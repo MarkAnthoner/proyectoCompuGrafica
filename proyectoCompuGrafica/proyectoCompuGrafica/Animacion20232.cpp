@@ -51,6 +51,7 @@ using namespace std;
 
 
 const float toRadians = 3.14159265f / 180.0f;
+const float PI = 3.14159265f;
 
 //variables para animación
 float movCoche;
@@ -380,12 +381,191 @@ void CrearDado()
 
 	};
 
-	//
+	//Mesh[6]
 	Mesh* dado = new Mesh();
 	dado->CreateMesh(cubo_vertices, cubo_indices, 192, 36);
 	meshList.push_back(dado);
 
 }
+
+
+void CrearCubo()
+{
+	unsigned int cubo_indices[] = {
+		// front
+		0, 1, 2,
+		2, 3, 0,
+		// right
+		4, 5, 6,
+		6, 7, 4,
+		// back
+		8, 9, 10,
+		10, 11, 8,
+
+		// left
+		12, 13, 14,
+		14, 15, 12,
+		// bottom
+		16, 17, 18,
+		18, 19, 16,
+		// top
+		20, 21, 22,
+		22, 23, 20,
+	};
+
+
+	GLfloat cubo_vertices[] = {
+		// front
+		//x		y		z		S		T			NX		NY		NZ
+		-0.5f, -0.5f,  0.5f,	0.27f,  0.35f,		0.0f,	0.0f,	-1.0f,	//0
+		0.5f, -0.5f,  0.5f,		0.48f,	0.35f,		0.0f,	0.0f,	-1.0f,	//1
+		0.5f,  0.5f,  0.5f,		0.48f,	0.64f,		0.0f,	0.0f,	-1.0f,	//2
+		-0.5f,  0.5f,  0.5f,	0.27f,	0.64f,		0.0f,	0.0f,	-1.0f,	//3
+		// right
+		//x		y		z		S		T
+		0.5f, -0.5f,  0.5f,	    0.52f,  0.35f,		-1.0f,	0.0f,	0.0f,
+		0.5f, -0.5f,  -0.5f,	0.73f,	0.35f,		-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  -0.5f,	0.73f,	0.64f,		-1.0f,	0.0f,	0.0f,
+		0.5f,  0.5f,  0.5f,	    0.52f,	0.64f,		-1.0f,	0.0f,	0.0f,
+		// back
+		-0.5f, -0.5f, -0.5f,	0.77f,	0.35f,		0.0f,	0.0f,	1.0f,
+		0.5f, -0.5f, -0.5f,		0.98f,	0.35f,		0.0f,	0.0f,	1.0f,
+		0.5f,  0.5f, -0.5f,		0.98f,	0.64f,		0.0f,	0.0f,	1.0f,
+		-0.5f,  0.5f, -0.5f,	0.77f,	0.64f,		0.0f,	0.0f,	1.0f,
+
+		// left
+		//x		y		z		S		T
+		-0.5f, -0.5f,  -0.5f,	0.0f,	0.35f,		1.0f,	0.0f,	0.0f,
+		-0.5f, -0.5f,  0.5f,	0.23f,  0.35f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  0.5f,	0.23f,	0.64f,		1.0f,	0.0f,	0.0f,
+		-0.5f,  0.5f,  -0.5f,	0.0f,	0.64f,		1.0f,	0.0f,	0.0f,
+
+		// bottom
+		//x		y		z		S		T
+		-0.5f, -0.5f,  0.5f,	0.27f,	0.02f,		0.0f,	1.0f,	0.0f,
+		0.5f,  -0.5f,  0.5f,	0.48f,  0.02f,		0.0f,	1.0f,	0.0f,
+		 0.5f,  -0.5f,  -0.5f,	0.48f,	0.31f,		0.0f,	1.0f,	0.0f,
+		-0.5f, -0.5f,  -0.5f,	0.27f,	0.31f,		0.0f,	1.0f,	0.0f,
+
+		//UP
+		 //x		y		z		S		T
+		 -0.5f, 0.5f,  0.5f,	0.27f,	0.68f,		0.0f,	-1.0f,	0.0f,
+		 0.5f,  0.5f,  0.5f,	0.48f,  0.68f,		0.0f,	-1.0f,	0.0f,
+		  0.5f, 0.5f,  -0.5f,	0.48f,	0.98f,		0.0f,	-1.0f,	0.0f,
+		 -0.5f, 0.5f,  -0.5f,	0.27f,	0.98f,		0.0f,	-1.0f,	0.0f,
+
+	};
+
+	Mesh *cubo = new Mesh();
+	cubo->CreateMesh(cubo_vertices, cubo_indices, 192, 36);
+	meshList.push_back(cubo);
+
+}
+
+
+//función para crear pirámide cuadrangular unitaria
+void CrearPiramideCuadrangular()
+{
+	/*unsigned int piramidecuadrangular_indices[] = {
+		0,3,4,
+		3,2,4,
+		2,1,4,
+		1,0,4,
+		0,1,2,
+		0,2,4
+
+	};*/
+	unsigned int piramide_indices[] = {
+		// Base
+		0, 1, 2,
+		2, 3, 0,
+		// Caras laterales
+		4, 1, 0,
+		4, 2, 1,
+		4, 3, 2,
+		4, 0, 3
+	};
+
+	/*GLfloat piramidecuadrangular_vertices[] = {
+		0.5f,-0.5f,0.5f,
+		0.5f,-0.5f,-0.5f,
+		-0.5f,-0.5f,-0.5f,
+		-0.5f,-0.5f,0.5f,
+		0.0f,0.5f,0.0f,
+	};*/
+	GLfloat piramide_vertices[] = {
+		// Base
+		// x     y     z      S      T     NX    NY    NZ
+		-0.5f, 0.0f, -0.5f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, // 0
+		-0.5f, 0.0f,  0.5f, 0.5f, 0.0f,  0.0f, 1.0f, 0.0f, // 1
+		 0.5f, 0.0f,  0.5f, 0.5f, 1.0f,  0.0f, 1.0f, 0.0f, // 2
+		 0.5f, 0.0f, -0.5f, 0.0f, 1.0f,  0.0f, 1.0f, 0.0f, // 3
+		 // Vértice de la punta
+		  0.0f, 1.0f,  0.0f, 0.5f, 0.5f,  0.0f, 1.0f, 0.0f  // 4
+	};
+
+	//mesh[]
+	Mesh* piramide = new Mesh();
+	piramide->CreateMesh(piramide_vertices, piramide_indices, 40, 18);
+	meshList.push_back(piramide);
+}
+
+//función para crear un cono
+void CrearCono(int res, float R) {
+
+	//constantes utilizadas en los ciclos for
+	int n, i, coordenada = 3;
+	//número de vértices ocupados
+	int verticesBase = (res) * 3;
+	//cálculo del paso interno en la circunferencia y variables que almacenarán cada coordenada de cada vértice
+	GLfloat dt = 2 * PI / res, x, z, y = -0.5f;
+	//apuntadores para guardar todos los vértices e índices generados
+	GLfloat* vertices = (GLfloat*)calloc(sizeof(GLfloat*), (verticesBase)+6);
+	unsigned int* indices = (unsigned int*)calloc(sizeof(unsigned int*), res + 1);
+	//caso inicial para crear el cono
+	vertices[0] = 0.0f;
+	vertices[1] = 0.5f;
+	vertices[2] = 0.0f;
+	//ciclo for para crear los vértices de la circunferencia del cono
+	for (n = 0; n <= (res); n++) {
+		x = R * cos((n)*dt);
+		z = R * sin((n)*dt);
+		for (i = 0; i < 3; i++) {
+			switch (i) {
+			case 0:
+				vertices[i + coordenada] = x;
+				break;
+			case 1:
+				vertices[i + coordenada] = y;
+				break;
+			case 2:
+				vertices[i + coordenada] = z;
+				break;
+			}
+		}
+		coordenada += 3;
+	}
+	//se agregan las coordenadas del último vértice para completar la circunferencia
+	vertices[coordenada + 1] = R * cos(0) * dt;
+	vertices[coordenada + 2] = -0.5f;
+	vertices[coordenada + 3] = R * sin(0) * dt;;
+
+	coordenada += 3;
+
+	//se agregan los índices
+	for (i = 0; i < res + 2; i++) {
+		indices[i] = i;
+	}
+
+	//se genera el mesh del cono
+	Mesh* cono = new Mesh();
+	cono->CreateMesh(vertices, indices, coordenada, res + 2);
+	meshList.push_back(cono);
+}
+
+
+
+
 void CreateShaders()
 {
 	Shader *shader1 = new Shader();
@@ -404,6 +584,8 @@ int main()
 	CreateObjects();
 	CrearDado();
 	CreateShaders();
+	CrearCubo();  //mesh[7]
+	CrearPiramideCuadrangular();  //mesh[8]
 	
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
@@ -798,6 +980,32 @@ int main()
         t += deltaTime * spiralSpeed;
 
 		
+
+
+		//Cubo
+		model = glm::mat4(1.0f);
+		color = glm::vec3(0.0f, 0.0f, 1.0f);
+		model = glm::translate(model, glm::vec3(4.6f, 10.0f, -53.0f));
+		//model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));    //rotar para ver tapa
+		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));    //rotar para ver tapa
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));//FALSE ES PARA QUE NO SEA TRANSPUESTA
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		meshList[7]->RenderMesh();
+
+
+		//Piramide
+		model = glm::mat4(1.0f);
+		color = glm::vec3(1.0f, 0.0f, 0.0f);
+		model = glm::translate(model, glm::vec3(4.6f, 20.0f, -53.0f));
+		//model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));    //rotar para ver tapa
+		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));    //rotar para ver tapa
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));//FALSE ES PARA QUE NO SEA TRANSPUESTA
+		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		meshList[8]->RenderMesh();
 
 
 
