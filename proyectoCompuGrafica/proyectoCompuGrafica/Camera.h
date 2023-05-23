@@ -35,6 +35,8 @@ private:
 	GLfloat moveSpeed;
 	GLfloat turnSpeed;
 
+	bool freeCameraMode;
+
 	void update();
 };
 

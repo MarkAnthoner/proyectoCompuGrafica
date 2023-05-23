@@ -13,6 +13,8 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	moveSpeed = startMoveSpeed;
 	turnSpeed = startTurnSpeed;
 
+	freeCameraMode = false;
+
 	update();
 }
 
@@ -39,25 +41,38 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 	{
 		position += right * velocity;
 	}
+
+	if (keys[GLFW_KEY_V])
+	{
+		freeCameraMode = !freeCameraMode;
+	}
+
 }
 
 void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 {
+
+
 	xChange *= turnSpeed;
 	yChange *= turnSpeed;
 
 	yaw += xChange;
-	pitch += yChange;
 
-	if (pitch > 89.0f)
+	if (freeCameraMode)
 	{
-		pitch = 89.0f;
-	}
+		pitch += yChange;
 
-	if (pitch < -89.0f)
-	{
-		pitch = -89.0f;
+		if (pitch > 89.0f)
+		{
+			pitch = 89.0f;
+		}
+
+		if (pitch < -89.0f)
+		{
+				pitch = -89.0f;
+		}
 	}
+	
 
 	update();
 }
@@ -80,13 +95,28 @@ glm::vec3 Camera::getCameraDirection()
 
 void Camera::update()
 {
-	front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front.y = sin(glm::radians(pitch));
-	front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-	front = glm::normalize(front);
 
-	right = glm::normalize(glm::cross(front, worldUp));
-	up = glm::normalize(glm::cross(right, front));
+	if (freeCameraMode)
+	{
+		front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+		front.y = sin(glm::radians(pitch));
+		front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+		front = glm::normalize(front);
+
+		right = glm::normalize(glm::cross(front, worldUp));
+		up = glm::normalize(glm::cross(right, front));
+	}
+	else {
+		glm::vec3 newFront;
+		newFront.x = cos(glm::radians(yaw));
+		newFront.y = 0.0f;
+		newFront.z = sin(glm::radians(yaw));
+		front = glm::normalize(newFront);
+
+		right = glm::normalize(glm::cross(front, worldUp));
+		up = glm::normalize(glm::cross(right, front));
+	}
+	
 }
 
 
