@@ -46,7 +46,9 @@ void Archivo::LeerKeyFramesDeArchivo() {
         //Expresion regular para obtener numero indice entre corchetes
         std::regex regex("\\[([0-9]+)\\]");
         //Expresion regular para obtener valor de la coordenada
-        std::regex regex2("= (-?[0-9.]+)$");
+        //std::regex regex2("= (-?[0-9.]+)$");
+        std::regex regex2("\\s*=\\s*(-?[0-9.]+)$");
+
 
         int indice = 0;
         float numeroFloat = 0.0f;
@@ -54,6 +56,12 @@ void Archivo::LeerKeyFramesDeArchivo() {
 
 
         while (std::getline(archivo, linea)) {
+
+            // Verificar si la línea está vacía
+            if (linea.empty()) {
+                break;
+            }
+
             std::smatch coincidencias;
             std::smatch coincidencias2;
 
@@ -76,29 +84,35 @@ void Archivo::LeerKeyFramesDeArchivo() {
             }
 
             // Aquí se usa el indice y el float para ingresar en el KeyFrame
-            if (contador == 0) {
+            if (contador == 0 and !linea.empty()) {
                 KeyFrame[indice].movAnimacion_x = numeroFloat;
                 LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].movAnimacion_x = " + std::to_string(numeroFloat));
+                //printf("KeyFrame[%d].mov_x = %f\n", indice, KeyFrame[indice].movAnimacion_x);
             }
             else if (contador == 1) {
                 KeyFrame[indice].movAnimacion_y = numeroFloat;
                 LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].movAnimacion_y = " + std::to_string(numeroFloat));
+                //printf("KeyFrame[%d].mov_y = %f\n", indice, KeyFrame[indice].movAnimacion_y);
             }
             else if (contador == 2) {
                 KeyFrame[indice].movAnimacion_z = numeroFloat;
                 LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].movAnimacion_z = " + std::to_string(numeroFloat));
+                //printf("KeyFrame[%d].mov_z = %f\n", indice, KeyFrame[indice].movAnimacion_z);
             }
             else if (contador == 3) {
                 KeyFrame[indice].giroAnimacion = numeroFloat;
                 LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].giroAnimacion = " + std::to_string(numeroFloat));
+                //printf("KeyFrame[%d].giro = %f\n", indice, KeyFrame[indice].giroAnimacion);
             }
             else if (contador == 4) {
                 KeyFrame[indice].giroDosAnimacion = numeroFloat;
                 LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].giroDosAnimacion = " + std::to_string(numeroFloat));
+                //printf("KeyFrame[%d].giroDos = %f\n", indice, KeyFrame[indice].giroDosAnimacion);
             }
             else if (contador == 5){
                 KeyFrame[indice].giroTresAnimacion = numeroFloat;
                 LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].giroTresAnimacion = " + std::to_string(numeroFloat));
+                //printf("KeyFrame[%d].giroTres = %f\n", indice, KeyFrame[indice].giroTresAnimacion);
                 contador = 0;
                 FrameIndex ++;
                 continue;
@@ -106,6 +120,8 @@ void Archivo::LeerKeyFramesDeArchivo() {
             contador += 1;
         }
         i_curr_steps = FrameIndex;
+
+        printf("\n\n\n");
 
         archivo.close();
     }

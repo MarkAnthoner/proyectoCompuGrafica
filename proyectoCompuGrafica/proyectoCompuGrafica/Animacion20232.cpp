@@ -939,7 +939,7 @@ int main()
 
 
 
-	int index = 0;
+	/*int index = 0;
 	int size_of_KeyFrame = 10;
 	while (index <= size_of_KeyFrame) {
 		printf("KeyFrame[%d].movpapalote_x = %f\n", index, KeyFrame[index].movAnimacion_x);
@@ -949,7 +949,7 @@ int main()
 		printf("KeyFrame[%d].giroDospapalote = %f\n", index, KeyFrame[index].giroDosAnimacion);
 		printf("KeyFrame[%d].giroTrespapalote = %f\n", index, KeyFrame[index].giroTresAnimacion);
 		index++;
-	}
+	}*/
 
 
 
