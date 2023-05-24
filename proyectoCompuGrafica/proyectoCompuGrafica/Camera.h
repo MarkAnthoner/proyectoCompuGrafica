@@ -16,6 +16,11 @@ public:
 	void keyControl(bool* keys, GLfloat deltaTime);
 	void mouseControl(GLfloat xChange, GLfloat yChange);
 
+	//Camara isometrica
+	void pan(float dx, float dy);
+	void zoom(float delta);
+
+
 	glm::vec3 getCameraPosition();
 	glm::vec3 getCameraDirection();
 	glm::mat4 calculateViewMatrix();
@@ -35,7 +40,21 @@ private:
 	GLfloat moveSpeed;
 	GLfloat turnSpeed;
 
-	bool freeCameraMode;
+	//Camara libre
+	int cameraMode;
+	int habilitaCambioCamara;
+	int reinicioCambioCamara;
+
+	//Camara isometrica
+	float rotation;     // Ángulo de vista
+	float scale;        // Escala de la cámara
+	glm::vec3 frontIsometrica;
+	glm::vec3 upIsometrica;
+	glm::vec3 positionIsometrica;
+
+	float zoomFactor;  // Factor de zoom inicial
+	float zoomSpeed;   // Velocidad de zoom
+	int habilitaZoom;
 
 	void update();
 };
