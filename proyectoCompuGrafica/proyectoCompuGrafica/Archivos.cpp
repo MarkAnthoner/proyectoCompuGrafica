@@ -40,9 +40,12 @@ void Archivo::LeerKeyFramesDeArchivo() {
         // Lógica para archivo con contenido
         std::ifstream archivo("Archivos/keyFramesGuardados.txt");
         std::string linea;
-        //Expresiones regulares
-        std::regex regex("\\[([0-9]+)\\]");
 
+        //Expresiones regulares
+
+        //Expresion regular para obtener numero indice entre corchetes
+        std::regex regex("\\[([0-9]+)\\]");
+        //Expresion regular para obtener valor de la coordenada
         std::regex regex2("= (-?[0-9.]+)$");
 
         int indice = 0;
@@ -74,20 +77,28 @@ void Archivo::LeerKeyFramesDeArchivo() {
 
             // Aquí se usa el indice y el float para ingresar en el KeyFrame
             if (contador == 0) {
-                KeyFrame[indice].movpapalote_x = numeroFloat;
-                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].movpapalote_x = " + std::to_string(numeroFloat));
+                KeyFrame[indice].movAnimacion_x = numeroFloat;
+                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].movAnimacion_x = " + std::to_string(numeroFloat));
             }
             else if (contador == 1) {
-                KeyFrame[indice].movpapalote_y = numeroFloat;
-                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].movpapalote_y = " + std::to_string(numeroFloat));
+                KeyFrame[indice].movAnimacion_y = numeroFloat;
+                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].movAnimacion_y = " + std::to_string(numeroFloat));
             }
             else if (contador == 2) {
-                KeyFrame[indice].movpapalote_z = numeroFloat;
-                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].movpapalote_z = " + std::to_string(numeroFloat));
+                KeyFrame[indice].movAnimacion_z = numeroFloat;
+                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].movAnimacion_z = " + std::to_string(numeroFloat));
             }
-            else if (contador == 3){
-                KeyFrame[indice].giropapalote = numeroFloat;
-                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].giropapalote = " + std::to_string(numeroFloat));
+            else if (contador == 3) {
+                KeyFrame[indice].giroAnimacion = numeroFloat;
+                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].giroAnimacion = " + std::to_string(numeroFloat));
+            }
+            else if (contador == 4) {
+                KeyFrame[indice].giroDosAnimacion = numeroFloat;
+                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].giroDosAnimacion = " + std::to_string(numeroFloat));
+            }
+            else if (contador == 5){
+                KeyFrame[indice].giroTresAnimacion = numeroFloat;
+                LeerKeyFrames("KeyFrame[" + std::to_string(indice) + "].giroTresAnimacion = " + std::to_string(numeroFloat));
                 contador = 0;
                 FrameIndex ++;
                 continue;

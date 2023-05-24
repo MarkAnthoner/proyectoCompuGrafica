@@ -20,14 +20,20 @@ typedef struct _frame
     //guardar en pares (complementaria)
 
     //Variables para GUARDAR Key Frames
-    float movpapalote_x;       //Variable para PosicionX
-    float movpapalote_y;       //Variable para PosicionY
-    float movpapalote_z;       //Variable para PosicionZ
-    float movpapalote_xInc;    //Variable para IncrementoX
-    float movpapalote_yInc;    //Variable para IncrementoY
-    float movpapalote_zInc;    //Variable para IncrementoZ
-    float giropapalote;
-    float giropapaloteInc;
+    float movAnimacion_x;       //Variable para PosicionX
+    float movAnimacion_y;       //Variable para PosicionY
+    float movAnimacion_z;       //Variable para PosicionZ
+    float movAnimacion_xInc;    //Variable para IncrementoX
+    float movAnimacion_yInc;    //Variable para IncrementoY
+    float movAnimacion_zInc;    //Variable para IncrementoZ
+    float giroAnimacion;
+    float giroAnimacionInc;
+
+    float giroDosAnimacion;     //Variable para Posicion de segundo eje
+    float giroDosAnimacionInc;  //Variable para Incremento en un segundo eje
+
+    float giroTresAnimacion;    //Variable para Posicion de tercer eje
+    float giroTresAnimacionInc; //Variable para Incremento en un tercer eje
 } FRAME;
 
 extern FRAME KeyFrame[MAX_FRAMES];

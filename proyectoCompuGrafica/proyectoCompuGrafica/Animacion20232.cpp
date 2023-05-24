@@ -622,9 +622,11 @@ bool animacion = false;
 
 
 //NEW// Keyframes
-float posXpapalote = 43.0, posYpapalote = 20.0, posZpapalote = 0.0;
-float	movpapalote_x = 0.0f, movpapalote_y = 0.0f, movpapalote_z = 0.0f;
-float giropapalote = 0;
+float posXAnimacion = 43.0, posYAnimacion = 20.0, posZAnimacion = 0.0;
+float	movAnimacion_x = 0.0f, movAnimacion_y = 0.0f, movAnimacion_z = 0.0f;
+float giroAnimacion = 0;
+float giroDosAnimacion = 0;
+float giroTresAnimacion = 0;
 
 
 int i_max_steps = 90;
@@ -641,23 +643,29 @@ FRAME KeyFrame[MAX_FRAMES];
 void saveFrame(void)
 {
 
-	KeyFrame[FrameIndex].movpapalote_x = movpapalote_x;
-	KeyFrame[FrameIndex].movpapalote_y = movpapalote_y;
-	KeyFrame[FrameIndex].movpapalote_z = movpapalote_z;
-	KeyFrame[FrameIndex].giropapalote = giropapalote;
+	KeyFrame[FrameIndex].movAnimacion_x = movAnimacion_x;
+	KeyFrame[FrameIndex].movAnimacion_y = movAnimacion_y;
+	KeyFrame[FrameIndex].movAnimacion_z = movAnimacion_z;
+	KeyFrame[FrameIndex].giroAnimacion = giroAnimacion;
+	KeyFrame[FrameIndex].giroDosAnimacion = giroDosAnimacion;
+	KeyFrame[FrameIndex].giroTresAnimacion = giroTresAnimacion;
 
 
 	//Keyframes ingresados mostrados en consola
-	printf("KeyFrame[%d].movpapalote_x = %f\n", FrameIndex, movpapalote_x);
-	printf("KeyFrame[%d].movpapalote_y = %f\n", FrameIndex, movpapalote_y);
-	printf("KeyFrame[%d].movpapalote_z = %f\n", FrameIndex, movpapalote_z);
-	printf("KeyFrame[%d].giropapalote = %f\n", FrameIndex, giropapalote);
+	printf("KeyFrame[%d].movAnimacion_x = %f\n", FrameIndex, movAnimacion_x);
+	printf("KeyFrame[%d].movAnimacion_y = %f\n", FrameIndex, movAnimacion_y);
+	printf("KeyFrame[%d].movAnimacion_z = %f\n", FrameIndex, movAnimacion_z);
+	printf("KeyFrame[%d].giroAnimacion = %f\n", FrameIndex, giroAnimacion);
+	printf("KeyFrame[%d].giroDosAnimacion = %f\n", FrameIndex, giroDosAnimacion);
+	printf("KeyFrame[%d].giroTresAnimacion = %f\n", FrameIndex, giroTresAnimacion);
 	printf("\n");
 
-	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].movpapalote_x = " + std::to_string(movpapalote_x));
-	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].movpapalote_y = " + std::to_string(movpapalote_y));
-	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].movpapalote_z = " + std::to_string(movpapalote_z));
-	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].giropapalote = " + std::to_string(giropapalote));
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].movAnimacion_x = " + std::to_string(movAnimacion_x));
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].movAnimacion_y = " + std::to_string(movAnimacion_y));
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].movAnimacion_z = " + std::to_string(movAnimacion_z));
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].giroAnimacion = " + std::to_string(giroAnimacion));
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].giroDosAnimacion = " + std::to_string(giroDosAnimacion));
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].giroTresAnimacion = " + std::to_string(giroTresAnimacion));
 
 
 	FrameIndex++;
@@ -666,18 +674,22 @@ void saveFrame(void)
 void resetElements(void)
 {
 
-	movpapalote_x = KeyFrame[0].movpapalote_x;
-	movpapalote_y = KeyFrame[0].movpapalote_y;
-	movpapalote_z = KeyFrame[0].movpapalote_z;
-	giropapalote = KeyFrame[0].giropapalote;
+	movAnimacion_x = KeyFrame[0].movAnimacion_x;
+	movAnimacion_y = KeyFrame[0].movAnimacion_y;
+	movAnimacion_z = KeyFrame[0].movAnimacion_z;
+	giroAnimacion = KeyFrame[0].giroAnimacion;
+	giroDosAnimacion = KeyFrame[0].giroDosAnimacion;
+	giroTresAnimacion = KeyFrame[0].giroTresAnimacion;
 }
 
 void interpolation(void)
 {
-	KeyFrame[playIndex].movpapalote_xInc = (KeyFrame[playIndex + 1].movpapalote_x - KeyFrame[playIndex].movpapalote_x) / i_max_steps;
-	KeyFrame[playIndex].movpapalote_yInc = (KeyFrame[playIndex + 1].movpapalote_y - KeyFrame[playIndex].movpapalote_y) / i_max_steps;
-	KeyFrame[playIndex].movpapalote_zInc = (KeyFrame[playIndex + 1].movpapalote_z - KeyFrame[playIndex].movpapalote_z) / i_max_steps;
-	KeyFrame[playIndex].giropapaloteInc = (KeyFrame[playIndex + 1].giropapalote - KeyFrame[playIndex].giropapalote) / i_max_steps;
+	KeyFrame[playIndex].movAnimacion_xInc = (KeyFrame[playIndex + 1].movAnimacion_x - KeyFrame[playIndex].movAnimacion_x) / i_max_steps;
+	KeyFrame[playIndex].movAnimacion_yInc = (KeyFrame[playIndex + 1].movAnimacion_y - KeyFrame[playIndex].movAnimacion_y) / i_max_steps;
+	KeyFrame[playIndex].movAnimacion_zInc = (KeyFrame[playIndex + 1].movAnimacion_z - KeyFrame[playIndex].movAnimacion_z) / i_max_steps;
+	KeyFrame[playIndex].giroAnimacionInc = (KeyFrame[playIndex + 1].giroAnimacion - KeyFrame[playIndex].giroAnimacion) / i_max_steps;
+	KeyFrame[playIndex].giroDosAnimacionInc = (KeyFrame[playIndex + 1].giroDosAnimacion - KeyFrame[playIndex].giroDosAnimacion) / i_max_steps;
+	KeyFrame[playIndex].giroTresAnimacionInc = (KeyFrame[playIndex + 1].giroTresAnimacion - KeyFrame[playIndex].giroTresAnimacion) / i_max_steps;
 
 }
 
@@ -705,10 +717,12 @@ void animate(void)
 		else
 		{
 			//Draw animation
-			movpapalote_x += KeyFrame[playIndex].movpapalote_xInc;
-			movpapalote_y += KeyFrame[playIndex].movpapalote_yInc;
-			movpapalote_z += KeyFrame[playIndex].movpapalote_zInc;
-			giropapalote += KeyFrame[playIndex].giropapaloteInc;
+			movAnimacion_x += KeyFrame[playIndex].movAnimacion_xInc;
+			movAnimacion_y += KeyFrame[playIndex].movAnimacion_yInc;
+			movAnimacion_z += KeyFrame[playIndex].movAnimacion_zInc;
+			giroAnimacion += KeyFrame[playIndex].giroAnimacionInc;
+			giroDosAnimacion += KeyFrame[playIndex].giroDosAnimacionInc;
+			giroTresAnimacion += KeyFrame[playIndex].giroTresAnimacionInc;
 			i_curr_steps++;
 		}
 
@@ -913,13 +927,29 @@ int main()
 	
 	glm::vec3 posblackhawk = glm::vec3(2.0f, 0.0f, 0.0f);
 
-	KeyFrame[0].movpapalote_x = 0.0f;
-	KeyFrame[0].movpapalote_y = 0.0f;
-	KeyFrame[0].movpapalote_z = 0.0f;
-	KeyFrame[0].giropapalote = 0;
+	KeyFrame[0].movAnimacion_x = 0.0f;
+	KeyFrame[0].movAnimacion_y = 0.0f;
+	KeyFrame[0].movAnimacion_z = 0.0f;
+	KeyFrame[0].giroAnimacion = 0;
+	KeyFrame[0].giroDosAnimacion = 0;
+	KeyFrame[0].giroTresAnimacion = 0;
 
 	//Se leen los keyFrames del archivo
 	archivo1.LeerKeyFramesDeArchivo();
+
+
+
+	int index = 0;
+	int size_of_KeyFrame = 10;
+	while (index <= size_of_KeyFrame) {
+		printf("KeyFrame[%d].movpapalote_x = %f\n", index, KeyFrame[index].movAnimacion_x);
+		printf("KeyFrame[%d].movpapalote_y = %f\n", index, KeyFrame[index].movAnimacion_y);
+		printf("KeyFrame[%d].movpapalote_z = %f\n", index, KeyFrame[index].movAnimacion_z);
+		printf("KeyFrame[%d].giropapalote = %f\n", index, KeyFrame[index].giroAnimacion);
+		printf("KeyFrame[%d].giroDospapalote = %f\n", index, KeyFrame[index].giroDosAnimacion);
+		printf("KeyFrame[%d].giroTrespapalote = %f\n", index, KeyFrame[index].giroTresAnimacion);
+		index++;
+	}
 
 
 
@@ -1168,10 +1198,12 @@ int main()
 
 		//Papalote
 		model = glm::mat4(1.0);
-		posblackhawk = glm::vec3(posXpapalote + movpapalote_x, posYpapalote + movpapalote_y, posZpapalote + movpapalote_z);
+		posblackhawk = glm::vec3(posXAnimacion + movAnimacion_x, posYAnimacion + movAnimacion_y, posZAnimacion + movAnimacion_z);
 		model = glm::translate(model, posblackhawk);
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
-		model = glm::rotate(model, giropapalote * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, giroAnimacion * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, giroDosAnimacion * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, giroTresAnimacion * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -1661,6 +1693,8 @@ void inputKeyframes(bool* keys)
 			}
 		}
 	}
+
+	//Reproducir animacion
 	if (keys[GLFW_KEY_0])
 	{
 		if (habilitaranimacion < 1)
@@ -1669,6 +1703,7 @@ void inputKeyframes(bool* keys)
 		}
 	}
 
+	//Guardar Frame
 	if (keys[GLFW_KEY_L])
 	{
 		if (guardoFrame < 1)
@@ -1678,6 +1713,8 @@ void inputKeyframes(bool* keys)
 			reinicioFrame = 0;
 		}
 	}
+
+	//Escribir frames en archivo
 	if (keys[GLFW_KEY_E])
 	{
 		if (guardoFrame < 1)
@@ -1687,6 +1724,8 @@ void inputKeyframes(bool* keys)
 			reinicioFrame = 0;
 		}
 	}
+
+	//Control para habilotar lo anterior
 	if (keys[GLFW_KEY_P])
 	{
 		if (reinicioFrame < 1)
@@ -1700,7 +1739,7 @@ void inputKeyframes(bool* keys)
 	{
 		if (ciclo < 1)
 		{
-			movpapalote_x += 1.0f;
+			movAnimacion_x += 1.0f;
 			ciclo++;
 			ciclo2 = 0;
 		}
@@ -1711,7 +1750,7 @@ void inputKeyframes(bool* keys)
 	{
 		if (ciclo < 1)
 		{
-			movpapalote_x -= 1.0f;
+			movAnimacion_x -= 1.0f;
 			ciclo++;
 			ciclo2 = 0;
 		}
@@ -1726,7 +1765,7 @@ void inputKeyframes(bool* keys)
 	{
 		if (ciclo < 1)
 		{
-			movpapalote_y += 1.0f;
+			movAnimacion_y += 1.0f;
 			ciclo++;
 			ciclo2 = 0;
 		}
@@ -1737,7 +1776,7 @@ void inputKeyframes(bool* keys)
 	{
 		if (ciclo < 1)
 		{
-			movpapalote_y -= 1.0f;
+			movAnimacion_y -= 1.0f;
 			ciclo++;
 			ciclo2 = 0;
 		}
@@ -1750,7 +1789,7 @@ void inputKeyframes(bool* keys)
 	{
 		if (ciclo < 1)
 		{
-			movpapalote_z += 1.0f;
+			movAnimacion_z += 1.0f;
 			ciclo++;
 			ciclo2 = 0;
 		}
@@ -1761,7 +1800,7 @@ void inputKeyframes(bool* keys)
 	{
 		if (ciclo < 1)
 		{
-			movpapalote_z -= 1.0f;
+			movAnimacion_z -= 1.0f;
 			ciclo++;
 			ciclo2 = 0;
 		}
@@ -1775,7 +1814,7 @@ void inputKeyframes(bool* keys)
 	{
 		if (ciclo < 1)
 		{
-			giropapalote += 10.0f;
+			giroAnimacion += 10.0f;
 			ciclo++;
 			ciclo2 = 0;
 		}
@@ -1786,12 +1825,62 @@ void inputKeyframes(bool* keys)
 	{
 		if (ciclo < 1)
 		{
-			giropapalote -= 10.0f;
+			giroAnimacion -= 10.0f;
 			ciclo++;
 			ciclo2 = 0;
 		}
 
 	}
+
+
+	//Movimiento de Giro positivo segundo EJE
+	if (keys[GLFW_KEY_U])
+	{
+		if (ciclo < 1)
+		{
+			giroDosAnimacion += 10.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+	//Movimiento de Giro negativo segundo EJE
+	if (keys[GLFW_KEY_Y])
+	{
+		if (ciclo < 1)
+		{
+			giroDosAnimacion -= 10.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+
+
+
+	//Movimiento de Giro positivo tercer EJE
+	if (keys[GLFW_KEY_N])
+	{
+		if (ciclo < 1)
+		{
+			giroTresAnimacion += 10.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+	//Movimiento de Giro negativo tercer EJE
+	if (keys[GLFW_KEY_B])
+	{
+		if (ciclo < 1)
+		{
+			giroTresAnimacion -= 10.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+
 
 
 	//Boton de control de todos los movimientos
