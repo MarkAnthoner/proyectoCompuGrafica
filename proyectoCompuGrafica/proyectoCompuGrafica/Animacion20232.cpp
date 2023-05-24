@@ -42,6 +42,10 @@ Adicional.- Texturizado con transparencia usando Blending: Requerimos dibujar lo
 #include "SpotLight.h"
 #include "Material.h"
 
+//Para la animación por keyframes
+#include "Archivos.h"
+#include "Frame.h"
+
 
 //numeros random
 #include<cstdlib>
@@ -53,7 +57,7 @@ using namespace std;
 const float toRadians = 3.14159265f / 180.0f;
 const float PI = 3.14159265f;
 
-//variables para animación
+//variables para animación simple
 float movCoche;
 float movCocheY;
 float movCocheZ;
@@ -91,6 +95,22 @@ float movDadoArriba = 0.0f;
 float offsetDadoArriba = 0.0f;
 int presionaTecla = 0;
 int presionateclaPrevio = 0;
+
+
+
+
+
+//Variables para animación por keyframes
+float reproduciranimacion, habilitaranimacion,
+guardoFrame, reinicioFrame, ciclo, ciclo2, contador = 0;
+
+//Lectura de archivos
+std::vector<Archivo> listaArchivos;
+Archivo archivo1 = Archivo();
+
+
+
+
 
 
 Window mainWindow;
@@ -131,6 +151,13 @@ Model helice;
 Model Dado_M;
 Model papalote;
 
+
+//Modelos para iluminación
+Model faro;
+Model antorcha;
+
+
+
 Skybox skybox;
 
 //materiales
@@ -156,6 +183,15 @@ static const char* vShader = "shaders/shader_light.vert";
 
 // Fragment Shader
 static const char* fShader = "shaders/shader_light.frag";
+
+
+
+
+
+//PARA INPUT CON KEYFRAMES, otra instancia del teclado
+void inputKeyframes(bool* keys);
+
+
 
 
 
@@ -576,6 +612,119 @@ void CreateShaders()
 
 
 
+
+
+
+
+///////////////////////////////KEYFRAMES/////////////////////
+
+bool animacion = false;
+
+
+//NEW// Keyframes
+float posXpapalote = 43.0, posYpapalote = 20.0, posZpapalote = 0.0;
+float	movpapalote_x = 0.0f, movpapalote_y = 0.0f, movpapalote_z = 0.0f;
+float giropapalote = 0;
+
+
+int i_max_steps = 90;
+int i_curr_steps = 1;  //igual a FrameIndex siempre
+int FrameIndex = 1;			//introducir datos
+bool play = false;
+int playIndex = 0;
+
+FRAME KeyFrame[MAX_FRAMES];
+
+
+
+//se puede hacer DELTATIME dentro de la interpolacion o en la reproduccion
+void saveFrame(void)
+{
+
+	KeyFrame[FrameIndex].movpapalote_x = movpapalote_x;
+	KeyFrame[FrameIndex].movpapalote_y = movpapalote_y;
+	KeyFrame[FrameIndex].movpapalote_z = movpapalote_z;
+	KeyFrame[FrameIndex].giropapalote = giropapalote;
+
+
+	//Keyframes ingresados mostrados en consola
+	printf("KeyFrame[%d].movpapalote_x = %f\n", FrameIndex, movpapalote_x);
+	printf("KeyFrame[%d].movpapalote_y = %f\n", FrameIndex, movpapalote_y);
+	printf("KeyFrame[%d].movpapalote_z = %f\n", FrameIndex, movpapalote_z);
+	printf("KeyFrame[%d].giropapalote = %f\n", FrameIndex, giropapalote);
+	printf("\n");
+
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].movpapalote_x = " + std::to_string(movpapalote_x));
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].movpapalote_y = " + std::to_string(movpapalote_y));
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].movpapalote_z = " + std::to_string(movpapalote_z));
+	archivo1.LeerKeyFrames("KeyFrame[" + std::to_string(FrameIndex) + "].giropapalote = " + std::to_string(giropapalote));
+
+
+	FrameIndex++;
+}
+
+void resetElements(void)
+{
+
+	movpapalote_x = KeyFrame[0].movpapalote_x;
+	movpapalote_y = KeyFrame[0].movpapalote_y;
+	movpapalote_z = KeyFrame[0].movpapalote_z;
+	giropapalote = KeyFrame[0].giropapalote;
+}
+
+void interpolation(void)
+{
+	KeyFrame[playIndex].movpapalote_xInc = (KeyFrame[playIndex + 1].movpapalote_x - KeyFrame[playIndex].movpapalote_x) / i_max_steps;
+	KeyFrame[playIndex].movpapalote_yInc = (KeyFrame[playIndex + 1].movpapalote_y - KeyFrame[playIndex].movpapalote_y) / i_max_steps;
+	KeyFrame[playIndex].movpapalote_zInc = (KeyFrame[playIndex + 1].movpapalote_z - KeyFrame[playIndex].movpapalote_z) / i_max_steps;
+	KeyFrame[playIndex].giropapaloteInc = (KeyFrame[playIndex + 1].giropapalote - KeyFrame[playIndex].giropapalote) / i_max_steps;
+
+}
+
+
+void animate(void)
+{
+	//Movimiento del objeto
+	if (play)
+	{
+		if (i_curr_steps >= i_max_steps) //end of animation between frames?
+		{
+			playIndex++;
+			if (playIndex > FrameIndex - 2)	//end of total animation?
+			{
+				playIndex = 0;
+				play = false;
+			}
+			else //Next frame interpolations
+			{
+				i_curr_steps = 0; //Reset counter
+				//Interpolation
+				interpolation();
+			}
+		}
+		else
+		{
+			//Draw animation
+			movpapalote_x += KeyFrame[playIndex].movpapalote_xInc;
+			movpapalote_y += KeyFrame[playIndex].movpapalote_yInc;
+			movpapalote_z += KeyFrame[playIndex].movpapalote_zInc;
+			giropapalote += KeyFrame[playIndex].giropapaloteInc;
+			i_curr_steps++;
+		}
+
+	}
+}
+
+/* FIN KEYFRAMES*/
+
+
+
+
+
+
+
+
+
 int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
@@ -612,9 +761,17 @@ int main()
 
 	Blackhawk_M = Model();
 	Blackhawk_M.LoadModel("Models/helicopteroSinHelice.obj");
-
 	helice = Model();
 	helice.LoadModel("Models/helice.obj");
+
+
+
+	faro = Model();
+	faro.LoadModel("Models/Pruebas/Street Lamp.obj");
+	antorcha = Model();
+	antorcha.LoadModel("Models/Pruebas/Torch.obj");
+
+
 
 
 	texto = Texture("Textures/texto.tga");
@@ -681,10 +838,18 @@ int main()
 	//contador de luces puntuales
 	unsigned int pointLightCount = 0;
 	//Declaración de primer luz puntual
-	pointLights[0] = PointLight(1.0f, 0.0f, 0.0f,
-		0.0f, 1.0f,
-		0.0f, 2.5f, 1.5f,
-		0.3f, 0.2f, 0.1f);
+	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f,
+		30.0f, 3.5f, 50.0f,
+		1.0f, 0.03f, 0.006f);
+		//0.3f, 0.2f, 0.1f);
+	pointLightCount++;
+
+	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
+		1.0f, 1.0f,
+		30.0f, 5.5f, 165.0f,
+		1.0f, 0.01f, 0.001f);
+	//0.3f, 0.2f, 0.1f);
 	pointLightCount++;
 
 	unsigned int spotLightCount = 0;
@@ -742,6 +907,20 @@ int main()
 	GLuint uniformColor = 0;
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
 	
+
+
+	
+	
+	glm::vec3 posblackhawk = glm::vec3(2.0f, 0.0f, 0.0f);
+
+	KeyFrame[0].movpapalote_x = 0.0f;
+	KeyFrame[0].movpapalote_y = 0.0f;
+	KeyFrame[0].movpapalote_z = 0.0f;
+	KeyFrame[0].giropapalote = 0;
+
+	//Se leen los keyFrames del archivo
+	archivo1.LeerKeyFramesDeArchivo();
+
 
 
 
@@ -819,6 +998,16 @@ int main()
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
+
+
+
+		//para keyframes
+		inputKeyframes(mainWindow.getsKeys());
+		animate();
+
+
+
+
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -847,7 +1036,7 @@ int main()
 
 		//información al shader de fuentes de iluminación
 		shaderList[0].SetDirectionalLight(&mainLight);
-		//shaderList[0].SetPointLights(pointLights, pointLightCount);
+		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		//shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
 
@@ -887,6 +1076,17 @@ int main()
 		brickTexture.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		pista.RenderModel();
+
+
+
+
+		//Antorcha
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f, 2.0f, 165.0));
+		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		antorcha.RenderModel();
 
 
 
@@ -960,24 +1160,27 @@ int main()
 
 
 
-		// Calcular la posición del objeto en la espiral
-		float x = spiralRadius * cos(t);
-		float y = spiralRadius * sin(t);
-		float z = t * spiralHeight;
+		//// Calcular la posición del objeto en la espiral
+		//float x = spiralRadius * cos(t);
+		//float y = spiralRadius * sin(t);
+		//float z = t * spiralHeight;
 		
 
 		//Papalote
 		model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(-1.5f, 20.5f+movDadoArriba, -2.0f));
-		model = glm::translate(model, glm::vec3(0.0f + x, 40.0f + z, 0.0f + y));
+		posblackhawk = glm::vec3(posXpapalote + movpapalote_x, posYpapalote + movpapalote_y, posZpapalote + movpapalote_z);
+		model = glm::translate(model, posblackhawk);
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::rotate(model, giropapalote * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//dadoTexture.UseTexture();
-		//meshList[6]->RenderMesh();
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		papalote.RenderModel();
 
-		// Actualizar el parámetro t para avanzar en la espiral
-        t += deltaTime * spiralSpeed;
+		//// Actualizar el parámetro t para avanzar en la espiral
+  //      t += deltaTime * spiralSpeed;
 
 		
 
@@ -1006,6 +1209,23 @@ int main()
 		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		meshList[8]->RenderMesh();
+
+
+
+
+
+
+		//Faro
+		model = glm::mat4(1.0);
+		color = glm::vec3(0.0f, 1.0f, 0.0f);
+		model = glm::translate(model, glm::vec3(30.0f, -3.0f, 50.0));
+		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		faro.RenderModel();
+
+
 
 
 
@@ -1414,3 +1634,174 @@ int main()
 
 	return 0;
 }
+
+
+
+void inputKeyframes(bool* keys)
+{
+	if (keys[GLFW_KEY_SPACE])
+	{
+		if (reproduciranimacion < 1)
+		{
+			if (play == false && (FrameIndex > 1))
+			{
+				resetElements();
+				//First Interpolation				
+				interpolation();
+				play = true;
+				playIndex = 0;
+				i_curr_steps = 0;
+				reproduciranimacion++;
+				habilitaranimacion = 0;
+
+			}
+			else
+			{
+				play = false;
+			}
+		}
+	}
+	if (keys[GLFW_KEY_0])
+	{
+		if (habilitaranimacion < 1)
+		{
+			reproduciranimacion = 0;
+		}
+	}
+
+	if (keys[GLFW_KEY_L])
+	{
+		if (guardoFrame < 1)
+		{
+			saveFrame();
+			guardoFrame++;
+			reinicioFrame = 0;
+		}
+	}
+	if (keys[GLFW_KEY_E])
+	{
+		if (guardoFrame < 1)
+		{
+			archivo1.Escribir();
+			guardoFrame++;
+			reinicioFrame = 0;
+		}
+	}
+	if (keys[GLFW_KEY_P])
+	{
+		if (reinicioFrame < 1)
+		{
+			guardoFrame = 0;
+		}
+	}
+
+	//Movimiento de X positivo
+	if (keys[GLFW_KEY_G])
+	{
+		if (ciclo < 1)
+		{
+			movpapalote_x += 1.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+	//Movimiento de X negativo
+	if (keys[GLFW_KEY_F])
+	{
+		if (ciclo < 1)
+		{
+			movpapalote_x -= 1.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+
+
+
+
+	//Movimiento de Y positivo
+	if (keys[GLFW_KEY_T])
+	{
+		if (ciclo < 1)
+		{
+			movpapalote_y += 1.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+	//Movimiento de Y negativo
+	if (keys[GLFW_KEY_V])
+	{
+		if (ciclo < 1)
+		{
+			movpapalote_y -= 1.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+
+
+	//Movimiento de Z positivo
+	if (keys[GLFW_KEY_R])
+	{
+		if (ciclo < 1)
+		{
+			movpapalote_z += 1.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+	//Movimiento de Z negativo
+	if (keys[GLFW_KEY_C])
+	{
+		if (ciclo < 1)
+		{
+			movpapalote_z -= 1.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+
+
+
+	//Movimiento de Giro positivo
+	if (keys[GLFW_KEY_J])
+	{
+		if (ciclo < 1)
+		{
+			giropapalote += 10.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+	//Movimiento de Giro negativo
+	if (keys[GLFW_KEY_H])
+	{
+		if (ciclo < 1)
+		{
+			giropapalote -= 10.0f;
+			ciclo++;
+			ciclo2 = 0;
+		}
+
+	}
+
+
+	//Boton de control de todos los movimientos
+	if (keys[GLFW_KEY_1])
+	{
+		if (ciclo2 < 1)
+		{
+			ciclo = 0;
+		}
+	}
+
+}
+
