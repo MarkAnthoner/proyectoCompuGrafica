@@ -1,16 +1,15 @@
 /*
 Semestre 2023-2
-Animación:
-1.- Simple o básica:Por banderas y condicionales
-2.- Compleja: Por medio de funciones y algoritmos,Textura Animada.
-Adicional.- Texturizado con transparencia usando Blending: Requerimos dibujar lo que está atras primero
+Proyecto: Diorama de la vida cotidiana -  Subnautica
+Integrantes
+* Castillo Montes Pamela			Gpo. 10
+* Hernández Jaimes Rogelio Yael		Gpo. 10
+* Sanchez Perez Marco Antonio		Gpo. 01
 */
-//para cargar imagen
-
-// Ejercicio de práctica 9
 
 #define STB_IMAGE_IMPLEMENTATION
 
+//Librerias generales OpenGL
 #include <stdio.h>
 #include <string.h>
 #include <cmath>
@@ -23,9 +22,8 @@ Adicional.- Texturizado con transparencia usando Blending: Requerimos dibujar lo
 #include <glm.hpp>
 #include <gtc\matrix_transform.hpp>
 #include <gtc\type_ptr.hpp>
-//para probar el importer
-//#include<assimp/Importer.hpp>
 
+//Encabezados generales OpenGL
 #include "Window.h"
 #include "Mesh.h"
 #include "Shader_light.h"
@@ -35,14 +33,14 @@ Adicional.- Texturizado con transparencia usando Blending: Requerimos dibujar lo
 #include"Model.h"
 #include "Skybox.h"
 
-//para iluminación
+//Encabezados Iluminación
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Material.h"
 
-//Para la animación por keyframes
+//Encabezados Animación Keyframes
 #include "Archivos.h"
 #include "Frame.h"
 
@@ -52,12 +50,11 @@ Adicional.- Texturizado con transparencia usando Blending: Requerimos dibujar lo
 using namespace std;
 
 
-
-
+// === Constantes Ángulos === 
 const float toRadians = 3.14159265f / 180.0f;
 const float PI = 3.14159265f;
 
-//variables para animación simple
+// === Variables Animación Simple === 
 float movCoche;
 float movCocheY;
 float movCocheZ;
@@ -89,7 +86,6 @@ float subeBajaHeli = 0.0f;
 float offsetAvanzaHeli = 0.0f;
 float offsetGiroHeli = 0.0f;
 
-
 //movimiento de dado
 float movDadoArriba = 0.0f;
 float offsetDadoArriba = 0.0f;
@@ -97,20 +93,13 @@ int presionaTecla = 0;
 int presionateclaPrevio = 0;
 
 
-
-
-
-//Variables para animación por keyframes
+// === Variables Animación Keyframes ===
 float reproduciranimacion, habilitaranimacion,
 guardoFrame, reinicioFrame, ciclo, ciclo2, contador = 0;
 
-//Lectura de archivos
+// === Variables Lectura de Archivos === 
 std::vector<Archivo> listaArchivos;
 Archivo archivo1 = Archivo();
-
-
-
-
 
 
 Window mainWindow;
@@ -119,48 +108,47 @@ std::vector<Shader> shaderList;
 
 Camera camera;
 
+// === Variables de Textura ===
 Texture brickTexture;
 Texture dirtTexture;
 Texture plainTexture;
 Texture pisoTexture;
 Texture AgaveTexture;
 Texture FlechaTexture;
-
 Texture texto;
-
-//Textura del dado
 Texture dadoTexture;
 
-//Carro practica: Carro, y ruedas
+Texture mesaTexture;
+
+// === Variables de Modelos ===
+//Coche
 Model cochePropio;
 Model ruedaSupDer;
 Model ruedaSupIzq;
 Model ruedaInfDer;
 Model ruedaInfIzq;
 
+//Pista
 Model pista;
 
-
+//Práctica
 Model Kitt_M;
 Model Llanta_M;
 Model Camino_M;
 
-
+//Helicoptero
 Model Blackhawk_M;
 Model helice;
 Model Dado_M;
 Model papalote;
 
-
-//Modelos para iluminación
+//Iluminación
 Model faro;
 Model antorcha;
 
-
-
 Skybox skybox;
 
-//materiales
+// === Materiales ===
 Material Material_brillante;
 Material Material_opaco;
 
@@ -170,7 +158,7 @@ GLfloat deltaTime = 0.0f;
 GLfloat lastTime = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
-// luz direccional
+//  === Luz direccional === 
 DirectionalLight mainLight;
 
 //para declarar varias luces de tipo pointlight
@@ -185,13 +173,8 @@ static const char* vShader = "shaders/shader_light.vert";
 static const char* fShader = "shaders/shader_light.frag";
 
 
-
-
-
 //PARA INPUT CON KEYFRAMES, otra instancia del teclado
 void inputKeyframes(bool* keys);
-
-
 
 
 
@@ -332,7 +315,6 @@ void CreateObjects()
 	meshList.push_back(obj6);
 
 }
-
 
 
 //Funcion que genera el dado de 8 caras
@@ -498,7 +480,6 @@ void CrearCubo()
 
 }
 
-
 //función para crear pirámide cuadrangular unitaria
 void CrearPiramideCuadrangular()
 {
@@ -601,6 +582,347 @@ void CrearCono(int res, float R) {
 
 
 
+//Función crea primitiva: mesa
+void CrearMesa()
+{
+	unsigned int mesa_indices[] = {
+		//== Pata Delantera Izquierda ==
+		//Front
+		0, 1, 2,
+		1, 2, 3,
+		//Back
+		4, 5, 6,
+		5, 6, 7,
+		//Left
+		8, 9, 10,
+		9, 10, 11,
+		//Right
+		12, 13, 14,
+		13, 14, 15,
+		//Bottom
+		16, 17, 18,
+		17, 18, 19,
+		//== Pata Delantera Derecha ==
+		//Front
+		20, 21, 22,
+		21, 22, 23,
+		//Back
+		24, 25, 26,
+		25, 26, 27,
+		//Left
+		28, 29, 30,
+		29, 30, 31,
+		//Right
+		32, 33, 34,
+		33, 34, 35,
+		//Bottom
+		36, 37, 38,
+		37, 38, 39,
+
+		//== Pata Trasera Izquierda ==
+		//Front
+		40, 41, 42,
+		41, 42, 43,
+		//Back
+		44, 45, 46,
+		45, 46, 47,
+		//Left
+		48, 49, 50,
+		49, 50, 51,
+		//Right
+		52, 53, 54,
+		53, 54, 55,
+		//Bottom
+		56, 57, 58,
+		57, 58, 59,
+		//== Pata Trasera Derecha ==
+		//Front
+		60, 61, 62,
+		61, 62, 63,
+		//Back
+		64, 65, 66,
+		65, 66, 67,
+		//Left
+		68, 69, 70,
+		69, 70, 71,
+		//Right
+		72, 73, 74,
+		73, 74, 75,
+		//Bottom
+		76, 77, 78,
+		77, 78, 79,
+
+		//== Mesa ==
+		//Front
+		80, 81, 82,
+		81, 82, 83,
+		//Back
+		84, 85, 86,
+		85, 86, 87,
+		//Left
+		88, 89, 90,
+		89, 90, 91,
+		//Right
+		92, 93, 94,
+		93, 94, 95,
+		//Bottom
+		96, 97, 98,
+		97, 98, 99,
+		//Up
+		100, 101, 102,
+		101, 102, 103,
+
+		//== Decoracion ==
+		//Front
+		104, 105, 106,
+		105, 106, 107,
+		//Back
+		108, 109, 110,
+		109, 110, 111,
+		//Left
+		112, 113, 114,
+		113, 114, 115,
+		//Right
+		116, 117, 118,
+		117, 118, 119,
+		//Bottom
+		120, 121, 122,
+		121, 122, 123,
+	};
+
+
+	GLfloat mesa_vertices[] = {
+		//== Pata Delantera Izquierda ==
+		//Front
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.0f,  0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	0.0f,	-1.0f,	//0: A
+		0.5f,  0.0f,  0.0f,		1.0f,	0.143f,		0.0f,	0.0f,	-1.0f,	//1: B
+		0.0f,  1.5f,  0.0f,		0.0f,	0.0f,		0.0f,	0.0f,	-1.0f,	//2: C
+		0.5f,  1.5f,  0.0f,		0.0f,	0.143,		0.0f,	0.0f,	-1.0f,	//3: D
+
+		//Back
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.0f,  0.0f,  -0.5f,	1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//4: F
+		0.5f,  0.0f,  -0.5f,	1.0f,	0.143f,		0.0f,	0.0f,	1.0f,	//5: E
+		0.0f,  1.5f,  -0.5f,	0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//6: H
+		0.5f,  1.5f,  -0.5f,	0.0f,	0.143,		0.0f,	0.0f,	1.0f,	//7: G
+
+		//Left
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.0f,  0.0f,  0.0f,		1.0f,   0.0f,		1.0f,	0.0f,	0.0f,	//8: A
+		0.0f,  0.0f,  -0.5f,	1.0f,	0.143f,		1.0f,	0.0f,	0.0f,	//9: F
+		0.0f,  1.5f,  0.0f,		0.0f,	0.0f,		1.0f,	0.0f,	0.0f,	//10: C
+		0.0f,  1.5f,  -0.5f,	0.0f,	0.143,		1.0f,	0.0f,	0.0f,	//11: H
+
+		//Right
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.5f,  0.0f,  0.0f,		1.0f,   0.0f,		-1.0f,	0.0f,	0.0f,	//12: B
+		0.5f,  0.0f,  -0.5f,	1.0f,	0.143f,		-1.0f,	0.0f,	0.0f,	//13: E
+		0.5f,  1.5f,  0.0f,		0.0f,	0.0f,		-1.0f,	0.0f,	0.0f,	//14: D
+		0.5f,  1.5f,  -0.5f,	0.0f,	0.143,		-1.0f,	0.0f,	0.0f,	//15: G
+
+		//Bottom
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.0f,  0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//16: A
+		0.5f,  0.0f,  0.0f,		1.0f,	0.143f,		0.0f,	1.0f,	0.0f,	//17: B
+		0.0f,  0.0f,  -0.5f,	0.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//18: F
+		0.5f,  0.0f,  -0.5f,	0.0f,	0.143,		0.0f,	1.0f,	0.0f,	//19: E
+
+		//== Pata Delantera Derecha ==
+		//Front
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.0f,  0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	0.0f,	-1.0f,	//20: I
+		3.5f,  0.0f,  0.0f,		1.0f,	0.143f,		0.0f,	0.0f,	-1.0f,	//21: J
+		3.0f,  1.5f,  0.0f,		0.0f,	0.0f,		0.0f,	0.0f,	-1.0f,	//22: K
+		3.5f,  1.5f,  0.0f,		0.0f,	0.143,		0.0f,	0.0f,	-1.0f,	//23: L
+
+		//Back
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.0f,  0.0f,  -0.5f,	1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//24: M
+		3.5f,  0.0f,  -0.5f,	1.0f,	0.143f,		0.0f,	0.0f,	1.0f,	//25: N
+		3.0f,  1.5f,  -0.5f,	0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//26: O
+		3.5f,  1.5f,  -0.5f,	0.0f,	0.143,		0.0f,	0.0f,	1.0f,	//27: P
+
+		//Left
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.0f,  0.0f,  0.0f,		1.0f,   0.0f,		1.0f,	0.0f,	0.0f,	//28: I
+		3.0f,  0.0f,  -0.5f,	1.0f,	0.143f,		1.0f,	0.0f,	0.0f,	//29: M
+		3.0f,  1.5f,  0.0f,		0.0f,	0.0f,		1.0f,	0.0f,	0.0f,	//30: K
+		3.0f,  1.5f,  -0.5f,	0.0f,	0.143,		1.0f,	0.0f,	0.0f,	//31: O
+
+		//Right
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.5f,  0.0f,  0.0f,		1.0f,   0.0f,		-1.0f,	0.0f,	0.0f,	//32: J
+		3.5f,  0.0f,  -0.5f,	1.0f,	0.143f,		-1.0f,	0.0f,	0.0f,	//33: N
+		3.5f,  1.5f,  0.0f,		0.0f,	0.0f,		-1.0f,	0.0f,	0.0f,	//34: L
+		3.5f,  1.5f,  -0.5f,	0.0f,	0.143,		-1.0f,	0.0f,	0.0f,	//35: P
+
+		//Bottom
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.0f,  0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//36: I
+		3.5f,  0.0f,  0.0f,		1.0f,	0.143f,		0.0f,	1.0f,	0.0f,	//37: J
+		3.0f,  0.0f,  -0.5f,	0.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//38: M
+		3.5f,  0.0f,  -0.5f,	0.0f,	0.143,		0.0f,	1.0f,	0.0f,	//39: N
+
+
+		//== Pata Trasera Izquierda ==
+		//Front
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.0f,  0.0f,  -3.0f,	1.0f,   0.0f,		0.0f,	0.0f,	-1.0f,	//40: A
+		0.5f,  0.0f,  -3.0f,	1.0f,	0.143f,		0.0f,	0.0f,	-1.0f,	//41: B
+		0.0f,  1.5f,  -3.0f,	0.0f,	0.0f,		0.0f,	0.0f,	-1.0f,	//42: C
+		0.5f,  1.5f,  -3.0f,	0.0f,	0.143,		0.0f,	0.0f,	-1.0f,	//43: D
+
+		//Back
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.0f,  0.0f,  -3.5f,	1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//44: F
+		0.5f,  0.0f,  -3.5f,	1.0f,	0.143f,		0.0f,	0.0f,	1.0f,	//45: E
+		0.0f,  1.5f,  -3.5f,	0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//46: H
+		0.5f,  1.5f,  -3.5f,	0.0f,	0.143,		0.0f,	0.0f,	1.0f,	//47: G
+
+		//Left
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.0f,  0.0f,  -3.0f,	1.0f,   0.0f,		1.0f,	0.0f,	0.0f,	//48: A
+		0.0f,  0.0f,  -3.5f,	1.0f,	0.143f,		1.0f,	0.0f,	0.0f,	//49: F
+		0.0f,  1.5f,  -3.0f,	0.0f,	0.0f,		1.0f,	0.0f,	0.0f,	//50: C
+		0.0f,  1.5f,  -3.5f,	0.0f,	0.143,		1.0f,	0.0f,	0.0f,	//51: H
+
+		//Right
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.5f,  0.0f,  -3.0f,	1.0f,   0.0f,		-1.0f,	0.0f,	0.0f,	//52: B
+		0.5f,  0.0f,  -3.5f,	1.0f,	0.143f,		-1.0f,	0.0f,	0.0f,	//53: E
+		0.5f,  1.5f,  -3.0f,	0.0f,	0.0f,		-1.0f,	0.0f,	0.0f,	//54: D
+		0.5f,  1.5f,  -3.5f,	0.0f,	0.143,		-1.0f,	0.0f,	0.0f,	//55: G
+
+		//Bottom
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.0f,  0.0f,  -3.0f,	1.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//56: A
+		0.5f,  0.0f,  -3.0f,	1.0f,	0.143f,		0.0f,	1.0f,	0.0f,	//57: B
+		0.0f,  0.0f,  -3.5f,	0.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//58: F
+		0.5f,  0.0f,  -3.5f,	0.0f,	0.143,		0.0f,	1.0f,	0.0f,	//59: E
+
+		//== Pata Trasera Derecha ==
+		//Front
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.0f,  0.0f,  -3.0f,	1.0f,   0.0f,		0.0f,	0.0f,	-1.0f,	//60: I
+		3.5f,  0.0f,  -3.0f,	1.0f,	0.143f,		0.0f,	0.0f,	-1.0f,	//61: J
+		3.0f,  1.5f,  -3.0f,	0.0f,	0.0f,		0.0f,	0.0f,	-1.0f,	//62: K
+		3.5f,  1.5f,  -3.0f,	0.0f,	0.143,		0.0f,	0.0f,	-1.0f,	//63: L
+
+		//Back
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.0f,  0.0f,  -3.5f,	1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//64: M
+		3.5f,  0.0f,  -3.5f,	1.0f,	0.143f,		0.0f,	0.0f,	1.0f,	//65: N
+		3.0f,  1.5f,  -3.5f,	0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//66: O
+		3.5f,  1.5f,  -3.5f,	0.0f,	0.143,		0.0f,	0.0f,	1.0f,	//67: P
+
+		//Left
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.0f,  0.0f,  -3.0f,	1.0f,   0.0f,		1.0f,	0.0f,	0.0f,	//68: I
+		3.0f,  0.0f,  -3.5f,	1.0f,	0.143f,		1.0f,	0.0f,	0.0f,	//69: M
+		3.0f,  1.5f,  -3.0f,	0.0f,	0.0f,		1.0f,	0.0f,	0.0f,	//70: K
+		3.0f,  1.5f,  -3.5f,	0.0f,	0.143,		1.0f,	0.0f,	0.0f,	//71: O
+
+		//Right
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.5f,  0.0f,  -3.0f,	1.0f,   0.0f,		-1.0f,	0.0f,	0.0f,	//72: J
+		3.5f,  0.0f,  -3.5f,	1.0f,	0.143f,		-1.0f,	0.0f,	0.0f,	//73: N
+		3.5f,  1.5f,  -3.0f,	0.0f,	0.0f,		-1.0f,	0.0f,	0.0f,	//74: L
+		3.5f,  1.5f,  -3.5f,	0.0f,	0.143,		-1.0f,	0.0f,	0.0f,	//75: P
+
+		//Bottom
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.0f,  0.0f,  -3.0f,	1.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//76: I
+		3.5f,  0.0f,  -3.0f,	1.0f,	0.143f,		0.0f,	1.0f,	0.0f,	//77: J
+		3.0f,  0.0f,  -3.5f,	0.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//78: M
+		3.5f,  0.0f,  -3.5f,	0.0f,	0.143,		0.0f,	1.0f,	0.0f,	//79: N
+
+		//== Mesa ==
+		//Front
+		//x		y		z		S		T			-NX		-NY		-NZ
+		-0.5f,  1.5f,  0.5f,	0.0f,   0.35f,		0.0f,	0.0f,	-1.0f,	//80: Q
+		4.0f,	1.5f,  0.5f,	0.0f,	0.35f,		0.0f,	0.0f,	-1.0f,	//81: R
+		-0.5f,	2.0f,  0.5f,	0.0f,	0.64f,		0.0f,	0.0f,	-1.0f,	//82: S
+		4.0f,	2.0f,  0.5f,	0.0f,	0.64f,		0.0f,	0.0f,	-1.0f,	//83: T
+
+		//Back
+		//x		y		z		S		T			-NX		-NY		-NZ
+		-0.5f,  1.5f,  -4.0f,	0.0f,   0.35f,		0.0f,	0.0f,	1.0f,	//84: U
+		4.0f,	1.5f,  -4.0f,	0.0f,	0.35f,		0.0f,	0.0f,	1.0f,	//85: V
+		-0.5f,	2.0f,  -4.0f,	0.0f,	0.64f,		0.0f,	0.0f,	1.0f,	//86: W
+		4.0f,	2.0f,  -4.0f,	0.0f,	0.64f,		0.0f,	0.0f,	1.0f,	//87: X
+
+		//Left	
+		//x		y		z		S		T			-NX		-NY		-NZ
+		-0.5f,  1.5f,  0.5f,	0.0f,   0.35f,		1.0f,	0.0f,	0.0f,	//88: Q
+		-0.5f,  1.5f,  -4.0f,	0.0f,   0.35f,		1.0f,	0.0f,	0.0f,	//89: U
+		-0.5f,	2.0f,  0.5f,	0.0f,	0.64f,		1.0f,	0.0f,	0.0f,	//90: S
+		-0.5f,	2.0f,  -4.0f,	0.0f,	0.64f,		1.0f,	0.0f,	0.0f,	//91: W
+
+		//Right	
+		//x		y		z		S		T			-NX		-NY		-NZ
+		4.0f,	1.5f,  0.5f,	0.0f,	0.35f,		-1.0f,	0.0f,	0.0f,	//92: R
+		4.0f,	1.5f,  -4.0f,	0.0f,	0.35f,		-1.0f,	0.0f,	0.0f,	//93: V
+		4.0f,	2.0f,  0.5f,	0.0f,	0.64f,		-1.0f,	0.0f,	0.0f,	//94: T
+		4.0f,	2.0f,  -4.0f,	0.0f,	0.64f,		-1.0f,	0.0f,	0.0f,	//95: X
+
+		//Bottom	
+		//x		y		z		S		T			-NX		-NY		-NZ
+		-0.5f,  1.5f,  0.5f,	0.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//96: Q
+		4.0f,	1.5f,  0.5f,	1.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//97: R
+		-0.5f,  1.5f,  -4.0f,	0.0f,   1.0f,		0.0f,	1.0f,	0.0f,	//98: U
+		4.0f,	1.5f,  -4.0f,	1.0f,	1.0f,		0.0f,	1.0f,	0.0f,	//99: V
+
+		//Up	
+		//x		y		z		S		T			-NX		-NY		-NZ
+		-0.5f,	2.0f,  0.5f,	0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,	//100: S
+		4.0f,	2.0f,  0.5f,	1.0f,	0.0f,		0.0f,	-1.0f,	0.0f,	//101: T
+		-0.5f,	2.0f,  -4.0f,	0.0f,	1.0f,		0.0f,	-1.0f,	0.0f,	//102: W
+		4.0f,	2.0f,  -4.0f,	1.0f,	1.0f,		0.0f,	-1.0f,	0.0f,	//103: X
+
+		//== Decoracion ==
+		//Front
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.25f,  1.25f, -0.25f,	0.0f,   0.35f,		0.0f,	0.0f,	-1.0f,	//104: Y
+		3.25f,	1.25f, -0.25f,	0.0f,	0.35f,		0.0f,	0.0f,	-1.0f,	//105: Z
+		0.25f,	1.5f,  -0.25f,	0.0f,	0.64f,		0.0f,	0.0f,	-1.0f,	//106: A1
+		3.25f,	1.5f,  -0.25f,	0.0f,	0.64f,		0.0f,	0.0f,	-1.0f,	//107: B1
+
+		//Back
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.25f,  1.25f, -3.25f,	0.0f,   0.35f,		0.0f,	0.0f,	1.0f,	//108: C1
+		3.25f,	1.25f, -3.25f,	0.0f,	0.35f,		0.0f,	0.0f,	1.0f,	//109: D1
+		0.25f,	1.5f,  -3.25f,	0.0f,	0.64f,		0.0f,	0.0f,	1.0f,	//110: E1
+		3.25f,	1.5f,  -3.25f,	0.0f,	0.64f,		0.0f,	0.0f,	1.0f,	//111: F1
+
+		//Left	
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.25f,  1.25f, -0.25f,	0.0f,   0.35f,		1.0f,	0.0f,	0.0f,	//112: Y
+		0.25f,  1.25f, -3.25f,	0.0f,   0.35f,		1.0f,	0.0f,	0.0f,	//113: C1
+		0.25f,	1.5f,  -0.25f,	0.0f,	0.64f,		1.0f,	0.0f,	0.0f,	//114: A1
+		0.25f,	1.5f,  -3.25f,	0.0f,	0.64f,		1.0f,	0.0f,	0.0f,	//115: E1
+
+		//Right	
+		//x		y		z		S		T			-NX		-NY		-NZ
+		3.25f,	1.25f, -0.25f,	0.0f,	0.35f,		-1.0f,	0.0f,	0.0f,	//116: Z
+		3.25f,	1.25f, -3.25f,	0.0f,	0.35f,		-1.0f,	0.0f,	0.0f,	//117: D1
+		3.25f,	1.5f,  -0.25f,	0.0f,	0.64f,		-1.0f,	0.0f,	0.0f,	//118: B1
+		3.25f,	1.5f,  -3.25f,	0.0f,	0.64f,		-1.0f,	0.0f,	0.0f,	//119: F1
+
+		//Bottom	
+		//x		y		z		S		T			-NX		-NY		-NZ
+		0.25f,  1.25f, -0.25f,	0.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//120: Y
+		3.25f,	1.25f, -0.25f,	1.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//121: Z
+		0.25f,  1.25f, -3.25f,	0.0f,   1.0f,		0.0f,	1.0f,	0.0f,	//122: C1
+		3.25f,	1.25f, -3.25f,	1.0f,	1.0f,		0.0f,	1.0f,	0.0f,	//123: D1
+
+	};
+
+	Mesh* mesa = new Mesh();
+	mesa->CreateMesh(mesa_vertices, mesa_indices, 992, 186);
+	meshList.push_back(mesa);
+
+}
 
 void CreateShaders()
 {
@@ -733,26 +1055,23 @@ void animate(void)
 
 
 
-
-
-
-
-
-
+//  === MAIN ===
 int main()
 {
 	mainWindow = Window(1366, 768); // 1280, 1024 or 1024, 768
 	mainWindow.Initialise();
 
-	CreateObjects();
-	CrearDado();
+	CreateObjects();				//mesh[0 a 5]
+	CrearDado();					//mesh[6]
 	CreateShaders();
-	CrearCubo();  //mesh[7]
-	CrearPiramideCuadrangular();  //mesh[8]
+	CrearCubo();					//mesh[7]
+	CrearPiramideCuadrangular();	//mesh[8]
 	
+	CrearMesa();					//mesh[9]
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
 
+	// === Texturas ===
 	brickTexture = Texture("Textures/brick.png");
 	brickTexture.LoadTextureA();
 	dirtTexture = Texture("Textures/dirt.png");
@@ -765,42 +1084,34 @@ int main()
 	AgaveTexture.LoadTextureA();
 	FlechaTexture = Texture("Textures/flechas.tga");
 	FlechaTexture.LoadTextureA();
+
+	texto = Texture("Textures/texto.tga");
+	texto.LoadTextureA();
+	dadoTexture = Texture("Textures/dado8.jpg");
+	//dadoTexture.LoadTextureA();
+	dadoTexture.LoadTexture();
+
+	mesaTexture = Texture("Textures/Wood.tga");
+	mesaTexture.LoadTexture();
+
+	// === Carga de modelos ===
 	Kitt_M = Model();
 	Kitt_M.LoadModel("Models/kitt_optimizado.obj");
 	Llanta_M = Model();
 	Llanta_M.LoadModel("Models/k_rueda.3ds");
 	Camino_M = Model();
 	Camino_M.LoadModel("Models/railroad track.obj");
-
-
+	
 	Blackhawk_M = Model();
 	Blackhawk_M.LoadModel("Models/helicopteroSinHelice.obj");
 	helice = Model();
 	helice.LoadModel("Models/helice.obj");
 
-
-
 	faro = Model();
 	faro.LoadModel("Models/Pruebas/Street Lamp.obj");
 	antorcha = Model();
 	antorcha.LoadModel("Models/Pruebas/Torch.obj");
-
-
-
-
-	texto = Texture("Textures/texto.tga");
-	texto.LoadTextureA();
 	
-
-
-
-	dadoTexture = Texture("Textures/dado8.jpg");
-	//dadoTexture.LoadTextureA();
-	dadoTexture.LoadTexture();
-
-
-
-
 	//Coche propio  NISSAN
 	cochePropio = Model();
 	//cochePropio.LoadModel("Models/Nisssa_Figaro_1991_OBJ.obj");
@@ -823,14 +1134,12 @@ int main()
 	pista = Model();
 	pista.LoadModel("Models/pista2rellena.fbx");
 
-
-
 	//Papalote
 	papalote = Model();
 	papalote.LoadModel("Models/kite sf.obj");
 
 
-
+	// === Skybox ===
 	std::vector<std::string> skyboxFaces;
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
 	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
@@ -845,13 +1154,18 @@ int main()
 	Material_opaco = Material(0.3f, 4);
 
 
-	//luz direccional, sólo 1 y siempre debe de existir
+	// === Luz Direccional === 
+	//Solo 1 y siempre debe de existir
+
+	//1° Luz [Direccional]: Sol
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		0.5f, 0.4f,
 		0.0f, 0.0f, -1.0f);
-	//contador de luces puntuales
+
+
+	// === Luz Puntal ===
 	unsigned int pointLightCount = 0;
-	//Declaración de primer luz puntual
+	
 	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f,
 		30.0f, 3.5f, 50.0f,
@@ -863,9 +1177,11 @@ int main()
 		1.0f, 1.0f,
 		30.0f, 5.5f, 165.0f,
 		1.0f, 0.01f, 0.001f);
-	//0.3f, 0.2f, 0.1f);
+		//0.3f, 0.2f, 0.1f);
 	pointLightCount++;
 
+
+	// === Luz Reflector ===
 	unsigned int spotLightCount = 0;
 	////linterna
 	//spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
@@ -885,8 +1201,7 @@ int main()
 	//	15.0f);
 	//spotLightCount++;
 
-	//luz de helicóptero
-	//luz frontal del coche
+	//1° Luz [Reflector]: Luz frontal del coche
 	spotLightsInverso[0] = SpotLight(0.0f, 0.0f, 1.0f,
 		0.5f, 2.0f,
 		5.0f, 10.0f, 0.0f,
@@ -895,7 +1210,7 @@ int main()
 		15.0f);
 	spotLightCount++;
 
-	//Luz trasera del coche
+	//2° Luz [Reflector]: Luz trasera del coche
 	spotLightsInverso[1] = SpotLight(0.0f, 1.0f, 0.0f,
 		0.5f, 2.0f,
 		5.0f, 10.0f, 0.0f,
@@ -904,7 +1219,7 @@ int main()
 		15.0f);
 	spotLightCount++;
 
-	//Luz del helicoptero
+	//3° Luz [Reflector]: Luz del helicoptero
 	spotLightsInverso[2] = SpotLight(1.0f, 0.0f, 0.0f,
 		0.5f, 2.0f,
 		5.0f, 10.0f, 0.0f,
@@ -912,21 +1227,17 @@ int main()
 		1.0f, 0.03f, 0.0001f,
 		15.0f);
 
-	//luz de faro
-
-
-
+	//Variables Uniform
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset=0;
 	GLuint uniformColor = 0;
+
+	//Perspectiva
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
-	
-
-
-	
-	
+		
 	glm::vec3 posblackhawk = glm::vec3(2.0f, 0.0f, 0.0f);
 
+	//KeyFrames iniciales
 	KeyFrame[0].movAnimacion_x = 0.0f;
 	KeyFrame[0].movAnimacion_y = 0.0f;
 	KeyFrame[0].movAnimacion_z = 0.0f;
@@ -936,7 +1247,6 @@ int main()
 
 	//Se leen los keyFrames del archivo
 	archivo1.LeerKeyFramesDeArchivo();
-
 
 
 	/*int index = 0;
@@ -952,8 +1262,7 @@ int main()
 	}*/
 
 
-
-
+	//Inicialización variables animación
 	movCoche = 0.0f;
 	movCocheY = 0.0f;
 	movCocheZ = 0.0f;
@@ -967,10 +1276,8 @@ int main()
 	movOffsetRotacionRampa = 1.1f;
 	movOffsetRotacionCurva = 1.0f;
 
-	
 	bool segundaCurvaParteDos = false;
 	bool rectaFinal = false;
-
 
 	rotllanta = 0.0f;
 	rotllantaOffset = 10.0f;
@@ -982,13 +1289,6 @@ int main()
 	int i = 0;
 	bool adelanteHeli = true;
 	
-
-
-
-
-
-
-
 	//dado
 	movDadoArriba = 20.5f;
 	offsetDadoArriba = 0.4f;
@@ -1002,9 +1302,6 @@ int main()
 	float spiralRadius = 2.0f;          // Radio de la espiral
 	float spiralHeight = 0.1f;         // Altura de la espiral
 	float spiralSpeed = 0.15f;           // Velocidad de la animación
-
-
-
 
 	//numero random
 	// Providing a seed value
@@ -1021,21 +1318,15 @@ int main()
 		lastTime = now;
 
 
-
-
 		//Recibir eventos del usuario
 		glfwPollEvents();
 		camera.keyControl(mainWindow.getsKeys(), deltaTime);
 		camera.mouseControl(mainWindow.getXChange(), mainWindow.getYChange());
 
 
-
-
 		//para keyframes
 		inputKeyframes(mainWindow.getsKeys());
 		animate();
-
-
 
 
 		// Clear the window
@@ -1050,7 +1341,8 @@ int main()
 		
 		uniformTextureOffset = shaderList[0].getOffsetLocation();
 
-		//información en el shader de intensidad especular y brillo
+
+		//Información en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 		uniformColor = shaderList[0].getColorLocation();
@@ -1059,7 +1351,8 @@ int main()
 		glUniformMatrix4fv(uniformView, 1, GL_FALSE, glm::value_ptr(camera.calculateViewMatrix()));
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
-		//// luz ligada a la cámara de tipo flash
+
+		//=== luz ligada cámara [flash] ===
 		//glm::vec3 lowerLight = camera.getCameraPosition();
 		//lowerLight.y -= 0.3f;
 		//spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
@@ -1070,26 +1363,15 @@ int main()
 		//shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
 
-
-
-
-
-
-
+		//=== Modelos ===
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
-
 		glm::mat4 modelauxHelice(1.0);
 
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
 
-
-
-
-
-
-		//Pista
+		//=== Pista ===
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(180.0f, -5.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(18.0f, 18.0f, 18.0f));
@@ -1107,10 +1389,7 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		pista.RenderModel();
 
-
-
-
-		//Antorcha
+		//=== Antorcha ===
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(30.0f, 2.0f, 165.0));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
@@ -1119,9 +1398,18 @@ int main()
 		antorcha.RenderModel();
 
 
+		// ========= PROYECTO =========
+
+		//=== Primitiva: Mesa ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(40.0f, 2.0f, 165.0));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		mesaTexture.UseTexture();
+		meshList[9]->RenderMesh();
 
 
 
+		//=== Piso [Textura con movimiento] === 
 		//Importantes porque la variable uniform no podemos modificarla directamente
 		toffsetu += 0.001;
 		toffsetv += 0.0;
@@ -1149,8 +1437,7 @@ int main()
 		glDisable(GL_BLEND);
 
 
-
-
+		//=== Texto [Textura con movimiento] === 
 		//Importantes porque la variable uniform no podemos modificarla directamente
 		toffsetu += 0.001;
 		toffsetv += 0.0;
@@ -1179,24 +1466,13 @@ int main()
 		glDisable(GL_BLEND);
 		
 
-
-
-
-
-
-
-
-
-
-
-
 		//// Calcular la posición del objeto en la espiral
 		//float x = spiralRadius * cos(t);
 		//float y = spiralRadius * sin(t);
 		//float z = t * spiralHeight;
 		
 
-		//Papalote
+		//=== Papalote ===
 		model = glm::mat4(1.0);
 		posblackhawk = glm::vec3(posXAnimacion + movAnimacion_x, posYAnimacion + movAnimacion_y, posZAnimacion + movAnimacion_z);
 		model = glm::translate(model, posblackhawk);
@@ -1213,11 +1489,9 @@ int main()
 
 		//// Actualizar el parámetro t para avanzar en la espiral
   //      t += deltaTime * spiralSpeed;
-
 		
 
-
-		//Cubo
+		//=== Cubo ===
 		model = glm::mat4(1.0f);
 		color = glm::vec3(0.0f, 0.0f, 1.0f);
 		model = glm::translate(model, glm::vec3(4.6f, 10.0f, -53.0f));
@@ -1230,7 +1504,7 @@ int main()
 		meshList[7]->RenderMesh();
 
 
-		//Piramide
+		//=== Piramide ===
 		model = glm::mat4(1.0f);
 		color = glm::vec3(1.0f, 0.0f, 0.0f);
 		model = glm::translate(model, glm::vec3(4.6f, 20.0f, -53.0f));
@@ -1243,11 +1517,7 @@ int main()
 		meshList[8]->RenderMesh();
 
 
-
-
-
-
-		//Faro
+		//=== Faro ===
 		model = glm::mat4(1.0);
 		color = glm::vec3(0.0f, 1.0f, 0.0f);
 		model = glm::translate(model, glm::vec3(30.0f, -3.0f, 50.0));
@@ -1258,14 +1528,7 @@ int main()
 		faro.RenderModel();
 
 
-
-
-
-
-
-
-
-		//Helicoptero
+		//=== Helicoptero ===
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f + movHeliX, 63.0f+sin(glm::radians(subeBajaHeli)), -1.0+movHeli));
 		model = glm::translate(model, glm::vec3(0.0f, 3.0f , -1.0));
@@ -1343,14 +1606,11 @@ int main()
 
 		spotLightsInverso[2].SetFlash(glm::vec3(0.0f + movHeliX, 63.0f + sin(glm::radians(subeBajaHeli)), -1.0 + movHeli), glm::vec3(0.0f, -1.0f, 0.0f));
 		shaderList[0].SetSpotLightsManual(spotLightsInverso, 2);
-
-
 		
 
-
+		//=== Coche ===
 		float posicionInicialCarro = 200.0f;
 
-		//Coche
 		color = glm::vec3(1.0f, 0.0f, 0.0f);
 		model = glm::mat4(1.0);
 		//movimiento de la carrocería
@@ -1366,7 +1626,8 @@ int main()
 		//Rotacion cuvas
 		model = glm::rotate(model, -(rotacionCurva)*toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		//primera recta
+		//Movimiento del Coche
+			//primera recta
 		if (adelanteCoche == true) {
 			if (movCoche > -156.0f)
 			{
@@ -1596,10 +1857,8 @@ int main()
 
 
 
-
-
-
-		////Agave ¿qué sucede si lo renderizan antes del coche y de la pista?
+		// === Agave ===
+		//¿qué sucede si lo renderizan antes del coche y de la pista?
 		////se deben renderizar al final para ver las texturas con traslucidez
 		//model = glm::mat4(1.0);
 		//model = glm::translate(model, glm::vec3(0.0f, 0.5f, -2.0f));
@@ -1613,20 +1872,7 @@ int main()
 		//meshList[3]->RenderMesh();
 		
 
-
-
-
-
-
-
-		
-
-
-
-
-
-
-		////textura con movimiento
+		// === textura con movimiento ===
 		//// 
 		//// Va al final para que no se muevan todas las texturas
 		//// Se tendrian que inicializar en 0 los off para agregar movimiento en otras texturas
