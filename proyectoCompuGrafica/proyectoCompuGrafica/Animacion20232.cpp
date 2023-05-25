@@ -92,6 +92,14 @@ float offsetDadoArriba = 0.0f;
 int presionaTecla = 0;
 int presionateclaPrevio = 0;
 
+//Movimiento de pengling
+float offsetAvanzaPengling;
+float offsetGiroPengling;
+float penglingOffset;
+float movPenglingZ = 0.0f;
+float movPenglingX = 0.0f;
+float rotaPengling = 0.0f;
+
 
 // === Variables Animación Keyframes ===
 float reproduciranimacion, habilitaranimacion,
@@ -145,6 +153,10 @@ Model papalote;
 //Iluminación
 Model faro;
 Model antorcha;
+
+//Pingu
+Model Pingu;
+
 
 Skybox skybox;
 
@@ -938,7 +950,7 @@ void CreateShaders()
 
 
 
-///////////////////////////////KEYFRAMES/////////////////////
+///////////////////////////////KEYFRAMES/////////////////////  
 
 bool animacion = false;
 
@@ -1138,6 +1150,10 @@ int main()
 	papalote = Model();
 	papalote.LoadModel("Models/kite sf.obj");
 
+	//Pingu
+	Pingu = Model();	
+	Pingu.LoadModel("Models/Pingu.obj");
+
 
 	// === Skybox ===
 	std::vector<std::string> skyboxFaces;
@@ -1288,6 +1304,12 @@ int main()
 	bool adelanteCoche = true;
 	int i = 0;
 	bool adelanteHeli = true;
+
+	//Movimiento pengling
+	offsetAvanzaPengling = 0.4f;
+	offsetGiroPengling = 3.0f;
+	penglingOffset = 5.0f;  //es el senoidal
+	bool adelantePengling = true;
 	
 	//dado
 	movDadoArriba = 20.5f;
@@ -1406,6 +1428,70 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		mesaTexture.UseTexture();
 		meshList[9]->RenderMesh();
+
+		//=== Pingu: Modelo de pinguino ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, 0.0f , 200.0 + movPenglingZ));
+		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		//rotacion En circuito
+		model = glm::rotate(model, rotaPengling * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+		//Movimiento del pinguino
+		if (adelantePengling == true) {
+			//rotaHelice += 6 * deltaTime;
+			if (movPenglingZ < 15.0f)
+			{
+				movPenglingZ += offsetAvanzaPengling * deltaTime;
+			}
+			else if (movPenglingZ >= 15.0 and movPenglingZ < 18.0f) {
+				movPenglingZ += 0.1 * deltaTime;
+				rotaPengling += offsetGiroPengling * deltaTime;
+			}
+			else if (movPenglingX < 20.0f) {
+				movPenglingX += offsetAvanzaPengling * deltaTime;
+			}
+			else if (movPenglingX >= 20.0 and movPenglingX < 23.0f) {
+				movPenglingX += 0.1 * deltaTime;
+				rotaPengling += offsetGiroPengling * deltaTime;
+			}
+			else {
+				adelantePengling = false;
+			}
+
+		}
+		else {
+			//rotaHelice += 6 * deltaTime;
+			if (movPenglingZ > -15.0f)
+			{
+				movPenglingZ -= offsetAvanzaPengling * deltaTime;
+			}
+			else if (movPenglingZ <= -15.0 and movPenglingZ > -18.0f) {
+				movPenglingZ -= 0.1 * deltaTime;
+				rotaPengling += offsetGiroPengling * deltaTime;
+			}
+			else if (movPenglingX > -10.0f) {
+				movPenglingX -= offsetAvanzaPengling * deltaTime;
+			}
+			else if (movPenglingX <= -10.0 and movPenglingX > -13.0f) {
+				movPenglingX -= 0.1 * deltaTime;
+				rotaPengling += offsetGiroPengling * deltaTime;
+			}
+			else {
+				adelantePengling = true;
+				//rotaHelice = 0.0;
+			}
+		}
+		//subeBajaPengling += penglingOffset * deltaTime;
+		if (movPenglingZ > 359.0) {
+			penglingOffset = 0.0f;
+		}
+
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Pingu.RenderModel();
 
 
 
