@@ -100,6 +100,12 @@ float movPenglingZ = 0.0f;
 float movPenglingX = 0.0f;
 float rotaPengling = 0.0f;
 
+//Movimiento de la Bolsa de Dinero
+float rotacionBolsaEje;
+float offsetGiroBolsa;
+float movBolsaArribaAbajo;
+float offsetBolsaArribaAbajo;
+
 
 // === Variables Animación Keyframes ===
 float reproduciranimacion, habilitaranimacion,
@@ -156,6 +162,9 @@ Model antorcha;
 
 //Pingu
 Model Pingu;
+
+//Bolsa de dinero
+Model bolsaDinero;
 
 
 Skybox skybox;
@@ -1154,6 +1163,10 @@ int main()
 	Pingu = Model();	
 	Pingu.LoadModel("Models/Pingu.obj");
 
+	//Bolsa de dinero
+	bolsaDinero = Model();
+	bolsaDinero.LoadModel("Models/monedero.obj");
+
 
 	// === Skybox ===
 	std::vector<std::string> skyboxFaces;
@@ -1310,6 +1323,12 @@ int main()
 	offsetGiroPengling = 3.0f;
 	penglingOffset = 5.0f;  //es el senoidal
 	bool adelantePengling = true;
+
+	//Movimiento de bolsa de dinero
+	offsetGiroBolsa = 4;
+	rotacionBolsaEje = 0.0;
+	offsetBolsaArribaAbajo = 4.0f;
+	movBolsaArribaAbajo = 0.0f;
 	
 	//dado
 	movDadoArriba = 20.5f;
@@ -1431,14 +1450,11 @@ int main()
 
 		//=== Pingu: Modelo de pinguino ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, 0.0f , 200.0 + movPenglingZ));
+		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, -2.0f , 200.0 + movPenglingZ));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
 		//rotacion En circuito
 		model = glm::rotate(model, rotaPengling * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-
 		//Movimiento del pinguino
 		if (adelantePengling == true) {
 			//rotaHelice += 6 * deltaTime;
@@ -1492,6 +1508,24 @@ int main()
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pingu.RenderModel();
+
+
+
+		//=== Bolsa de dinero ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-30.0f, 2.0f + 4*sin(glm::radians(movBolsaArribaAbajo)), 180.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::rotate(model, rotacionBolsaEje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		rotacionBolsaEje += offsetGiroBolsa * deltaTime;
+
+		movBolsaArribaAbajo += offsetBolsaArribaAbajo * deltaTime;
+		/*if (movBolsaArribaAbajo > 359.0) {
+			offsetBolsaArribaAbajo = 0.0f;
+		}*/
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		bolsaDinero.RenderModel();
 
 
 
