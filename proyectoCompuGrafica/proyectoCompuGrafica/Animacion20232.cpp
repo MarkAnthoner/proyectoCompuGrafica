@@ -70,7 +70,6 @@ float movOffsetRotacionRampa;
 float movOffsetRotacionCurva;
 
 
-
 float rotllanta;
 float rotllantaOffset;
 bool avanza;
@@ -133,6 +132,8 @@ Texture texto;
 Texture dadoTexture;
 
 Texture mesaTexture;
+Texture aguaTexture;
+Texture arenaTexture;
 
 // === Variables de Modelos ===
 //Coche
@@ -166,6 +167,8 @@ Model Pingu;
 //Bolsa de dinero
 Model bolsaDinero;
 
+//Leviathan
+Model Leviathan_M;
 
 Skybox skybox;
 
@@ -602,7 +605,6 @@ void CrearCono(int res, float R) {
 }
 
 
-
 //Función crea primitiva: mesa
 void CrearMesa()
 {
@@ -945,15 +947,163 @@ void CrearMesa()
 
 }
 
+//Función crea primitiva: agua
+void CrearAgua()
+{
+	unsigned int agua_indices[] = {
+		//Front
+		0, 1, 2,
+		1, 2, 3,
+		//Back
+		4, 5, 6,
+		5, 6, 7,
+		//Left
+		8, 9, 10,
+		9, 10, 11,
+		//Right
+		12, 13, 14,
+		13, 14, 15,
+		//Bottom
+		16, 17, 18,
+		17, 18, 19,
+		//Top
+		20, 21, 22,
+		21, 22, 23,
+	};
+
+
+	GLfloat agua_vertices[] = {
+		//Front
+		//x			y		z		S		T			-NX		-NY		-NZ
+		0.0f,	 0.0f,  0.0f,		0.27f,  0.35f,		0.0f,	0.0f,	-1.0f,	//0: A
+		0.125f,	 0.0f,  0.0f,		0.48f,	0.35f,		0.0f,	0.0f,	-1.0f,	//1: B
+		0.0f,	 1.0f,  0.0f,		0.48f,	0.64f,		0.0f,	0.0f,	-1.0f,	//2: C
+		0.375f,	 1.0f,  0.0f,		0.27f,	0.64f,		0.0f,	0.0f,	-1.0f,	//3: D
+	
+		//Back
+		//x		y		z			S		T			-NX		-NY		-NZ
+		0.0f,	 0.0f,  -1.0f,		1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//4: E
+		0.125f,  0.0f,  -1.0f,		1.0f,	0.143f,		0.0f,	0.0f,	1.0f,	//5: F
+		0.0f,	 1.0f,  -1.0f,		0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//6: G
+		0.375f,  1.0f,  -1.0f,		0.0f,	0.143,		0.0f,	0.0f,	1.0f,	//7: H
+
+		//Left
+		//x		y		z			S		T			-NX		-NY		-NZ
+		0.0f,	 0.0f,  0.0f,		1.0f,   0.0f,		1.0f,	0.0f,	0.0f,	//8: A
+		0.0f,	 0.0f,  -1.0f,		1.0f,	0.143f,		1.0f,	0.0f,	0.0f,	//9: E
+		0.0f,	 1.0f,  0.0f,		0.0f,	0.0f,		1.0f,	0.0f,	0.0f,	//10: C
+		0.0f,	 1.0f,  -1.0f,		0.0f,	0.143,		1.0f,	0.0f,	0.0f,	//11: G
+
+		//Right
+		//x		y		z			S		T			-NX		-NY		-NZ
+		0.125f,	 0.0f,  0.0f,		1.0f,   0.0f,		-1.0f,	0.0f,	0.0f,	//12: B
+		0.125f,  0.0f,  -1.0f,		1.0f,	0.143f,		-1.0f,	0.0f,	0.0f,	//13: F
+		0.375f,	 1.0f,  0.0f,		0.0f,	0.0f,		-1.0f,	0.0f,	0.0f,	//14: D
+		0.375f,  1.0f,  -1.0f,		0.0f,	0.143,		-1.0f,	0.0f,	0.0f,	//15: H
+
+		//Bottom
+		//x		y		z			S		T			-NX		-NY		-NZ
+		0.0f,	 0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//16: A
+		0.125f,	 0.0f,  0.0f,		1.0f,	0.143f,		0.0f,	1.0f,	0.0f,	//17: B
+		0.0f,	 0.0f,  -1.0f,		0.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//18: E
+		0.125f,  0.0f,  -1.0f,		0.0f,	0.143,		0.0f,	1.0f,	0.0f,	//19: F
+
+		//Top
+		//x		y		z			S		T			-NX		-NY		-NZ
+		0.0f,	 1.0f,  0.0f,		1.0f,   0.0f,		0.0f,	-1.0f,	0.0f,	//20: C
+		0.375f,	 1.0f,  0.0f,		1.0f,	0.143f,		0.0f,	-1.0f,	0.0f,	//21: D
+		0.0f,	 1.0f,  -1.0f,		0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,	//22: G
+		0.375f,  1.0f,  -1.0f,		0.0f,	0.143,		0.0f,	-1.0f,	0.0f,	//23: H
+
+	};
+
+	Mesh* agua = new Mesh();
+	agua->CreateMesh(agua_vertices, agua_indices, 192, 36);
+	meshList.push_back(agua);
+}
+
+//Función crea primitiva: arena
+void CrearArena()
+{
+	unsigned int arena_indices[] = {
+		//Front
+		0, 1, 2,
+		1, 2, 3,
+		//Back
+		4, 5, 6,
+		5, 6, 7,
+		//Left
+		8, 9, 10,
+		9, 10, 11,
+		//Right
+		12, 13, 14,
+		13, 14, 15,
+		//Bottom
+		16, 17, 18,
+		17, 18, 19,
+		//Top
+		20, 21, 22,
+		21, 22, 23,
+	};
+
+
+	GLfloat arena_vertices[] = {
+		//Front
+		//x			y		z		S		T			-NX		-NY		-NZ
+		0.125f,	 0.0f,  0.0f,		0.0f,	0.0f,		0.0f,	0.0f,	-1.0f,	//0: B
+		1.0f,	 0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	0.0f,	-1.0f,	//1: I
+		0.375f,	 1.0f,  0.0f,		0.0f,	1.0f,		0.0f,	0.0f,	-1.0f,	//2: D
+		1.0f,	 1.0f,  0.0f,		1.0f,	1.0f,		0.0f,	0.0f,	-1.0f,	//3: J
+
+		//Back
+		//x		y		z			S		T			-NX		-NY		-NZ
+		0.125f,  0.0f,  -1.0f,		0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//5: F
+		1.0f,	 0.0f,  -1.0f,		1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//4: K
+		0.375f,  1.0f,  -1.0f,		0.0f,	1.0f,		0.0f,	0.0f,	1.0f,	//7: H
+		1.0f,	 1.0f,  -1.0f,		1.0f,	1.0f,		0.0f,	0.0f,	1.0f,	//6: L
+		
+		//Left
+		//x		y		z			S		T			-NX		-NY		-NZ
+		0.125f,	 0.0f,  0.0f,		0.0f,	0.0f,		1.0f,	0.0f,	0.0f,	//8: B
+		0.125f,  0.0f,  -1.0f,		1.0f,   0.0f,		1.0f,	0.0f,	0.0f,	//9: F
+		0.375f,	 1.0f,  0.0f,		0.0f,	1.0f,		1.0f,	0.0f,	0.0f,	//10: D
+		0.375f,  1.0f,  -1.0f,		1.0f,	1.0f,		1.0f,	0.0f,	0.0f,	//11: H
+
+		//Right
+		//x		y		z			S		T			-NX		-NY		-NZ
+		1.0f,	 0.0f,  0.0f,		0.0f,	0.0f,		-1.0f,	0.0f,	0.0f,	//12: I
+		1.0f,	 0.0f,  -1.0f,		1.0f,   0.0f,		-1.0f,	0.0f,	0.0f,	//13: K
+		1.0f,	 1.0f,  0.0f,		0.0f,	1.0f,		-1.0f,	0.0f,	0.0f,	//14: J
+		1.0f,	 1.0f,  -1.0f,		1.0f,	1.0f,		-1.0f,	0.0f,	0.0f,	//15: L
+
+		//Bottom
+		//x		y		z			S		T			-NX		-NY		-NZ
+		0.125f,	 0.0f,  0.0f,		0.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//16: B
+		1.0f,	 0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//17: I
+		0.125f,  0.0f,  -1.0f,		0.0f,	1.0f,		0.0f,	1.0f,	0.0f,	//18: F
+		1.0f,	 0.0f,  -1.0f,		1.0f,	1.0f,		0.0f,	1.0f,	0.0f,	//19: K
+
+		//Top
+		//x		y		z			S		T			-NX		-NY		-NZ
+		0.375f,	 1.0f,  0.0f,		0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,	//20: D
+		1.0f,	 1.0f,  0.0f,		1.0f,   0.0f,		0.0f,	-1.0f,	0.0f,	//21: J
+		0.375f,  1.0f,  -1.0f,		0.0f,	1.0f,		0.0f,	-1.0f,	0.0f,	//22: H
+		1.0f,	 1.0f,  -1.0f,		1.0f,	1.0f,		0.0f,	-1.0f,	0.0f,	//23: L
+
+	};
+
+	Mesh* arena = new Mesh();
+	arena->CreateMesh(arena_vertices, arena_indices, 192, 36);
+	meshList.push_back(arena);
+}
+
+
 void CreateShaders()
 {
 	Shader *shader1 = new Shader();
 	shader1->CreateFromFiles(vShader, fShader);
 	shaderList.push_back(*shader1);
 }
-
-
-
 
 
 
@@ -1089,6 +1239,8 @@ int main()
 	CrearPiramideCuadrangular();	//mesh[8]
 	
 	CrearMesa();					//mesh[9]
+	CrearAgua();					//mesh[10]
+	CrearArena();					//mesh[11]
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
 
@@ -1114,6 +1266,10 @@ int main()
 
 	mesaTexture = Texture("Textures/Wood.tga");
 	mesaTexture.LoadTexture();
+	aguaTexture = Texture("Textures/Agua.tga");
+	aguaTexture.LoadTextureA();
+	arenaTexture = Texture("Textures/Arena.tga");
+	arenaTexture.LoadTexture();
 
 	// === Carga de modelos ===
 	Kitt_M = Model();
@@ -1167,15 +1323,24 @@ int main()
 	bolsaDinero = Model();
 	bolsaDinero.LoadModel("Models/monedero.obj");
 
-
 	// === Skybox ===
 	std::vector<std::string> skyboxFaces;
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_rt.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_lf.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_dn.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_up.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_bk.tga");
-	skyboxFaces.push_back("Textures/Skybox/cupertin-lake_ft.tga");
+	//Day
+	skyboxFaces.push_back("Textures/Skybox/Day_Right.tga");
+	skyboxFaces.push_back("Textures/Skybox/Day_Left.tga");
+	skyboxFaces.push_back("Textures/Skybox/Day_Bottom.tga");
+	skyboxFaces.push_back("Textures/Skybox/Day_Top.tga");
+	skyboxFaces.push_back("Textures/Skybox/Day_Front.tga");
+	skyboxFaces.push_back("Textures/Skybox/Day_Back.tga");
+	/*
+	//Night
+	skyboxFaces.push_back("Textures/Skybox/Night_Right.tga");
+	skyboxFaces.push_back("Textures/Skybox/Night_Left.tga");
+	skyboxFaces.push_back("Textures/Skybox/Night_Bottom.tga");
+	skyboxFaces.push_back("Textures/Skybox/Night_Top.tga");
+	skyboxFaces.push_back("Textures/Skybox/Night_Front.tga");
+	skyboxFaces.push_back("Textures/Skybox/Night_Back.tga");
+	*/
 
 	skybox = Skybox(skyboxFaces);
 
@@ -1425,7 +1590,6 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		//pisoTexture.UseTexture();
 		brickTexture.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		pista.RenderModel();
@@ -1448,6 +1612,29 @@ int main()
 		mesaTexture.UseTexture();
 		meshList[9]->RenderMesh();
 
+		//=== Primitiva: Agua ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-300.0f, -102.0f, 300.0));		//x:- (EscalaX/2)  y:- (EscalaY+2)  z: EscalaZ/2
+		model = glm::scale(model, glm::vec3(600.0f, 100.0f, 600.0f));
+			
+		//blending: transparencia o traslucidez  menor al 100%
+		glEnable(GL_BLEND); 
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		aguaTexture.UseTexture();
+		meshList[10]->RenderMesh();
+		glDisable(GL_BLEND);
+			
+
+		//=== Primitiva: Arena ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-300.0f, -102.0f, 300.0));		//x:- (EscalaX/2)  y:- (EscalaY+2)  z: EscalaZ/2
+		model = glm::scale(model, glm::vec3(600.0f, 100.0f, 600.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arenaTexture.UseTexture();
+		meshList[11]->RenderMesh();
+
+	
 		//=== Pingu: Modelo de pinguino ===
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, -2.0f , 200.0 + movPenglingZ));
@@ -1528,7 +1715,7 @@ int main()
 		bolsaDinero.RenderModel();
 
 
-
+		/*
 		//=== Piso [Textura con movimiento] === 
 		//Importantes porque la variable uniform no podemos modificarla directamente
 		toffsetu += 0.001;
@@ -1546,6 +1733,7 @@ int main()
 		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
 		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		//glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+
 		////blending: transparencia o traslucidez  menor al 100%
 		glEnable(GL_BLEND);  //habilita las texturas del agave para blending
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -1555,7 +1743,7 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[2]->RenderMesh();
 		glDisable(GL_BLEND);
-
+		*/
 
 		//=== Texto [Textura con movimiento] === 
 		//Importantes porque la variable uniform no podemos modificarla directamente
