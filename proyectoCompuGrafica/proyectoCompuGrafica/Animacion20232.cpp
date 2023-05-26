@@ -134,6 +134,7 @@ Texture dadoTexture;
 Texture mesaTexture;
 Texture aguaTexture;
 Texture arenaTexture;
+Texture casaTexture;
 
 // === Variables de Modelos ===
 //Coche
@@ -1097,6 +1098,105 @@ void CrearArena()
 	meshList.push_back(arena);
 }
 
+//Función crea primitiva: casa
+
+void CrearCasa()
+{
+	unsigned int casa_indices[] = {
+		//Front
+		0, 1, 2,
+		1, 2, 3,
+		2, 5, 6,
+		2, 3, 6,
+		4, 5, 6,
+
+		//Back
+		7, 8, 9,
+		8, 9, 10,
+		9, 12, 13,
+		9, 10, 13,
+		11, 12, 13,
+
+		//Right
+		20, 21, 18,
+		21, 19, 18,	
+		18, 19, 16, 
+		19, 17, 16, 
+		16, 17, 14, 
+		17, 15, 14,
+
+		//Left
+		28, 29, 26,
+		29, 27, 26,
+		26, 27, 24,
+		27, 25, 24,
+		24, 25, 22,
+		25, 23, 22,
+
+		//Bottom
+		30, 31, 32,
+		31, 32, 33,
+	};
+
+
+	GLfloat casa_vertices[] = {
+		//Front
+		//x					y					z			S					T					-NX	  -NY	 -NZ
+		0.087235487642f,	0.0011752714266f,	0.0f,		0.0479565399097f,	0.49932519425395f,   0.0f, 0.0f, -1.0f,     //0: C
+		0.8660852434438f,	0.0022203162877f,	0.0f,		0.4373814178106f,	0.4998477166845f,    0.0f, 0.0f, -1.0f,     //1: D
+		0.0482761515455f,	0.4169979723985f,	0.0f,		0.02847687186145f,	0.7072365447399f,    0.0f, 0.0f, -1.0f,     //2: E
+		0.9117380930899f,	0.4144286735813f,	0.0f,		0.46020784263365f,	0.7059518953313f,    0.0f, 0.0f, -1.0f,     //3: F
+		0.4815969563616f,	1.0025248829187f,	0.0f,		0.2451372742695f,	1.0f,				 0.0f, 0.0f, -1.0f,     //4: G
+		0.0015197330629f,	0.4848379232325f,	0.0f,		0.00509866262015f,	0.7411565201569f,    0.0f, 0.0f, -1.0f,     //5: H
+		0.971549737457f,	0.4709889866024f,	0.0f,		0.4901136648172f,	0.73423205184185f,   0.0f, 0.0f, -1.0f,     //6: I
+
+		//Back
+		//x					y					z			S					T				-NX	  -NY	 -NZ
+		0.087235487642f,	0.0011752714266f,	-1.0f,		0.04795654f,	0.002301136f,		0.0f, 0.0f, 1.0f,     //7: C1
+		0.8660852434438f,	0.0022203162877f,	-1.0f,		0.437381418f,	0.002823659f,		0.0f, 0.0f, 1.0f,     //8: D1
+		0.0482761515455f,	0.4169979723985f,	-1.0f,		0.028476872f,	0.210212487f,		0.0f, 0.0f, 1.0f,     //9: E1
+		0.9117380930899f,	0.4144286735813f,	-1.0f,		0.460207843f,	0.208927837f,		0.0f, 0.0f, 1.0f,     //10: F1
+		0.4815969563616f,	1.0025248829187f,	-1.0f,		0.245137274f,	0.502975942f,		0.0f, 0.0f, 1.0f,     //11: G1
+		0.0015197330629f,	0.4848379232325f,	-1.0f,		0.005098663f,	0.244132462f,		0.0f, 0.0f, 1.0f,     //12: H1
+		0.971549737457f,	0.4709889866024f,	-1.0f,		0.490113665f,	0.237207994f,		0.0f, 0.0f, 1.0f,     //13: I1
+
+		//Right 
+		//x					y					z			S		T			-NX	  -NY	 -NZ
+		0.4815969563616f,	1.0025248829187f,	0.0f,		0.5f,	0.5f,		-1.0f, 0.0f, 0.0f,     //14: G
+		0.4815969563616f,	1.0025248829187f,	-1.0f,		1.0f,	0.5f,		-1.0f, 0.0f, 0.0f,     //15: G1
+		0.971549737457f,	0.4709889866024f,	0.0f,		0.5f,	0.3033f,    -1.0f, 0.0f, 0.0f,     //16: I
+		0.971549737457f,	0.4709889866024f,	-1.0f,		1.0f,	0.3033f,	-1.0f, 0.0f, 0.0f,     //17: I1
+		0.9117380930899f,	0.4144286735813f,	0.0f,		0.5f,	0.25f,		-1.0f, 0.0f, 0.0f,     //18: F
+		0.9117380930899f,	0.4144286735813f,	-1.0f,		1.0f,	0.25f,		-1.0f, 0.0f, 0.0f,     //19: F1
+		0.8660852434438f,	0.0022203162877f,	0.0f,		0.5f,	0.0f,		-1.0f, 0.0f, 0.0f,     //20: D
+		0.8660852434438f,	0.0022203162877f,	-1.0f,		1.0f,	0.0f,		-1.0f, 0.0f, 0.0f,     //21: D1
+
+		//Left
+		//x					y					z			S		T			-NX	  -NY	 -NZ
+		0.4815969563616f,	1.0025248829187f,	0.0f,		0.5f,	0.5f,		1.0f, 0.0f, 0.0f,     //22: G
+		0.4815969563616f,	1.0025248829187f,	-1.0f,		1.0f,	0.5f,		1.0f, 0.0f, 0.0f,     //23: G1
+		0.0015197330629f,	0.4848379232325f,	0.0f,		0.5f,	0.3033f,    1.0f, 0.0f, 0.0f,     //24: H
+		0.0015197330629f,	0.4848379232325f,	-1.0f,		1.0f,	0.3033f,	1.0f, 0.0f, 0.0f,     //25: H1
+		0.0482761515455f,	0.4169979723985f,	0.0f,		0.5f,	0.25f,		1.0f, 0.0f, 0.0f,     //26: E1
+		0.0482761515455f,	0.4169979723985f,	-1.0f,		1.0f,	0.25f,		1.0f, 0.0f, 0.0f,     //27: E1
+		0.087235487642f,	0.0011752714266f,	0.0f,		0.5f,	0.0f,		1.0f, 0.0f, 0.0f,     //28: C
+		0.087235487642f,	0.0011752714266f,	-1.0f,		1.0f,	0.0f,		1.0f, 0.0f, 0.0f,     //29: C1
+
+		//Bottom
+		0.8660852434438f,	0.0022203162877f,	0.0f,		0.1f,	0.1f,		0.0f, 1.0f, 0.0f,     //30: D
+		0.8660852434438f,	0.0022203162877f,	-1.0f,		0.2f,	0.1f,		0.0f, 1.0f, 0.0f,     //31: D1
+		0.087235487642f,	0.0011752714266f,	0.0f,		0.1f,	0.2f,		0.0f, 1.0f, 0.0f,     //32: C
+		0.087235487642f,	0.0011752714266f,	-1.0f,		0.2f,	0.2f,		0.0f, 1.0f, 0.0f,     //33: C1
+
+	};
+
+
+	Mesh* casa = new Mesh();
+	casa->CreateMesh(casa_vertices, casa_indices, 272, 72);
+	meshList.push_back(casa);
+
+}
+
 
 void CreateShaders()
 {
@@ -1241,6 +1341,7 @@ int main()
 	CrearMesa();					//mesh[9]
 	CrearAgua();					//mesh[10]
 	CrearArena();					//mesh[11]
+	CrearCasa();					//mesh[12]
 
 	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
 
@@ -1270,6 +1371,8 @@ int main()
 	aguaTexture.LoadTextureA();
 	arenaTexture = Texture("Textures/Arena.tga");
 	arenaTexture.LoadTexture();
+	casaTexture = Texture("Textures/Casa.tga");
+	casaTexture.LoadTextureA();
 
 	// === Carga de modelos ===
 	Kitt_M = Model();
@@ -1633,6 +1736,21 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		arenaTexture.UseTexture();
 		meshList[11]->RenderMesh();
+
+		//=== Primitiva: Casa ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(50.0f, 2.0f, 165.0));
+		model = glm::scale(model, glm::vec3(60.0f, 60.0f, 60.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		//blending: transparencia o traslucidez  menor al 100%
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		casaTexture.UseTexture();
+		meshList[12]->RenderMesh();
+		glDisable(GL_BLEND);
+
 
 	
 		//=== Pingu: Modelo de pinguino ===
