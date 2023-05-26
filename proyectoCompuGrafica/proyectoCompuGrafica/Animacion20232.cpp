@@ -55,41 +55,9 @@ const float toRadians = 3.14159265f / 180.0f;
 const float PI = 3.14159265f;
 
 // === Variables Animación Simple === 
-float movCoche;
-float movCocheY;
-float movCocheZ;
-float rotacionRampa;
-float rotacionCurva;
 
-
-float movOffset;
-float movOffsetY;
-float movOffsetZ;
-float movOffsetSubeRampa;
-float movOffsetRotacionRampa;
-float movOffsetRotacionCurva;
-
-
-float rotllanta;
-float rotllantaOffset;
-bool avanza;
 float toffsetu = 0.0f;
 float toffsetv = 0.0f;
-
-float movHeli = 0.0f;
-float movHeliX = 0.0f;
-float rotaHeli = 0.0f;
-
-float heliOffset = 0.0f;  //grados de subir y bajar
-float subeBajaHeli = 0.0f;
-float offsetAvanzaHeli = 0.0f;
-float offsetGiroHeli = 0.0f;
-
-//movimiento de dado
-float movDadoArriba = 0.0f;
-float offsetDadoArriba = 0.0f;
-int presionaTecla = 0;
-int presionateclaPrevio = 0;
 
 //Movimiento de pengling
 float offsetAvanzaPengling;
@@ -113,7 +81,6 @@ float offsetGiroBolsa;
 float movBolsaArribaAbajo;
 float offsetBolsaArribaAbajo;
 
-
 // === Variables Animación Keyframes ===
 float reproduciranimacion, habilitaranimacion,
 guardoFrame, reinicioFrame, ciclo, ciclo2, contador = 0;
@@ -134,8 +101,6 @@ Texture brickTexture;
 Texture dirtTexture;
 Texture plainTexture;
 Texture pisoTexture;
-Texture AgaveTexture;
-Texture FlechaTexture;
 Texture texto;
 Texture dadoTexture;
 
@@ -145,25 +110,7 @@ Texture arenaTexture;
 Texture casaTexture;
 
 // === Variables de Modelos ===
-//Coche
-Model cochePropio;
-Model ruedaSupDer;
-Model ruedaSupIzq;
-Model ruedaInfDer;
-Model ruedaInfIzq;
 
-//Pista
-Model pista;
-
-//Práctica
-Model Kitt_M;
-Model Llanta_M;
-Model Camino_M;
-
-//Helicoptero
-Model Blackhawk_M;
-Model helice;
-Model Dado_M;
 Model papalote;
 
 //Iluminación
@@ -1365,10 +1312,6 @@ int main()
 	plainTexture.LoadTextureA();
 	pisoTexture = Texture("Textures/pisoAzul.tga");
 	pisoTexture.LoadTextureA();
-	AgaveTexture = Texture("Textures/Agave.tga");
-	AgaveTexture.LoadTextureA();
-	FlechaTexture = Texture("Textures/flechas.tga");
-	FlechaTexture.LoadTextureA();
 
 	texto = Texture("Textures/textoOpen.tga");
 	texto.LoadTextureA();
@@ -1386,45 +1329,13 @@ int main()
 	casaTexture.LoadTextureA();
 
 	// === Carga de modelos ===
-	Kitt_M = Model();
-	Kitt_M.LoadModel("Models/kitt_optimizado.obj");
-	Llanta_M = Model();
-	Llanta_M.LoadModel("Models/k_rueda.3ds");
-	Camino_M = Model();
-	Camino_M.LoadModel("Models/railroad track.obj");
-	
-	Blackhawk_M = Model();
-	Blackhawk_M.LoadModel("Models/helicopteroSinHelice.obj");
-	helice = Model();
-	helice.LoadModel("Models/helice.obj");
 
+	//Faro
 	faro = Model();
 	faro.LoadModel("Models/Pruebas/Street Lamp.obj");
 	antorcha = Model();
 	antorcha.LoadModel("Models/Pruebas/Torch.obj");
 	
-	//Coche propio  NISSAN
-	cochePropio = Model();
-	//cochePropio.LoadModel("Models/Nisssa_Figaro_1991_OBJ.obj");
-	//cochePropio.LoadModel("Models/nissan.obj");
-
-	//ruedas indpendientes
-	ruedaSupDer = Model();
-	ruedaSupDer.LoadModel("Models/ruedaSupDer.3ds");
-
-	ruedaSupIzq = Model();
-	ruedaSupIzq.LoadModel("Models/ruedaSupIzq.3ds");
-
-	ruedaInfDer = Model();
-	ruedaInfDer.LoadModel("Models/ruedaInfDer.3ds");
-
-	ruedaInfIzq = Model();
-	ruedaInfIzq.LoadModel("Models/ruedaInfIzq.3ds");
-
-	//Pista
-	pista = Model();
-	pista.LoadModel("Models/pista2rellena.fbx");
-
 	//Papalote
 	papalote = Model();
 	papalote.LoadModel("Models/kite sf.obj");
@@ -1575,31 +1486,6 @@ int main()
 
 
 	//Inicialización variables animación
-	movCoche = 0.0f;
-	movCocheY = 0.0f;
-	movCocheZ = 0.0f;
-	rotacionRampa = 0.0f;
-	rotacionCurva = 0.0f;
-
-	movOffset = 0.7f;
-	movOffsetY = 0.32f;
-	movOffsetZ = 0.3f;
-	movOffsetSubeRampa = 0.5f;
-	movOffsetRotacionRampa = 1.1f;
-	movOffsetRotacionCurva = 1.0f;
-
-	bool segundaCurvaParteDos = false;
-	bool rectaFinal = false;
-
-	rotllanta = 0.0f;
-	rotllantaOffset = 10.0f;
-	offsetAvanzaHeli = 0.2f;
-	offsetGiroHeli = 3.0f;
-	heliOffset = 5.0f;  //es el senoidal
-	float rotaHelice = 0.0f;
-	bool adelanteCoche = true;
-	int i = 0;
-	bool adelanteHeli = true;
 
 	//Movimiento pengling
 	offsetAvanzaPengling = 0.4f;
@@ -1619,13 +1505,6 @@ int main()
 	offsetBolsaArribaAbajo = 4.0f;
 	movBolsaArribaAbajo = 0.0f;
 	
-	//dado
-	movDadoArriba = 20.5f;
-	offsetDadoArriba = 0.4f;
-	bool nuevoTiro = false;
-	bool resultadoDado = false;
-	int random = 1;
-
 	//Letrero de la casa de tom Nook
 	glm::vec3 posicionLetreroCasaTomNook = glm::vec3(50.0f, 2.0f, 165.0);
 
@@ -1704,29 +1583,14 @@ int main()
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
 
-		//=== Pista ===
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(180.0f, -5.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(18.0f, 18.0f, 18.0f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		model = glm::rotate(model, -2 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		brickTexture.UseTexture();
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		pista.RenderModel();
-
 		//=== Antorcha ===
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(30.0f, 2.0f, 165.0));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
 		antorcha.RenderModel();
 
 
@@ -1899,36 +1763,6 @@ int main()
 		bolsaDinero.RenderModel();
 
 
-		/*
-		//=== Piso [Textura con movimiento] === 
-		//Importantes porque la variable uniform no podemos modificarla directamente
-		toffsetu += 0.001;
-		toffsetv += 0.0;
-		//para que no se desborde la variable
-		if (toffsetu > 1.0)
-			toffsetu = 0.0;
-		//if (toffsetv > 1.0)   //movimiento vertical
-		//	toffsetv = 0;
-		//printf("\ntfosset %f \n", toffsetu);
-		//pasar a la variable uniform el valor actualizado
-		toffset = glm::vec2(toffsetu, toffsetv);
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(30.0f, 1.0f, 30.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-
-		////blending: transparencia o traslucidez  menor al 100%
-		glEnable(GL_BLEND);  //habilita las texturas del agave para blending
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		pisoTexture.UseTexture();
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		meshList[2]->RenderMesh();
-		glDisable(GL_BLEND);
-		*/
-
 		//=== Texto [Textura con movimiento] === 
 		//Importantes porque la variable uniform no podemos modificarla directamente
 		toffsetu += 0.001;
@@ -1943,7 +1777,7 @@ int main()
 		toffset = glm::vec2(toffsetu, toffsetv);
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, posicionLetreroCasaTomNook + glm::vec3(28.0f, 25.0f, 1.0f));
+		model = glm::translate(model, posicionLetreroCasaTomNook + glm::vec3(29.0f, 25.0f, 1.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -1980,36 +1814,6 @@ int main()
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		papalote.RenderModel();
 
-		//// Actualizar el parámetro t para avanzar en la espiral
-  //      t += deltaTime * spiralSpeed;
-		
-
-		//=== Cubo ===
-		model = glm::mat4(1.0f);
-		color = glm::vec3(0.0f, 0.0f, 1.0f);
-		model = glm::translate(model, glm::vec3(4.6f, 10.0f, -53.0f));
-		//model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));    //rotar para ver tapa
-		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));    //rotar para ver tapa
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));//FALSE ES PARA QUE NO SEA TRANSPUESTA
-		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		meshList[7]->RenderMesh();
-
-
-		//=== Piramide ===
-		model = glm::mat4(1.0f);
-		color = glm::vec3(1.0f, 0.0f, 0.0f);
-		model = glm::translate(model, glm::vec3(4.6f, 20.0f, -53.0f));
-		//model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));    //rotar para ver tapa
-		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));    //rotar para ver tapa
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));//FALSE ES PARA QUE NO SEA TRANSPUESTA
-		glUniformMatrix4fv(uniformProjection, 1, GL_FALSE, glm::value_ptr(projection));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		meshList[8]->RenderMesh();
-
-
 		//=== Faro ===
 		model = glm::mat4(1.0);
 		color = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -2019,382 +1823,6 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		faro.RenderModel();
-
-
-		//=== Helicoptero ===
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f + movHeliX, 63.0f+sin(glm::radians(subeBajaHeli)), -1.0+movHeli));
-		model = glm::translate(model, glm::vec3(0.0f, 3.0f , -1.0));
-		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f ));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		modelauxHelice = model;
-		modelauxHelice = glm::rotate(modelauxHelice, rotaHelice * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		//rotacion En circuito
-		model = glm::rotate(model, rotaHeli * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-
-		//Movimiento del helicoptero
-		if (adelanteHeli == true) {
-			rotaHelice +=  6 * deltaTime;
-			if (movHeli < 15.0f)
-			{
-				movHeli += offsetAvanzaHeli * deltaTime;
-			}
-			else if (movHeli >= 15.0 and movHeli < 18.0f) {
-				movHeli += 0.1 * deltaTime;
-				rotaHeli += offsetGiroHeli * deltaTime;
-			}
-			else if (movHeliX < 20.0f) {
-				movHeliX += offsetAvanzaHeli * deltaTime;
-			}
-			else if (movHeliX >= 20.0 and movHeliX < 23.0f) {
-				movHeliX += 0.1 * deltaTime;
-				rotaHeli += offsetGiroHeli * deltaTime;
-			}
-			else {
-				adelanteHeli = false;
-			}
-
-		}
-		else {
-			rotaHelice += 6 * deltaTime;
-			if (movHeli > -15.0f)
-			{
-				movHeli -= offsetAvanzaHeli * deltaTime;
-			}
-			else if (movHeli <= -15.0 and movHeli > -18.0f) {
-				movHeli -= 0.1 * deltaTime;
-				rotaHeli += offsetGiroHeli * deltaTime;
-			}
-			else if (movHeliX > -10.0f) {
-				movHeliX -= offsetAvanzaHeli * deltaTime;
-			}
-			else if (movHeliX <= -10.0 and movHeliX > -13.0f) {
-				movHeliX -= 0.1 * deltaTime;
-				rotaHeli += offsetGiroHeli * deltaTime;
-			}
-			else {
-				adelanteHeli = true;
-				rotaHelice = 0.0;
-			}
-		}
-		subeBajaHeli += heliOffset * deltaTime;
-		if (movHeli > 359.0) {
-			heliOffset = 0.0f;
-		}
-
-
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Blackhawk_M.RenderModel();
-
-
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(modelauxHelice));
-		helice.RenderModel();
-
-		spotLightsInverso[2].SetFlash(glm::vec3(0.0f + movHeliX, 63.0f + sin(glm::radians(subeBajaHeli)), -1.0 + movHeli), glm::vec3(0.0f, -1.0f, 0.0f));
-		shaderList[0].SetSpotLightsManual(spotLightsInverso, 2);
-		
-
-		//=== Coche ===
-		float posicionInicialCarro = 200.0f;
-
-		color = glm::vec3(1.0f, 0.0f, 0.0f);
-		model = glm::mat4(1.0);
-		//movimiento de la carrocería
-		//model = glm::translate(model, glm::vec3(posicionInicialCarro + movCoche, -269.7f+movCocheY, 0.0f));
-		model = glm::translate(model, glm::vec3(posicionInicialCarro + movCoche, 3.7f + movCocheY, 0.0f + movCocheZ));
-		//model = glm::translate(model, glm::vec3(posicionInicialCarro, -1.4f, 0.0f));
-		model = glm::scale(model, glm::vec3(0.05f, 0.05f, 0.05f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		//Rotacion rampa
-		model = glm::rotate(model, -(rotacionRampa) * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-
-		//Rotacion cuvas
-		model = glm::rotate(model, -(rotacionCurva)*toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-		//Movimiento del Coche
-			//primera recta
-		if (adelanteCoche == true) {
-			if (movCoche > -156.0f)
-			{
-				movCoche -= movOffset * deltaTime;
-				//cuando comienza a avanzar
-				spotLightsInverso[0].SetFlash(glm::vec3(posicionInicialCarro + movCoche, 4.5f + movCocheY, -1.0f + movCocheZ), glm::vec3(-1.0f, 0.0f, 0.0f));
-				shaderList[0].SetSpotLightsManual(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-			//rotacion subida
-			else if (movCoche > -173.0f and movCoche <= -156.0f)
-			{
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-				movCoche -= movOffsetSubeRampa * deltaTime;
-				movCocheY += movOffsetY * deltaTime;
-				rotacionRampa += movOffsetRotacionRampa * deltaTime;
-			}
-			//plano subida empinado
-			else if (movCoche > -190.0f and movCoche <= -173.0f)
-			{
-				movCoche -= movOffsetSubeRampa * deltaTime;
-				movCocheY += movOffsetY * deltaTime;
-				spotLightsInverso[0].SetFlash(glm::vec3(posicionInicialCarro + movCoche, 4.5f + movCocheY, -1.0f + movCocheZ), glm::vec3(-1.0f, 1.0f, 0.0f));
-				shaderList[0].SetSpotLightsManual(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-			//rotacion para el plano superior
-			else if (movCoche > -207.0f and movCoche <=-190.0f)
-			{
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-				movCoche -= movOffsetSubeRampa * deltaTime;
-				rotacionRampa -= movOffsetRotacionRampa * deltaTime;
-			}
-			//plano superior
-			else if (movCoche > -256.0f and movCoche <= -204.0f)
-			{
-				movCoche -= movOffsetSubeRampa * deltaTime;
-				spotLightsInverso[0].SetFlash(glm::vec3(posicionInicialCarro + movCoche, 4.5f + movCocheY, -1.0f + movCocheZ), glm::vec3(-1.0f, 0.0f, 0.0f));
-				shaderList[0].SetSpotLightsManual(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-			//BAJADA
-			//rotacion bajada
-			else if (movCoche > -273.0f and movCoche <= -256.0f)
-			{
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-				movCoche -= movOffsetSubeRampa * deltaTime;
-				movCocheY -= movOffsetY * deltaTime;
-				rotacionRampa -= movOffsetRotacionRampa * deltaTime;
-			}
-			//plano bajada empinado
-			else if (movCoche > -295.0f and movCoche <= -273.0f)
-			{
-				movCoche -= movOffsetSubeRampa * deltaTime;
-				movCocheY -= movOffsetY * deltaTime;
-				spotLightsInverso[0].SetFlash(glm::vec3(posicionInicialCarro + movCoche, 4.5f + movCocheY, -1.0f + movCocheZ), glm::vec3(-1.0f, -1.0f, 0.0f));
-				shaderList[0].SetSpotLightsManual(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-			//rotacion para el plano inferior
-			else if (movCoche > -312.0f and movCoche <= -295.0f)
-			{
-				movCoche -= movOffsetSubeRampa * deltaTime;
-				//movCocheY -= movOffsetY * deltaTime;
-				rotacionRampa += movOffsetRotacionRampa * deltaTime;
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-			//plano inferior
-			else if (movCoche > -488.0f and movCoche <= -312.0f)
-			{
-				movCoche -= movOffset * deltaTime;
-				spotLightsInverso[0].SetFlash(glm::vec3(posicionInicialCarro + movCoche, 4.5f + movCocheY, -1.0f + movCocheZ), glm::vec3(-1.0f, 0.0f, 0.0f));
-				shaderList[0].SetSpotLightsManual(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-
-
-			//CURVA
-			//Primera parte
-			else if (movCoche > -530.0f and movCoche <= -488.0f)
-			{
-				movCoche -= movOffsetSubeRampa * deltaTime;
-				movCocheZ += 0.32f * deltaTime;
-				rotacionCurva -= movOffsetRotacionCurva * deltaTime;
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-
-			}
-			else if(movCocheZ < 37.0f){
-				movCocheZ += movOffsetZ * deltaTime;
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-
-			else {
-				adelanteCoche = false;
-				movCocheY = 0;
-			}
-			rotllanta += rotllantaOffset * deltaTime;
-		}
-		else {
-			//CURVA
-			//segunda parte
-			if (movCoche < -488.0f)
-			{
-				movCoche += movOffsetSubeRampa * deltaTime;
-				movCocheZ += movOffsetZ * deltaTime;
-				rotacionCurva -= 1.13f * deltaTime;
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-				movCocheY = -2.5f;
-
-			}
-			//Recta de regreso
-			else if (movCoche < 43.0f and rectaFinal == false) {
-				movCoche += movOffset * deltaTime;
-				movCocheY += 0.0045 * deltaTime;
-				segundaCurvaParteDos = false;
-				spotLightsInverso[0].SetFlash(glm::vec3(posicionInicialCarro + movCoche, 4.5f + movCocheY, -1.0f + movCocheZ), glm::vec3(1.0f, 0.0f, 0.0f));
-				shaderList[0].SetSpotLightsManual(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-			//SEGUNDA CURVA (de regreso)
-			//primera parte
-			else if (movCoche >= 43.0f and movCoche <= 63.0f and segundaCurvaParteDos == false and rectaFinal == false) {
-				movCoche += 0.25 * deltaTime;
-				movCocheZ -= 0.25 * deltaTime;
-				rotacionCurva -= 1.21f * deltaTime;
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-			//recta curva 
-			else if (movCocheZ > 23.0f) {
-				movCocheZ -= 0.25 * deltaTime;
-				segundaCurvaParteDos = true;
-				rectaFinal = true;
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-			//segunda parte
-			else if (movCoche >= 48.0f and segundaCurvaParteDos == true and rectaFinal == true) {
-				movCoche -= 0.18 * deltaTime;
-				movCocheZ -= 0.27 * deltaTime;
-				rotacionCurva -= 0.96f * deltaTime;
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-			//Recta final
-			else if (movCoche < 48.0f and movCoche > 0 and rectaFinal == true) {
-				movCoche -= movOffset * deltaTime;
-				spotLightsInverso[0].SetFlash(glm::vec3(posicionInicialCarro + movCoche, 4.5f + movCocheY, -1.0f + movCocheZ), glm::vec3(-1.0f, 0.0f, 0.0f));
-				shaderList[0].SetSpotLightsManual(spotLightsInverso, 0);
-				shaderList[0].SetSpotLightsApagarUna(spotLightsInverso, 1);
-			}
-
-
-			else {
-				adelanteCoche = true;
-				movCoche = 0;
-				movCocheY = 0;
-				movCocheZ = 0;
-				rotacionCurva = 0;
-				rectaFinal = false;
-			}
-
-		}
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		cochePropio.RenderModel();
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(posicionInicialCarro + movCoche, 6.5f + movCocheY, 0.0f + movCocheZ));
-		//Rotacion rampa
-		model = glm::rotate(model, -(rotacionRampa)*toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		//Rotacion cuvas
-		model = glm::rotate(model, -(rotacionCurva)*toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		modelaux = model;
-
-		//rueda superior derecha
-		color = glm::vec3(1.0f, 1.0f, 1.0f);
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(-5.7f, -1.88f, -3.2f));
-		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
-		//giro
-		model = glm::rotate(model, -5 * movCoche * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		ruedaSupDer.RenderModel();
-
-		//rueda superior izquierda
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(-5.7f, -1.88f, 3.2f));
-		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
-		model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//giro
-		model = glm::rotate(model, 5 * movCoche * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		ruedaSupIzq.RenderModel();
-
-		//rueda inferior derecha
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(5.7f, -1.88f, -3.2f));
-		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
-		//giro
-		model = glm::rotate(model, -5 * movCoche * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		ruedaInfDer.RenderModel();
-
-		//rueda inferior izquierda
-		model = modelaux;
-		model = glm::translate(model, glm::vec3(5.7f, -1.88f, 3.2f));
-		model = glm::scale(model, glm::vec3(0.02f, 0.02f, 0.02f));
-		model = glm::rotate(model, -180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//giro
-		model = glm::rotate(model, 5 * movCoche * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		ruedaInfIzq.RenderModel();
-
-
-
-		// === Agave ===
-		//¿qué sucede si lo renderizan antes del coche y de la pista?
-		////se deben renderizar al final para ver las texturas con traslucidez
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 0.5f, -2.0f));
-		//model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		////blending: transparencia o traslucidez  menor al 100%
-		//glEnable(GL_BLEND);  //habilita las texturas del agave para blending
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//AgaveTexture.UseTexture();
-		//Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		//meshList[3]->RenderMesh();
-		
-
-		// === textura con movimiento ===
-		//// 
-		//// Va al final para que no se muevan todas las texturas
-		//// Se tendrian que inicializar en 0 los off para agregar movimiento en otras texturas
-		//// 
-		////Importantes porque la variable uniform no podemos modificarla directamente
-		//toffsetu += 0.001;
-		//toffsetv += 0.0;
-		////para que no se desborde la variable
-		//if (toffsetu > 1.0)
-		//	toffsetu = 0.0;
-		////if (toffsetv > 1.0)   //movimiento vertical
-		////	toffsetv = 0;
-		////printf("\ntfosset %f \n", toffsetu);
-		////pasar a la variable uniform el valor actualizado
-		//toffset = glm::vec2(toffsetu, toffsetv);
-
-		//model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(0.0f, 0.2f, -6.0f));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		//model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
-		//glUniform2fv(uniformTextureOffset, 1, glm::value_ptr(toffset));
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//
-		//FlechaTexture.UseTexture();
-		////Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		//meshList[4]->RenderMesh();
-		//glDisable(GL_BLEND);
-		
-		
 
 
 
