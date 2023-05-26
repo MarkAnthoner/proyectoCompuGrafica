@@ -186,9 +186,9 @@ glm::mat4 Camera::calculateViewMatrix()
 	if (cameraMode == 0 or cameraMode == 1) {
 
 		//coordenadas adelante de la camara
-		posicionPersonaje = position - glm::vec3(0.0f, 7.0f, 0.0f) + front * distanciaPersonajeCamara ; //se resta la altura de la camara que hay en el main;
+		posicionPersonaje = position - glm::vec3(0.0f, 7.0f, 0.0f); //se resta la altura de la camara que hay en el main;
 
-		return glm::lookAt(position, position + front, up);
+		return glm::lookAt(position - front * distanciaPersonajeCamara, position + front, up);
 
 	}
 	//Modo de camara isometrica
