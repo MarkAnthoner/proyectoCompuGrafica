@@ -1815,12 +1815,13 @@ int main()
 		Pingu.RenderModel();
 
 
-		//=== Pingu: Modelo de pinguino ===
+		//=== Pingu: Modelo de pinguino === SE MUEVE CON LA CAMARA
 		model = glm::mat4(1.0);
 		//model = glm::translate(model, glm::vec3(80.0f, -2.0f, 200.0 ));
 		model = glm::translate(model, glm::vec3(posicionPersonaje));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -anguloPersonaje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pingu.RenderModel();
