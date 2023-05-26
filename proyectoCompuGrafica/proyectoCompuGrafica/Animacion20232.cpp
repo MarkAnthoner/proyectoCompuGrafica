@@ -99,6 +99,14 @@ float movPenglingZ = 0.0f;
 float movPenglingX = 0.0f;
 float rotaPengling = 0.0f;
 
+//Movimiento de Tom Nook
+float offsetAvanzaTomNook;
+float offsetGiroTomNook;
+float tomNookOffset;
+float movTomNookZ = 0.0f;
+float movTomNookX = 0.0f;
+float rotaTomNook = 0.0f;
+
 //Movimiento de la Bolsa de Dinero
 float rotacionBolsaEje;
 float offsetGiroBolsa;
@@ -170,6 +178,9 @@ Model bolsaDinero;
 
 //Leviathan
 Model Leviathan_M;
+
+//Tom Nook
+Model tomNook;
 
 Skybox skybox;
 
@@ -1422,6 +1433,10 @@ int main()
 	Pingu = Model();	
 	Pingu.LoadModel("Models/Pingu.obj");
 
+	//Tom Nook
+	tomNook = Model();
+	tomNook.LoadModel("Models/tomNook.obj");
+
 	//Bolsa de dinero
 	bolsaDinero = Model();
 	bolsaDinero.LoadModel("Models/monedero.obj");
@@ -1592,6 +1607,12 @@ int main()
 	penglingOffset = 5.0f;  //es el senoidal
 	bool adelantePengling = true;
 
+	//Movimiento Tom Nook
+	offsetAvanzaTomNook = 0.3f;
+	offsetGiroTomNook = 3.0f;
+	tomNookOffset = 5.0f;  //es el senoidal
+	bool adelanteTomNook = true;
+
 	//Movimiento de bolsa de dinero
 	offsetGiroBolsa = 4;
 	rotacionBolsaEje = 0.0;
@@ -1604,6 +1625,9 @@ int main()
 	bool nuevoTiro = false;
 	bool resultadoDado = false;
 	int random = 1;
+
+	//Letrero de la casa de tom Nook
+	glm::vec3 posicionLetreroCasaTomNook = glm::vec3(50.0f, 2.0f, 165.0);
 
 	//parametros de Arquimedes
 	// Variables para la animación en espiral de Arquímedes
@@ -1739,7 +1763,7 @@ int main()
 
 		//=== Primitiva: Casa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(50.0f, 2.0f, 165.0));
+		model = glm::translate(model, posicionLetreroCasaTomNook);
 		model = glm::scale(model, glm::vec3(60.0f, 60.0f, 60.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -1815,16 +1839,46 @@ int main()
 		Pingu.RenderModel();
 
 
-		//=== Pingu: Modelo de pinguino === SE MUEVE CON LA CAMARA
+		////=== Pingu: Modelo de pinguino === SE MUEVE CON LA CAMARA
+		//model = glm::mat4(1.0);
+		////model = glm::translate(model, glm::vec3(80.0f, -2.0f, 200.0 ));
+		//model = glm::translate(model, glm::vec3(posicionPersonaje));
+		//model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -anguloPersonaje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//Pingu.RenderModel();
+
+		//=== Tom Nook: Modelo de mapache
 		model = glm::mat4(1.0);
-		//model = glm::translate(model, glm::vec3(80.0f, -2.0f, 200.0 ));
-		model = glm::translate(model, glm::vec3(posicionPersonaje));
+		model = glm::translate(model, glm::vec3(-20.0f + movTomNookX, -2.0f, 240.0 ));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, -anguloPersonaje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, rotaTomNook * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//Movimiento de Tom Nook
+		if (adelanteTomNook == true) {
+			if (movTomNookX < 4.0f)
+			{
+				movTomNookX += offsetAvanzaTomNook * deltaTime;
+				rotaTomNook += offsetGiroTomNook * deltaTime;
+			}
+			else {
+				adelanteTomNook = false;
+			}
+		}
+		else {
+			if (movTomNookX > -4.0f)
+			{
+				movTomNookX -= offsetAvanzaTomNook * deltaTime;
+				rotaTomNook -= offsetGiroTomNook * deltaTime;
+			}
+			else {
+				adelanteTomNook = true;
+			}
+		}
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		Pingu.RenderModel();
+		tomNook.RenderModel();
 
 
 
@@ -1889,8 +1943,9 @@ int main()
 		toffset = glm::vec2(toffsetu, toffsetv);
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, 0.12f, -6.0f));
+		model = glm::translate(model, posicionLetreroCasaTomNook + glm::vec3(25.0f, 25.0f, 1.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::scale(model, glm::vec3(60.0f, 60.0f, 60.0f));
 		glEnable(GL_BLEND);  //habilita las texturas del agave para blending
