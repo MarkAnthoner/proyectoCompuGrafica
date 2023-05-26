@@ -7,6 +7,15 @@
 
 #include <glfw3.h>
 
+#ifndef ANGULO_C
+#define ANGULO_C
+extern float anguloPersonaje;
+extern glm::vec3 posicionPersonaje;
+
+#endif
+
+
+
 class Camera
 {
 public:
@@ -55,6 +64,9 @@ private:
 	float zoomFactor;  // Factor de zoom inicial
 	float zoomSpeed;   // Velocidad de zoom
 	int habilitaZoom;
+
+	//Personaje moviendose
+	GLfloat distanciaPersonajeCamara;
 
 	void update();
 };

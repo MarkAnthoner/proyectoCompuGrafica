@@ -1,5 +1,8 @@
 #include "Camera.h"
 
+float anguloPersonaje;
+glm::vec3 posicionPersonaje;
+
 Camera::Camera() {}
 
 Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMoveSpeed, GLfloat startTurnSpeed)
@@ -33,6 +36,12 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	zoomFactor = 1.0f;  // Factor de zoom inicial
 	zoomSpeed = 0.001f;   // Velocidad de zoom
 	habilitaZoom = 0;
+
+
+	//Camara siguiendo a personaje
+	anguloPersonaje = startYaw;
+	posicionPersonaje = position - glm::vec3(0.0f, -7.0f, 0.0f); //se resta la altura de la camara que hay en el main
+	distanciaPersonajeCamara = 24.0f;
 
 	update();
 }
@@ -140,6 +149,7 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 		yChange *= turnSpeed;
 
 		yaw += xChange;
+		anguloPersonaje = yaw;
 	}
 
 	//Camara libre
@@ -174,7 +184,12 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 glm::mat4 Camera::calculateViewMatrix()
 {
 	if (cameraMode == 0 or cameraMode == 1) {
+
+		//coordenadas adelante de la camara
+		posicionPersonaje = position - glm::vec3(0.0f, 7.0f, 0.0f) + front * distanciaPersonajeCamara ; //se resta la altura de la camara que hay en el main;
+
 		return glm::lookAt(position, position + front, up);
+
 	}
 	//Modo de camara isometrica
 	else {

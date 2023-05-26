@@ -1343,7 +1343,7 @@ int main()
 	CrearArena();					//mesh[11]
 	CrearCasa();					//mesh[12]
 
-	camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
+	camera = Camera(glm::vec3(0.0f, 7.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f), -60.0f, 0.0f, 0.5f, 0.5f);
 
 	// === Texturas ===
 	brickTexture = Texture("Textures/brick.png");
@@ -1810,6 +1810,17 @@ int main()
 			penglingOffset = 0.0f;
 		}
 
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Pingu.RenderModel();
+
+
+		//=== Pingu: Modelo de pinguino ===
+		model = glm::mat4(1.0);
+		//model = glm::translate(model, glm::vec3(80.0f, -2.0f, 200.0 ));
+		model = glm::translate(model, glm::vec3(posicionPersonaje));
+		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pingu.RenderModel();
