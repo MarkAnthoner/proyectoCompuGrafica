@@ -200,6 +200,10 @@ Model Pengling_M;
 //Capsulas
 Model  Capsulas_M;
 
+//Dron
+Model dron;
+Model heliceDron;
+
 Skybox skybox;	//skybox de día
 Skybox skybox_night; //skybox de noche
 
@@ -1245,7 +1249,7 @@ bool animacion = false;
 
 
 //NEW// Keyframes
-float posXAnimacion = -113.0, posYAnimacion = 0.0, posZAnimacion = -60.0;
+float posXAnimacion = 30.0, posYAnimacion = 0.0, posZAnimacion = -60.0;
 float	movAnimacion_x = 0.0f, movAnimacion_y = 0.0f, movAnimacion_z = 0.0f;
 float giroAnimacion = 0;
 float giroDosAnimacion = 0;
@@ -1460,6 +1464,13 @@ int main()
 	//Capsulas
 	Capsulas_M = Model();
 	Capsulas_M.LoadModel("Models/Capsulas.obj");
+
+	//Dron
+	dron = Model();
+	dron.LoadModel("Models/dronSinhelices.obj");
+
+	heliceDron = Model();
+	heliceDron.LoadModel("Models/heliceDron.obj");
 
 	// === Skybox ===
 	std::vector<std::string> skyboxFaces;
@@ -2288,20 +2299,40 @@ int main()
 		//float z = t * spiralHeight;
 
 
-		//=== Papalote ===
+		//=== Dron ===
 		model = glm::mat4(1.0);
 		posblackhawk = glm::vec3(posXAnimacion + movAnimacion_x, posYAnimacion + movAnimacion_y, posZAnimacion + movAnimacion_z);
 		model = glm::translate(model, posblackhawk);
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		model = glm::rotate(model, 270 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, giroAnimacion * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, giroDosAnimacion * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, giroTresAnimacion * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		papalote.RenderModel();
+		dron.RenderModel();
+
+		//Helice1 dron
+		model = glm::mat4(1.0);
+		posblackhawk = glm::vec3(posXAnimacion + movAnimacion_x, posYAnimacion + movAnimacion_y + 4.3f, posZAnimacion + movAnimacion_z + 10.5f);
+		model = glm::translate(model, posblackhawk);
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		model = glm::rotate(model, 270 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, giroAnimacion * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, giroDosAnimacion * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, giroTresAnimacion * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		model = glm::rotate(model, rotacionBolsaEje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		heliceDron.RenderModel();
 
 		//=== Faro ===
 		model = glm::mat4(1.0);
@@ -2441,7 +2472,7 @@ void inputKeyframes(bool* keys)
 
 
 	//Movimiento de Z positivo
-	if (keys[GLFW_KEY_R])
+	if (keys[GLFW_KEY_5])
 	{
 		if (ciclo < 1)
 		{
@@ -2452,7 +2483,7 @@ void inputKeyframes(bool* keys)
 
 	}
 	//Movimiento de Z negativo
-	if (keys[GLFW_KEY_C])
+	if (keys[GLFW_KEY_6])
 	{
 		if (ciclo < 1)
 		{
