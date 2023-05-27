@@ -18,3 +18,4 @@
 proyectoCompuGrafica/.vs/proyectoCompuGrafica/v17/.suo
 *.db
 *.log
+*.lock

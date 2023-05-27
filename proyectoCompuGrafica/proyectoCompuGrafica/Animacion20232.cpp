@@ -92,15 +92,6 @@ float rotaPez = 0.0f;
 float movPezArribaAbajo = 0.0f;
 float offsetPezArribaAbajo;
 
-//Animacion de Levyathan
-float offsetAvanzaLev;
-float offsetGiroLev;
-float levOffset;
-float movLevZ = 0.0f;
-float movLevX = 0.0f;
-float movLevY = 0.0f;
-float rotaLev = 0.0f;
-
 //Movimiento de Robin (Avatar)
 float rotaBrazoDerRobin = 0.0f;
 float rotaBrazoIzqRobin = 0.0f;
@@ -116,10 +107,24 @@ float piernaMovRobin = 0.0f; //0: Pierna derecha, 1:Puerna izquierda, indica cua
 float aperturaRobin = 0.0f; //0: Pierna derecha, 1:Puerna izquierda, indica cual pierna se va a mover
 bool auxiliarMovimiento = true;	//indica el sentido de movimiento inicial (ej. el brazo derecho avanza y tras una parte cambia y regresa).
 
+//Animacion de Levyathan
+float offsetAvanzaLev;
+float offsetGiroLev;
+float levOffset;
+float movLevZ = 0.0f;
+float movLevX = 0.0f;
+float movLevY = 0.0f;
+float rotaLev = 0.0f;
+
 
 // === Variables Animaci�n Keyframes ===
 float reproduciranimacion, habilitaranimacion,
 guardoFrame, reinicioFrame, ciclo, ciclo2, contador = 0;
+
+// === Variables CICLO DIA-NOCHE
+//float start;
+//float nowTime;
+
 
 // === Variables Lectura de Archivos === 
 std::vector<Archivo> listaArchivos;
@@ -183,7 +188,8 @@ Model ArmLeftRobin;
 Model Pengling_M;
 
 
-Skybox skybox;
+Skybox skybox;	//skybox de día
+Skybox skybox_night; //skybox de noche
 
 // === Materiales ===
 Material Material_brillante;
@@ -1446,17 +1452,17 @@ int main()
 	skyboxFaces.push_back("Textures/Skybox/Day_Top.tga");
 	skyboxFaces.push_back("Textures/Skybox/Day_Front.tga");
 	skyboxFaces.push_back("Textures/Skybox/Day_Back.tga");
-	/*
-	//Night
-	skyboxFaces.push_back("Textures/Skybox/Night_Right.tga");
-	skyboxFaces.push_back("Textures/Skybox/Night_Left.tga");
-	skyboxFaces.push_back("Textures/Skybox/Night_Bottom.tga");
-	skyboxFaces.push_back("Textures/Skybox/Night_Top.tga");
-	skyboxFaces.push_back("Textures/Skybox/Night_Front.tga");
-	skyboxFaces.push_back("Textures/Skybox/Night_Back.tga");
-	*/
-
 	skybox = Skybox(skyboxFaces);
+	//Night
+	std::vector<std::string> skyboxFaces_night;
+	skyboxFaces_night.push_back("Textures/Skybox/Night_Right.tga");
+	skyboxFaces_night.push_back("Textures/Skybox/Night_Left.tga");
+	skyboxFaces_night.push_back("Textures/Skybox/Night_Bottom.tga");
+	skyboxFaces_night.push_back("Textures/Skybox/Night_Top.tga");
+	skyboxFaces_night.push_back("Textures/Skybox/Night_Front.tga");
+	skyboxFaces_night.push_back("Textures/Skybox/Night_Back.tga");
+
+	skybox_night = Skybox(skyboxFaces_night);
 
 	Material_brillante = Material(4.0f, 256);
 	Material_opaco = Material(0.3f, 4);
@@ -1612,6 +1618,11 @@ int main()
 	float resultado = 0;
 	bool controlDireccionLev = false;
 
+	//Skybox día-noche variable
+	float startTime = 0.0f;
+	float nowTime;
+	float diaNoche = 0.0f; //O: día, 1:noche
+
 	//Letrero de la casa de tom Nook
 	glm::vec3 posicionLetreroCasaTomNook = glm::vec3(50.0f, 2.0f, 165.0);
 
@@ -1635,7 +1646,7 @@ int main()
 		deltaTime = now - lastTime;
 		deltaTime += (now - lastTime) / limitFPS;
 		lastTime = now;
-
+		nowTime = now;
 
 		//Recibir eventos del usuario
 		glfwPollEvents();
@@ -1651,7 +1662,18 @@ int main()
 		// Clear the window
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		skybox.DrawSkybox(camera.calculateViewMatrix(), projection);
+
+		if (nowTime - startTime >= 10) {
+			startTime = nowTime;
+			if (diaNoche == 0.0f)diaNoche = 1.0f;
+			else diaNoche = 0.0f;
+		}
+		if (diaNoche == 0.0f) {
+			skybox.DrawSkybox(camera.calculateViewMatrix(), projection); //skyboxdia
+		}
+		else {
+			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection); //skybox de noche
+		}
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -1681,6 +1703,8 @@ int main()
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		//shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
+
+		//Ciclo dia noche
 
 		//=== Modelos ===
 		glm::mat4 model(1.0);
@@ -1739,15 +1763,11 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, -2.0f, 200.0 + movPenglingZ));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
-
 		if (movPenglingZ > 50) {
 			movPenglingZ = 49;
 		}
-
 		//rotacion En circuito
 		model = glm::rotate(model, rotaPengling * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
-
 		//Movimiento del pinguino
 		if (adelantePengling == true) {
 			if (movPenglingZ < 15.0f)
@@ -2005,14 +2025,13 @@ int main()
 		model = glm::translate(model, glm::vec3(-20.0f + movTomNookX, -2.0f, 240.0));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
 		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, rotaTomNook * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
-		printf("\n%f\n",movTomNookX);
 		//Lineas que hacebn que no se inicialice desde coordenadas muy lejanas
 		if (movTomNookX > 10.0f) {
 			movTomNookX = 0.0f;
 		}
-
+		model = glm::rotate(model, rotaTomNook * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		
 		//Movimiento de Tom Nook
 		if (adelanteTomNook == true) {
 			if (movTomNookX < 4.0f)
@@ -2058,8 +2077,6 @@ int main()
 		compSeno = sin(glm::radians(movPezY));
 		model = glm::translate(model, glm::vec3(-140.0f + movPezX, componenteYpez, 100.0f + movPezZ));
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-
 		//Lineas que hacebn que no se inicialice desde coordenadas muy lejanas
 		if (movPezZ > 70.0f) {
 			movPezZ = 0.0f;
@@ -2145,14 +2162,13 @@ int main()
 		model = glm::scale(model, glm::vec3(200.0f, 200.0f, 200.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, -35 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, -35 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		//Lineas que hacebn que no se inicialice desde coordenadas muy lejanas
 		if (movLevZ > 40.0f) {
 			movLevZ = 0.0f;
 		}
 		model = glm::rotate(model, rotaLev * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-	
+
 		//Segunda ejecución
 		if (controlDireccionLev == true) {
 			if (movLevZ >= -27.0f) {
@@ -2165,7 +2181,7 @@ int main()
 			}
 		}
 		else {
-			if (movLevZ <= 27.0f ) {
+			if (movLevZ <= 27.0f) {
 				movLevZ += levOffset * deltaTime;
 				resultado = std::abs(0.02f * std::pow(movLevZ, 2) - 2) - 8;
 				rotaLev -= offsetGiroLev * deltaTime;
