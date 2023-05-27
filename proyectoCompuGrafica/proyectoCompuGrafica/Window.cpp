@@ -4,6 +4,12 @@ Window::Window()
 {
 	width = 800;
 	height = 600;
+	//Movimiento Avatar
+	movAvatar = 0;		//no se espera movimiento
+	movAvatar_r = 0;	//bandera de bloqueo apagada
+	sentido = 0;	//Hacia adelante originalmente
+
+
 	for (size_t i = 0; i < 1024; i++)
 	{
 		keys[i] = 0;
@@ -15,6 +21,11 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	height = windowHeight;
 	muevex = 2.0f;
 	muevey = 2.0f;
+
+	//Movimiento Avatar
+	movAvatar = 0;		//no se espera movimiento
+	movAvatar_r = 0;	//bandera de bloqueo apagada
+	sentido = 0;	//Hacia adelante originalmente
 
 	muevexHelicoptero = 2.0f;
 	muevezCarro = 2.0f;
@@ -73,9 +84,9 @@ int Window::Initialise()
 	}
 
 	glEnable(GL_DEPTH_TEST); //HABILITAR BUFFER DE PROFUNDIDAD
-							 // Asignar valores de la ventana y coordenadas
-							 
-							 //Asignar Viewport
+	// Asignar valores de la ventana y coordenadas
+
+	//Asignar Viewport
 	glViewport(0, 0, bufferWidth, bufferHeight);
 	//Callback para detectar que se está usando la ventana
 	glfwSetWindowUserPointer(mainWindow, this);
@@ -112,15 +123,53 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 
+	//Movimiento Avatar
+	if (key == GLFW_KEY_W)		//desplazamiento "hacia adelante"
+	{
+		if (theWindow->movAvatar_r == 0) {
+			theWindow->sentido = 0;
+			theWindow->movAvatar = 1.0;
+			theWindow->movAvatar_r = 1.0;
+		}
+	}
+
+	if (key == GLFW_KEY_S)		//desplazamiento "hacia atrás"
+	{
+		if (theWindow->movAvatar_r == 0) {
+			theWindow->sentido = 1;
+			theWindow->movAvatar = 1.0;
+			theWindow->movAvatar_r = 1.0;
+		}
+	}
+
+	if (key == GLFW_KEY_A)		//desplazamiento "izquierda"
+	{
+		if (theWindow->movAvatar_r == 0) {
+			theWindow->sentido = 2;
+			theWindow->movAvatar = 1.0;
+			theWindow->movAvatar_r = 1.0;
+		}
+	}
+
+	if (key == GLFW_KEY_D)
+	{
+		if (theWindow->movAvatar_r == 0) {
+			theWindow->sentido = 3;
+			theWindow->movAvatar = 1.0;
+			theWindow->movAvatar_r = 1.0;
+		}
+	}
+
+
 
 	//Movimiento del coche adelante y atras en eje X
 	if (key == GLFW_KEY_Y)
 	{
-		theWindow-> muevex += 1.0;
+		theWindow->muevex += 1.0;
 	}
 	if (key == GLFW_KEY_U)
 	{
-		theWindow-> muevex -= 1.0;
+		theWindow->muevex -= 1.0;
 	}
 	//Movimiento del coche en eje Z
 	if (key == GLFW_KEY_T)

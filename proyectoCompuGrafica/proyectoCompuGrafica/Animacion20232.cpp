@@ -1,9 +1,9 @@
-/*
+ï»¿/*
 Semestre 2023-2
 Proyecto: Diorama de la vida cotidiana -  Subnautica
 Integrantes
 * Castillo Montes Pamela			Gpo. 10
-* Hernández Jaimes Rogelio Yael		Gpo. 10
+* Hernï¿½ndez Jaimes Rogelio Yael		Gpo. 10
 * Sanchez Perez Marco Antonio		Gpo. 01
 */
 
@@ -33,14 +33,14 @@ Integrantes
 #include"Model.h"
 #include "Skybox.h"
 
-//Encabezados Iluminación
+//Encabezados Iluminaciï¿½n
 #include "CommonValues.h"
 #include "DirectionalLight.h"
 #include "PointLight.h"
 #include "SpotLight.h"
 #include "Material.h"
 
-//Encabezados Animación Keyframes
+//Encabezados Animaciï¿½n Keyframes
 #include "Archivos.h"
 #include "Frame.h"
 
@@ -50,11 +50,11 @@ Integrantes
 using namespace std;
 
 
-// === Constantes Ángulos === 
+// === Constantes ï¿½ngulos === 
 const float toRadians = 3.14159265f / 180.0f;
 const float PI = 3.14159265f;
 
-// === Variables Animación Simple === 
+// === Variables Animaciï¿½n Simple === 
 
 float toffsetu = 0.0f;
 float toffsetv = 0.0f;
@@ -81,18 +81,23 @@ float offsetGiroBolsa;
 float movBolsaArribaAbajo;
 float offsetBolsaArribaAbajo;
 
-//Animacion de salto de pez
-float offsetAvanzaPez;
-float offsetGiroPez;
-float pezOffset;
-float movPezZ = 0.0f;
-float movPezX = 0.0f;
-float movPezY = 0.0f;
-float rotaPez = 0.0f;
-float movPezArribaAbajo = 0.0f;
-float offsetPezArribaAbajo;
+//Movimiento de Robin (Avatar)
+float rotaBrazoDerRobin = 0.0f;
+float rotaBrazoIzqRobin = 0.0f;
+float rotaPiernaDerRobin = 0.0f;
+float rotaPiernaIzqRobin = 0.0f;
+float rotaPiernaXDerRobin = 0.0f;
+float rotaPiernaXIzqRobin = 0.0f;
+float offsetRotaPiernaRobin = 5.0f;
+float offsetRotaXPiernaRobin = 1.0f;
+float offsetRotaBrazoRobin = 5.0f;
+int contadorRobin = 0;
+float piernaMovRobin = 0.0f; //0: Pierna derecha, 1:Puerna izquierda, indica cual pierna se va a mover
+float aperturaRobin = 0.0f; //0: Pierna derecha, 1:Puerna izquierda, indica cual pierna se va a mover
+bool auxiliarMovimiento = true;	//indica el sentido de movimiento inicial (ej. el brazo derecho avanza y tras una parte cambia y regresa).
 
-// === Variables Animación Keyframes ===
+
+// === Variables Animaciï¿½n Keyframes ===
 float reproduciranimacion, habilitaranimacion,
 guardoFrame, reinicioFrame, ciclo, ciclo2, contador = 0;
 
@@ -124,7 +129,7 @@ Texture casaTexture;
 
 Model papalote;
 
-//Iluminación
+//Iluminaciï¿½n
 Model faro;
 Model antorcha;
 
@@ -139,6 +144,14 @@ Model Leviathan_M;
 
 //Tom Nook
 Model tomNook;
+
+//Robin: Avatar
+Model BodyRobin;
+Model LegRightRobin;
+Model LegLeftRobin;
+Model ArmRightRobin;
+Model ArmLeftRobin;
+
 
 Skybox skybox;
 
@@ -172,7 +185,7 @@ void inputKeyframes(bool* keys);
 
 
 
-/*Cálculo del promedio de las normales para sombreado de Phong
+/*Cï¿½lculo del promedio de las normales para sombreado de Phong
 en algunas ocasiones nos ayuda para no tener que declarar las normales manualmente dentro del VAO
 */
 void calcAverageNormals(unsigned int* indices, unsigned int indiceCount, GLfloat* vertices, unsigned int verticeCount,
@@ -468,13 +481,13 @@ void CrearCubo()
 
 	};
 
-	Mesh *cubo = new Mesh();
+	Mesh* cubo = new Mesh();
 	cubo->CreateMesh(cubo_vertices, cubo_indices, 192, 36);
 	meshList.push_back(cubo);
 
 }
 
-//función para crear pirámide cuadrangular unitaria
+//funciï¿½n para crear pirï¿½mide cuadrangular unitaria
 void CrearPiramideCuadrangular()
 {
 	/*unsigned int piramidecuadrangular_indices[] = {
@@ -511,7 +524,7 @@ void CrearPiramideCuadrangular()
 		-0.5f, 0.0f,  0.5f, 0.5f, 0.0f,  0.0f, 1.0f, 0.0f, // 1
 		 0.5f, 0.0f,  0.5f, 0.5f, 1.0f,  0.0f, 1.0f, 0.0f, // 2
 		 0.5f, 0.0f, -0.5f, 0.0f, 1.0f,  0.0f, 1.0f, 0.0f, // 3
-		 // Vértice de la punta
+		 // Vï¿½rtice de la punta
 		  0.0f, 1.0f,  0.0f, 0.5f, 0.5f,  0.0f, 1.0f, 0.0f  // 4
 	};
 
@@ -521,23 +534,23 @@ void CrearPiramideCuadrangular()
 	meshList.push_back(piramide);
 }
 
-//función para crear un cono
+//funciï¿½n para crear un cono
 void CrearCono(int res, float R) {
 
 	//constantes utilizadas en los ciclos for
 	int n, i, coordenada = 3;
-	//número de vértices ocupados
+	//nï¿½mero de vï¿½rtices ocupados
 	int verticesBase = (res) * 3;
-	//cálculo del paso interno en la circunferencia y variables que almacenarán cada coordenada de cada vértice
+	//cï¿½lculo del paso interno en la circunferencia y variables que almacenarï¿½n cada coordenada de cada vï¿½rtice
 	GLfloat dt = 2 * PI / res, x, z, y = -0.5f;
-	//apuntadores para guardar todos los vértices e índices generados
+	//apuntadores para guardar todos los vï¿½rtices e ï¿½ndices generados
 	GLfloat* vertices = (GLfloat*)calloc(sizeof(GLfloat*), (verticesBase)+6);
 	unsigned int* indices = (unsigned int*)calloc(sizeof(unsigned int*), res + 1);
 	//caso inicial para crear el cono
 	vertices[0] = 0.0f;
 	vertices[1] = 0.5f;
 	vertices[2] = 0.0f;
-	//ciclo for para crear los vértices de la circunferencia del cono
+	//ciclo for para crear los vï¿½rtices de la circunferencia del cono
 	for (n = 0; n <= (res); n++) {
 		x = R * cos((n)*dt);
 		z = R * sin((n)*dt);
@@ -556,14 +569,14 @@ void CrearCono(int res, float R) {
 		}
 		coordenada += 3;
 	}
-	//se agregan las coordenadas del último vértice para completar la circunferencia
+	//se agregan las coordenadas del ï¿½ltimo vï¿½rtice para completar la circunferencia
 	vertices[coordenada + 1] = R * cos(0) * dt;
 	vertices[coordenada + 2] = -0.5f;
 	vertices[coordenada + 3] = R * sin(0) * dt;;
 
 	coordenada += 3;
 
-	//se agregan los índices
+	//se agregan los ï¿½ndices
 	for (i = 0; i < res + 2; i++) {
 		indices[i] = i;
 	}
@@ -575,7 +588,7 @@ void CrearCono(int res, float R) {
 }
 
 
-//Función crea primitiva: mesa
+//Funciï¿½n crea primitiva: mesa
 void CrearMesa()
 {
 	unsigned int mesa_indices[] = {
@@ -917,7 +930,7 @@ void CrearMesa()
 
 }
 
-//Función crea primitiva: agua
+//Funciï¿½n crea primitiva: agua
 void CrearAgua()
 {
 	unsigned int agua_indices[] = {
@@ -949,7 +962,7 @@ void CrearAgua()
 		0.125f,	 0.0f,  0.0f,		0.48f,	0.35f,		0.0f,	0.0f,	-1.0f,	//1: B
 		0.0f,	 1.0f,  0.0f,		0.48f,	0.64f,		0.0f,	0.0f,	-1.0f,	//2: C
 		0.375f,	 1.0f,  0.0f,		0.27f,	0.64f,		0.0f,	0.0f,	-1.0f,	//3: D
-	
+
 		//Back
 		//x		y		z			S		T			-NX		-NY		-NZ
 		0.0f,	 0.0f,  -1.0f,		1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//4: E
@@ -992,7 +1005,7 @@ void CrearAgua()
 	meshList.push_back(agua);
 }
 
-//Función crea primitiva: arena
+//Funciï¿½n crea primitiva: arena
 void CrearArena()
 {
 	unsigned int arena_indices[] = {
@@ -1031,7 +1044,7 @@ void CrearArena()
 		1.0f,	 0.0f,  -1.0f,		1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//4: K
 		0.375f,  1.0f,  -1.0f,		0.0f,	1.0f,		0.0f,	0.0f,	1.0f,	//7: H
 		1.0f,	 1.0f,  -1.0f,		1.0f,	1.0f,		0.0f,	0.0f,	1.0f,	//6: L
-		
+
 		//Left
 		//x		y		z			S		T			-NX		-NY		-NZ
 		0.125f,	 0.0f,  0.0f,		0.0f,	0.0f,		1.0f,	0.0f,	0.0f,	//8: B
@@ -1067,7 +1080,7 @@ void CrearArena()
 	meshList.push_back(arena);
 }
 
-//Función crea primitiva: casa
+//Funciï¿½n crea primitiva: casa
 
 void CrearCasa()
 {
@@ -1088,10 +1101,10 @@ void CrearCasa()
 
 		//Right
 		20, 21, 18,
-		21, 19, 18,	
-		18, 19, 16, 
-		19, 17, 16, 
-		16, 17, 14, 
+		21, 19, 18,
+		18, 19, 16,
+		19, 17, 16,
+		16, 17, 14,
 		17, 15, 14,
 
 		//Left
@@ -1169,7 +1182,7 @@ void CrearCasa()
 
 void CreateShaders()
 {
-	Shader *shader1 = new Shader();
+	Shader* shader1 = new Shader();
 	shader1->CreateFromFiles(vShader, fShader);
 	shaderList.push_back(*shader1);
 }
@@ -1306,7 +1319,7 @@ int main()
 	CreateShaders();
 	CrearCubo();					//mesh[7]
 	CrearPiramideCuadrangular();	//mesh[8]
-	
+
 	CrearMesa();					//mesh[9]
 	CrearAgua();					//mesh[10]
 	CrearArena();					//mesh[11]
@@ -1346,13 +1359,13 @@ int main()
 	faro.LoadModel("Models/Pruebas/Street Lamp.obj");
 	antorcha = Model();
 	antorcha.LoadModel("Models/Pruebas/Torch.obj");
-	
+
 	//Papalote
 	papalote = Model();
 	papalote.LoadModel("Models/kite sf.obj");
 
 	//Pingu
-	Pingu = Model();	
+	Pingu = Model();
 	Pingu.LoadModel("Models/Pingu.obj");
 
 	//Tom Nook
@@ -1362,6 +1375,18 @@ int main()
 	//Bolsa de dinero
 	bolsaDinero = Model();
 	bolsaDinero.LoadModel("Models/monedero.obj");
+
+	//Robin:Avatar
+	BodyRobin = Model();
+	BodyRobin.LoadModel("Models/RobinCuerpo.obj");
+	LegLeftRobin = Model();
+	LegLeftRobin.LoadModel("Models/RobinPiernaIzquierda.obj");
+	LegRightRobin = Model();
+	LegRightRobin.LoadModel("Models/RobinPiernaDerecha.obj");
+	ArmLeftRobin = Model();
+	ArmLeftRobin.LoadModel("Models/RobinBrazoIzquierdo.obj");
+	ArmRightRobin = Model();
+	ArmRightRobin.LoadModel("Models/RobinBrazoDerecho.obj");
 
 	// === Skybox ===
 	std::vector<std::string> skyboxFaces;
@@ -1391,7 +1416,7 @@ int main()
 	// === Luz Direccional === 
 	//Solo 1 y siempre debe de existir
 
-	//1° Luz [Direccional]: Sol
+	//1ï¿½ Luz [Direccional]: Sol
 	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
 		0.5f, 0.4f,
 		0.0f, 0.0f, -1.0f);
@@ -1399,19 +1424,19 @@ int main()
 
 	// === Luz Puntal ===
 	unsigned int pointLightCount = 0;
-	
+
 	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f,
 		30.0f, 3.5f, 50.0f,
 		1.0f, 0.03f, 0.006f);
-		//0.3f, 0.2f, 0.1f);
+	//0.3f, 0.2f, 0.1f);
 	pointLightCount++;
 
 	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
 		1.0f, 1.0f,
 		30.0f, 5.5f, 165.0f,
 		1.0f, 0.01f, 0.001f);
-		//0.3f, 0.2f, 0.1f);
+	//0.3f, 0.2f, 0.1f);
 	pointLightCount++;
 
 
@@ -1435,7 +1460,7 @@ int main()
 	//	15.0f);
 	//spotLightCount++;
 
-	//1° Luz [Reflector]: Luz frontal del coche
+	//1ï¿½ Luz [Reflector]: Luz frontal del coche
 	spotLightsInverso[0] = SpotLight(0.0f, 0.0f, 1.0f,
 		0.5f, 2.0f,
 		5.0f, 10.0f, 0.0f,
@@ -1444,7 +1469,7 @@ int main()
 		15.0f);
 	spotLightCount++;
 
-	//2° Luz [Reflector]: Luz trasera del coche
+	//2ï¿½ Luz [Reflector]: Luz trasera del coche
 	spotLightsInverso[1] = SpotLight(0.0f, 1.0f, 0.0f,
 		0.5f, 2.0f,
 		5.0f, 10.0f, 0.0f,
@@ -1453,7 +1478,7 @@ int main()
 		15.0f);
 	spotLightCount++;
 
-	//3° Luz [Reflector]: Luz del helicoptero
+	//3ï¿½ Luz [Reflector]: Luz del helicoptero
 	spotLightsInverso[2] = SpotLight(1.0f, 0.0f, 0.0f,
 		0.5f, 2.0f,
 		5.0f, 10.0f, 0.0f,
@@ -1463,12 +1488,12 @@ int main()
 
 	//Variables Uniform
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
-		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset=0;
+		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset = 0;
 	GLuint uniformColor = 0;
 
 	//Perspectiva
 	glm::mat4 projection = glm::perspective(45.0f, (GLfloat)mainWindow.getBufferWidth() / mainWindow.getBufferHeight(), 0.1f, 1000.0f);
-		
+
 	glm::vec3 posblackhawk = glm::vec3(2.0f, 0.0f, 0.0f);
 
 	//KeyFrames iniciales
@@ -1496,7 +1521,7 @@ int main()
 	}*/
 
 
-	//Inicialización variables animación
+	//Inicializaciï¿½n variables animaciï¿½n
 
 	//Movimiento pengling
 	offsetAvanzaPengling = 0.4f;
@@ -1516,26 +1541,15 @@ int main()
 	offsetBolsaArribaAbajo = 4.0f;
 	movBolsaArribaAbajo = 0.0f;
 
-	//Movimiento de salto
-	offsetAvanzaPez = 0.4f;
-	offsetGiroPez = 3.0f;
-	pezOffset = 5.0f;  //es el senoidal
-	offsetPezArribaAbajo = 4.0f;
-	movPezX = 0.0f;
-	movPezZ = 0.0f;
-	movPezY = 270.0f;
-	bool adelantePez = true;
-	float compSeno = -1.0f;
-	
 	//Letrero de la casa de tom Nook
 	glm::vec3 posicionLetreroCasaTomNook = glm::vec3(50.0f, 2.0f, 165.0);
 
 	//parametros de Arquimedes
-	// Variables para la animación en espiral de Arquímedes
-	float t = 0.0f;                     // Parámetro t de la espiral
+	// Variables para la animaciï¿½n en espiral de Arquï¿½medes
+	float t = 0.0f;                     // Parï¿½metro t de la espiral
 	float spiralRadius = 2.0f;          // Radio de la espiral
 	float spiralHeight = 0.1f;         // Altura de la espiral
-	float spiralSpeed = 0.15f;           // Velocidad de la animación
+	float spiralSpeed = 0.15f;           // Velocidad de la animaciï¿½n
 
 	//numero random
 	// Providing a seed value
@@ -1572,11 +1586,11 @@ int main()
 		uniformProjection = shaderList[0].GetProjectionLocation();
 		uniformView = shaderList[0].GetViewLocation();
 		uniformEyePosition = shaderList[0].GetEyePositionLocation();
-		
+
 		uniformTextureOffset = shaderList[0].getOffsetLocation();
 
 
-		//Información en el shader de intensidad especular y brillo
+		//Informaciï¿½n en el shader de intensidad especular y brillo
 		uniformSpecularIntensity = shaderList[0].GetSpecularIntensityLocation();
 		uniformShininess = shaderList[0].GetShininessLocation();
 		uniformColor = shaderList[0].getColorLocation();
@@ -1586,12 +1600,12 @@ int main()
 		glUniform3f(uniformEyePosition, camera.getCameraPosition().x, camera.getCameraPosition().y, camera.getCameraPosition().z);
 
 
-		//=== luz ligada cámara [flash] ===
+		//=== luz ligada cï¿½mara [flash] ===
 		//glm::vec3 lowerLight = camera.getCameraPosition();
 		//lowerLight.y -= 0.3f;
 		//spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 
-		//información al shader de fuentes de iluminación
+		//informaciï¿½n al shader de fuentes de iluminaciï¿½n
 		shaderList[0].SetDirectionalLight(&mainLight);
 		shaderList[0].SetPointLights(pointLights, pointLightCount);
 		//shaderList[0].SetSpotLights(spotLights, spotLightCount);
@@ -1601,6 +1615,7 @@ int main()
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
 		glm::mat4 modelauxHelice(1.0);
+		glm::mat4 modelauxRobin(1.0);
 
 		glm::vec3 color = glm::vec3(1.0f, 1.0f, 1.0f);
 		glm::vec2 toffset = glm::vec2(0.0f, 0.0f);
@@ -1629,15 +1644,15 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-300.0f, -102.0f, 300.0));		//x:- (EscalaX/2)  y:- (EscalaY+2)  z: EscalaZ/2
 		model = glm::scale(model, glm::vec3(600.0f, 100.0f, 600.0f));
-			
+
 		//blending: transparencia o traslucidez  menor al 100%
-		glEnable(GL_BLEND); 
+		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		aguaTexture.UseTexture();
 		meshList[10]->RenderMesh();
 		glDisable(GL_BLEND);
-			
+
 
 		//=== Primitiva: Arena ===
 		model = glm::mat4(1.0);
@@ -1662,10 +1677,10 @@ int main()
 		glDisable(GL_BLEND);
 
 
-	
+
 		//=== Pingu: Modelo de pinguino ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, -2.0f , 200.0 + movPenglingZ));
+		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, -2.0f, 200.0 + movPenglingZ));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		//rotacion En circuito
@@ -1725,20 +1740,199 @@ int main()
 		Pingu.RenderModel();
 
 
-		////=== Pingu: Modelo de pinguino === SE MUEVE CON LA CAMARA
-		//model = glm::mat4(1.0);
-		////model = glm::translate(model, glm::vec3(80.0f, -2.0f, 200.0 ));
-		//model = glm::translate(model, glm::vec3(posicionPersonaje));
-		//model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		////=== Robin: Subnautica Below Zero, Avatar === SE MUEVE CON LA CAMARA
+		if (mainWindow.getmovAvatar() == 1.0f) {
+			switch (mainWindow.getsentido())
+			{
+			case 0:		//movimiento hacia adelante
+				if (contadorRobin < 20) {
+					if (auxiliarMovimiento > 0.0f) {
+						if (piernaMovRobin == 1.0f) {
+							rotaBrazoDerRobin += offsetRotaBrazoRobin * deltaTime;
+							rotaPiernaDerRobin -= offsetRotaPiernaRobin * deltaTime;
+							rotaBrazoIzqRobin -= offsetRotaBrazoRobin * deltaTime;
+							rotaPiernaIzqRobin += offsetRotaPiernaRobin * deltaTime;
+						}
+						else {
+							rotaBrazoDerRobin -= offsetRotaBrazoRobin * deltaTime;
+							rotaPiernaDerRobin += offsetRotaPiernaRobin * deltaTime;
+							rotaBrazoIzqRobin += offsetRotaBrazoRobin * deltaTime;
+							rotaPiernaIzqRobin -= offsetRotaPiernaRobin * deltaTime;
+						}
+
+					}
+					else {
+
+						if (auxiliarMovimiento == 0.0f) {
+							if (piernaMovRobin > 0.0f) {
+								rotaBrazoDerRobin -= offsetRotaBrazoRobin * deltaTime;
+								rotaPiernaDerRobin += offsetRotaPiernaRobin * deltaTime;
+								rotaBrazoIzqRobin += offsetRotaBrazoRobin * deltaTime;
+								rotaPiernaIzqRobin -= offsetRotaPiernaRobin * deltaTime;
+							}
+							else {
+								rotaBrazoDerRobin += offsetRotaBrazoRobin * deltaTime;
+								rotaPiernaDerRobin -= offsetRotaPiernaRobin * deltaTime;
+								rotaBrazoIzqRobin -= offsetRotaBrazoRobin * deltaTime;
+								rotaPiernaIzqRobin += offsetRotaPiernaRobin * deltaTime;
+							}
+						}
+					}
+					contadorRobin++;
+					if (contadorRobin == 10) {
+						if (auxiliarMovimiento == 1.0f)auxiliarMovimiento = 0.0f;
+						else auxiliarMovimiento = 1.0f;
+					}
+				}
+				else {
+					contadorRobin = 0;
+					mainWindow.setmovAvatar_r(0.0f);
+					mainWindow.setmovAvatar(0.0f);
+				}
+				break;
+			case 1:		//movimiento hacia atras
+				if (contadorRobin < 20) {
+					if (auxiliarMovimiento > 0.0f) {
+						if (piernaMovRobin == 1.0f) {
+							rotaBrazoDerRobin += offsetRotaBrazoRobin * deltaTime;
+							rotaPiernaDerRobin -= offsetRotaPiernaRobin * deltaTime;
+							rotaBrazoIzqRobin -= offsetRotaBrazoRobin * deltaTime;
+							rotaPiernaIzqRobin += offsetRotaPiernaRobin * deltaTime;
+						}
+						else {
+							rotaBrazoDerRobin -= offsetRotaBrazoRobin * deltaTime;
+							rotaPiernaDerRobin += offsetRotaPiernaRobin * deltaTime;
+							rotaBrazoIzqRobin += offsetRotaBrazoRobin * deltaTime;
+							rotaPiernaIzqRobin -= offsetRotaPiernaRobin * deltaTime;
+						}
+
+					}
+					else {
+
+						if (auxiliarMovimiento == 0.0f) {
+							if (piernaMovRobin > 0.0f) {
+								rotaBrazoDerRobin -= offsetRotaBrazoRobin * deltaTime;
+								rotaPiernaDerRobin += offsetRotaPiernaRobin * deltaTime;
+								rotaBrazoIzqRobin += offsetRotaBrazoRobin * deltaTime;
+								rotaPiernaIzqRobin -= offsetRotaPiernaRobin * deltaTime;
+							}
+							else {
+								rotaBrazoDerRobin += offsetRotaBrazoRobin * deltaTime;
+								rotaPiernaDerRobin -= offsetRotaPiernaRobin * deltaTime;
+								rotaBrazoIzqRobin -= offsetRotaBrazoRobin * deltaTime;
+								rotaPiernaIzqRobin += offsetRotaPiernaRobin * deltaTime;
+							}
+						}
+					}
+					contadorRobin++;
+					if (contadorRobin == 10) {
+						if (auxiliarMovimiento == 1.0f)auxiliarMovimiento = 0.0f;
+						else auxiliarMovimiento = 1.0f;
+					}
+				}
+				else {
+					contadorRobin = 0;
+					mainWindow.setmovAvatar_r(0.0f);
+					mainWindow.setmovAvatar(0.0f);
+				}
+				break;
+			case 2:		//movimiento hacia la izquierda
+				if (contadorRobin < 30) {
+					if (aperturaRobin == 0.0f) {
+						rotaPiernaXDerRobin += offsetRotaXPiernaRobin * deltaTime;
+						rotaPiernaXIzqRobin -= offsetRotaXPiernaRobin * deltaTime;
+					}
+					else {
+						rotaPiernaXDerRobin -= offsetRotaXPiernaRobin * deltaTime;
+						rotaPiernaXIzqRobin += offsetRotaXPiernaRobin * deltaTime;
+					}
+					contadorRobin++;
+					if (contadorRobin == 15) {
+						if (aperturaRobin == 1.0f)aperturaRobin = 0.0f;
+						else aperturaRobin = 1.0f;
+					}
+				}
+				else {
+					contadorRobin = 0;
+					aperturaRobin = 0.0f;
+					mainWindow.setmovAvatar_r(0.0f);
+					mainWindow.setmovAvatar(0.0f);
+				}
+				break;
+			case 3:		//movimiento hacia la derecha
+				if (contadorRobin < 30) {
+					if (aperturaRobin == 0.0f) {
+						rotaPiernaXDerRobin += offsetRotaXPiernaRobin * deltaTime;
+						rotaPiernaXIzqRobin -= offsetRotaXPiernaRobin * deltaTime;
+					}
+					else {
+						rotaPiernaXDerRobin -= offsetRotaXPiernaRobin * deltaTime;
+						rotaPiernaXIzqRobin += offsetRotaXPiernaRobin * deltaTime;
+					}
+					contadorRobin++;
+					if (contadorRobin == 15) {
+						if (aperturaRobin == 1.0f)aperturaRobin = 0.0f;
+						else aperturaRobin = 1.0f;
+					}
+				}
+				else {
+					contadorRobin = 0;
+					aperturaRobin = 0.0f;
+					mainWindow.setmovAvatar_r(0.0f);
+					mainWindow.setmovAvatar(0.0f);
+				}
+				break;
+			default:
+				break;
+			}
+
+		}
+
+
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 7.0f, 0.0));
+		model = glm::translate(model, glm::vec3(posicionPersonaje));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//model = glm::rotate(model, -anguloPersonaje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		//Pingu.RenderModel();
+		model = glm::rotate(model, -anguloPersonaje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelauxRobin = model;
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		BodyRobin.RenderModel();
+		//Pierna izquierda
+		model = modelauxRobin;
+		model = glm::translate(model, glm::vec3(-0.1f, -0.3f, 0.21));
+		model = glm::rotate(model, rotaPiernaIzqRobin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, rotaPiernaXIzqRobin * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		LegLeftRobin.RenderModel();
+		//Pierna derecha
+		model = modelauxRobin;
+		model = glm::translate(model, glm::vec3(-0.1f, -0.3f, -0.21));
+		model = glm::rotate(model, rotaPiernaDerRobin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, rotaPiernaXDerRobin * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		LegRightRobin.RenderModel();
+		//Brazo izquierdo
+		model = modelauxRobin;
+		model = glm::translate(model, glm::vec3(-0.1f, 0.9f, -0.21));
+		model = glm::rotate(model, rotaBrazoIzqRobin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ArmLeftRobin.RenderModel();
+		//Brazo derecho
+		model = modelauxRobin;
+		model = glm::translate(model, glm::vec3(-0.1f, 0.9f, 0.21));
+		model = glm::rotate(model, rotaBrazoDerRobin * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		ArmRightRobin.RenderModel();
 
 		//=== Tom Nook: Modelo de mapache
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f + movTomNookX, -2.0f, 240.0 ));
+		model = glm::translate(model, glm::vec3(-20.0f + movTomNookX, -2.0f, 240.0));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
 		model = glm::rotate(model, rotaTomNook * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		//Movimiento de Tom Nook
@@ -1770,7 +1964,7 @@ int main()
 
 		//=== Bolsa de dinero ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-30.0f, 2.0f + 4*sin(glm::radians(movBolsaArribaAbajo)), 180.0f));
+		model = glm::translate(model, glm::vec3(-30.0f, 2.0f + 4 * sin(glm::radians(movBolsaArribaAbajo)), 180.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, rotacionBolsaEje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		rotacionBolsaEje += offsetGiroBolsa * deltaTime;
@@ -1782,91 +1976,6 @@ int main()
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		bolsaDinero.RenderModel();
-
-
-
-		//=== Bolsa de dinero - Animacion Salto ===
-		model = glm::mat4(1.0);
-		float componenteYpez = -1.5f + 5 * compSeno;
-			printf("\nY: %f", componenteYpez);
-			printf("\nSeno: %f", compSeno);
-			printf("\nSeno: %f", movPezY);
-		compSeno = sin(glm::radians(movPezY));
-		model = glm::translate(model, glm::vec3(-140.0f + movPezX, componenteYpez, 100.0f + movPezZ));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
-		//rotacion En circuito
-		model = glm::rotate(model, rotaPez * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		if (adelantePez == true) {
-			if (movPezZ < 25.0f)
-			{
-				//Subida de salto
-				if (movPezZ > -22 and movPezZ < 15) {
-					movPezY += offsetPezArribaAbajo * deltaTime;
-
-				}
-				movPezZ += offsetAvanzaPez * deltaTime;
-			}
-			else if (movPezZ >= 25.0 and movPezZ < 28.0f) {
-				movPezZ += 0.1 * deltaTime;
-				rotaPez += offsetGiroPez * deltaTime;
-				compSeno = -1.0f;
-				movPezY = 270;
-			}
-			else if (movPezX < 30.0f) {
-				movPezX += offsetAvanzaPez * deltaTime;
-				compSeno = -1.0f;
-				movPezY = 270;
-			}
-			else if (movPezX >= 30.0 and movPezX < 33.0f) {
-				movPezX += 0.1 * deltaTime;
-				rotaPez += offsetGiroPez * deltaTime;
-				compSeno = -1.0f;
-				movPezY = 270;
-			}
-			else {
-				adelantePez = false;
-				movPezY = 270;
-			}
-
-		}
-		else {
-			if (movPezZ > -25.0f)
-			{
-				movPezZ -= offsetAvanzaPez * deltaTime;
-				compSeno = -1.0f;
-				movPezY = 270;
-			}
-			else if (movPezZ <= -25.0 and movPezZ > -28.0f) {
-				movPezZ -= 0.1 * deltaTime;
-				rotaPez += offsetGiroPez * deltaTime;
-				compSeno = -1.0f;
-				movPezY = 270;
-			}
-			else if (movPezX > -20.0f) {
-				movPezX -= offsetAvanzaPez * deltaTime;
-				compSeno = -1.0f;
-				movPezY = 270;
-			}
-			else if (movPezX <= -20.0 and movPezX > -23.0f) {
-				movPezX -= 0.1 * deltaTime;
-				rotaPez += offsetGiroPez * deltaTime;
-				compSeno = -1.0f;
-				movPezY = 270;
-			}
-			else {
-				adelantePez = true;
-				compSeno = -1.0f;
-				movPezY = 270;
-			}
-		}
-		//subeBajaPengling += penglingOffset * deltaTime;
-		if (movPezZ > 359.0) {
-			pezOffset = 0.0f;
-		}
-
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		bolsaDinero.RenderModel();
 
 
@@ -1898,13 +2007,13 @@ int main()
 		//Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		meshList[4]->RenderMesh();
 		glDisable(GL_BLEND);
-		
 
-		//// Calcular la posición del objeto en la espiral
+
+		//// Calcular la posiciï¿½n del objeto en la espiral
 		//float x = spiralRadius * cos(t);
 		//float y = spiralRadius * sin(t);
 		//float z = t * spiralHeight;
-		
+
 
 		//=== Papalote ===
 		model = glm::mat4(1.0);
