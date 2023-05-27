@@ -40,7 +40,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 
 	//Camara siguiendo a personaje
 	anguloPersonaje = startYaw;
-	posicionPersonaje = position - glm::vec3(0.0f, -7.0f, 0.0f); //se resta la altura de la camara que hay en el main
+	posicionPersonaje = position - glm::vec3(0.0f, 7.0f, 0.0f); //se resta la altura de la camara que hay en el main
 	distanciaPersonajeCamara = 24.0f;
 
 	update();
@@ -183,8 +183,18 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 
 glm::mat4 Camera::calculateViewMatrix()
 {
-	if (cameraMode == 0 or cameraMode == 1) {
+	//Camara XZ
+	if (cameraMode == 0) {
+		//coordenadas adelante de la camara
+		//posicionPersonaje = position - glm::vec3(0.0f, 9.0f, 0.0f);   //Antes de reseteo de Y
 
+		posicionPersonaje = position - glm::vec3(0.0f, position.y, 0.0f) - glm::vec3(0.0f, 2.0f, 0.0f);
+		position.y = 7.0f;
+		return glm::lookAt(position - front * distanciaPersonajeCamara, position + front, up);
+	}
+
+	//Camara libre
+	else if (cameraMode == 1) {
 		//coordenadas adelante de la camara
 		posicionPersonaje = position - glm::vec3(0.0f, 7.0f, 0.0f); //se resta la altura de la camara que hay en el main;
 
