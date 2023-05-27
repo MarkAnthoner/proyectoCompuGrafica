@@ -81,6 +81,17 @@ float offsetGiroBolsa;
 float movBolsaArribaAbajo;
 float offsetBolsaArribaAbajo;
 
+//Animacion de salto de pez
+float offsetAvanzaPez;
+float offsetGiroPez;
+float pezOffset;
+float movPezZ = 0.0f;
+float movPezX = 0.0f;
+float movPezY = 0.0f;
+float rotaPez = 0.0f;
+float movPezArribaAbajo = 0.0f;
+float offsetPezArribaAbajo;
+
 //Movimiento de Robin (Avatar)
 float rotaBrazoDerRobin = 0.0f;
 float rotaBrazoIzqRobin = 0.0f;
@@ -1541,6 +1552,17 @@ int main()
 	offsetBolsaArribaAbajo = 4.0f;
 	movBolsaArribaAbajo = 0.0f;
 
+	//Movimiento de salto
+	offsetAvanzaPez = 0.4f;
+	offsetGiroPez = 3.0f;
+	pezOffset = 5.0f;  //es el senoidal
+	offsetPezArribaAbajo = 4.0f;
+	movPezX = 0.0f;
+	movPezZ = 0.0f;
+	movPezY = 270.0f;
+	bool adelantePez = true;
+	float compSeno = -1.0f;
+
 	//Letrero de la casa de tom Nook
 	glm::vec3 posicionLetreroCasaTomNook = glm::vec3(50.0f, 2.0f, 165.0);
 
@@ -1976,6 +1998,90 @@ int main()
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		bolsaDinero.RenderModel();
+
+
+		//=== Bolsa de dinero - Animacion Salto ===
+		model = glm::mat4(1.0);
+		float componenteYpez = -1.5f + 5 * compSeno;
+		printf("\nY: %f", componenteYpez);
+		printf("\nSeno: %f", compSeno);
+		printf("\nSeno: %f", movPezY);
+		compSeno = sin(glm::radians(movPezY));
+		model = glm::translate(model, glm::vec3(-140.0f + movPezX, componenteYpez, 100.0f + movPezZ));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		//rotacion En circuito
+		model = glm::rotate(model, rotaPez * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		if (adelantePez == true) {
+			if (movPezZ < 25.0f)
+			{
+				//Subida de salto
+				if (movPezZ > -22 and movPezZ < 15) {
+					movPezY += offsetPezArribaAbajo * deltaTime;
+
+				}
+				movPezZ += offsetAvanzaPez * deltaTime;
+			}
+			else if (movPezZ >= 25.0 and movPezZ < 28.0f) {
+				movPezZ += 0.1 * deltaTime;
+				rotaPez += offsetGiroPez * deltaTime;
+				compSeno = -1.0f;
+				movPezY = 270;
+			}
+			else if (movPezX < 30.0f) {
+				movPezX += offsetAvanzaPez * deltaTime;
+				compSeno = -1.0f;
+				movPezY = 270;
+			}
+			else if (movPezX >= 30.0 and movPezX < 33.0f) {
+				movPezX += 0.1 * deltaTime;
+				rotaPez += offsetGiroPez * deltaTime;
+				compSeno = -1.0f;
+				movPezY = 270;
+			}
+			else {
+				adelantePez = false;
+				movPezY = 270;
+			}
+
+		}
+		else {
+			if (movPezZ > -25.0f)
+			{
+				movPezZ -= offsetAvanzaPez * deltaTime;
+				compSeno = -1.0f;
+				movPezY = 270;
+			}
+			else if (movPezZ <= -25.0 and movPezZ > -28.0f) {
+				movPezZ -= 0.1 * deltaTime;
+				rotaPez += offsetGiroPez * deltaTime;
+				compSeno = -1.0f;
+				movPezY = 270;
+			}
+			else if (movPezX > -20.0f) {
+				movPezX -= offsetAvanzaPez * deltaTime;
+				compSeno = -1.0f;
+				movPezY = 270;
+			}
+			else if (movPezX <= -20.0 and movPezX > -23.0f) {
+				movPezX -= 0.1 * deltaTime;
+				rotaPez += offsetGiroPez * deltaTime;
+				compSeno = -1.0f;
+				movPezY = 270;
+			}
+			else {
+				adelantePez = true;
+				compSeno = -1.0f;
+				movPezY = 270;
+			}
+		}
+		//subeBajaPengling += penglingOffset * deltaTime;
+		if (movPezZ > 359.0) {
+			pezOffset = 0.0f;
+		}
+
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		bolsaDinero.RenderModel();
 
 
