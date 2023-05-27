@@ -116,6 +116,15 @@ float movLevX = 0.0f;
 float movLevY = 0.0f;
 float rotaLev = 0.0f;
 
+//Animacion circular
+float offsetAvanzaCirculo;
+float offsetGiroCirculo;
+float circuloOffset;
+float movCirculoZ = 0.0f;
+float movCirculoX = 0.0f;
+float radioCirculo = 0.0f;
+float anguloCirculo = 0.0f;
+
 
 // === Variables Animaci�n Keyframes ===
 float reproduciranimacion, habilitaranimacion,
@@ -1233,7 +1242,7 @@ bool animacion = false;
 
 
 //NEW// Keyframes
-float posXAnimacion = 43.0, posYAnimacion = 20.0, posZAnimacion = 0.0;
+float posXAnimacion = -113.0, posYAnimacion = 0.0, posZAnimacion = -60.0;
 float	movAnimacion_x = 0.0f, movAnimacion_y = 0.0f, movAnimacion_z = 0.0f;
 float giroAnimacion = 0;
 float giroDosAnimacion = 0;
@@ -1618,6 +1627,15 @@ int main()
 	float resultado = 0;
 	bool controlDireccionLev = false;
 
+	//Movimiento circular
+	offsetAvanzaCirculo = 0.7;
+	offsetGiroCirculo = 0.5f;
+	circuloOffset = 0.35f;
+	movCirculoX = 0;
+	radioCirculo = 60.0f;
+	movCirculoZ = 0.0f;
+	anguloCirculo = 0;
+
 	//Skybox día-noche variable
 	float startTime = 0.0f;
 	float nowTime;
@@ -1820,13 +1838,19 @@ int main()
 		Pengling_M.RenderModel();
 
 
-		//=== Pingu: Modelo de pinguino ===
+		//=== Pingu: Modelo de pinguino : Animación de circulo ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(20.0f, -2.0f, 200.0));
-		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		model = glm::translate(model, glm::vec3(20.0f + movCirculoX, 0.0f, -60.0f + movCirculoZ));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 350 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -anguloCirculo * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		movCirculoX = radioCirculo * cos(glm::radians(anguloCirculo));
+		movCirculoZ = radioCirculo * sin(glm::radians(anguloCirculo));
+		anguloCirculo += offsetAvanzaCirculo * deltaTime;
+
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		Pingu.RenderModel();
 
 
@@ -2024,7 +2048,7 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-20.0f + movTomNookX, -2.0f, 240.0));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
-		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		//Lineas que hacebn que no se inicialice desde coordenadas muy lejanas
 		if (movTomNookX > 10.0f) {
@@ -2069,7 +2093,6 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		bolsaDinero.RenderModel();
-
 
 		//=== Pez - Animacion Salto ===
 		model = glm::mat4(1.0);
@@ -2158,7 +2181,7 @@ int main()
 
 		//=== Leviathan ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-90.0f, 0.0f + resultado, movLevZ));
+		model = glm::translate(model, glm::vec3(-110.0f, 0.0f + resultado, movLevZ));
 		model = glm::scale(model, glm::vec3(200.0f, 200.0f, 200.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, -35 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
