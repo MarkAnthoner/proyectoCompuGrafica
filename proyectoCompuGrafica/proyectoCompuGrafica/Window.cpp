@@ -124,41 +124,44 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 	}
 
 	//Movimiento Avatar
-	if (key == GLFW_KEY_W)		//desplazamiento "hacia adelante"
-	{
-		if (theWindow->movAvatar_r == 0) {
-			theWindow->sentido = 0;
-			theWindow->movAvatar = 1.0;
-			theWindow->movAvatar_r = 1.0;
+	if (theWindow->cameraMode == 0) {
+		if (key == GLFW_KEY_W)		//desplazamiento "hacia adelante"
+		{
+			if (theWindow->movAvatar_r == 0) {
+				theWindow->sentido = 0;
+				theWindow->movAvatar = 1.0;
+				theWindow->movAvatar_r = 1.0;
+			}
+		}
+
+		if (key == GLFW_KEY_S)		//desplazamiento "hacia atrás"
+		{
+			if (theWindow->movAvatar_r == 0) {
+				theWindow->sentido = 1;
+				theWindow->movAvatar = 1.0;
+				theWindow->movAvatar_r = 1.0;
+			}
+		}
+
+		if (key == GLFW_KEY_A)		//desplazamiento "izquierda"
+		{
+			if (theWindow->movAvatar_r == 0) {
+				theWindow->sentido = 2;
+				theWindow->movAvatar = 1.0;
+				theWindow->movAvatar_r = 1.0;
+			}
+		}
+
+		if (key == GLFW_KEY_D)
+		{
+			if (theWindow->movAvatar_r == 0) {
+				theWindow->sentido = 3;
+				theWindow->movAvatar = 1.0;
+				theWindow->movAvatar_r = 1.0;
+			}
 		}
 	}
 
-	if (key == GLFW_KEY_S)		//desplazamiento "hacia atrás"
-	{
-		if (theWindow->movAvatar_r == 0) {
-			theWindow->sentido = 1;
-			theWindow->movAvatar = 1.0;
-			theWindow->movAvatar_r = 1.0;
-		}
-	}
-
-	if (key == GLFW_KEY_A)		//desplazamiento "izquierda"
-	{
-		if (theWindow->movAvatar_r == 0) {
-			theWindow->sentido = 2;
-			theWindow->movAvatar = 1.0;
-			theWindow->movAvatar_r = 1.0;
-		}
-	}
-
-	if (key == GLFW_KEY_D)
-	{
-		if (theWindow->movAvatar_r == 0) {
-			theWindow->sentido = 3;
-			theWindow->movAvatar = 1.0;
-			theWindow->movAvatar_r = 1.0;
-		}
-	}
 
 
 

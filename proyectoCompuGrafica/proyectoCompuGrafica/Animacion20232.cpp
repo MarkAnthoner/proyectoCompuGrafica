@@ -1763,6 +1763,7 @@ int main()
 
 
 		////=== Robin: Subnautica Below Zero, Avatar === SE MUEVE CON LA CAMARA
+		mainWindow.setcameraMode(camera.getcameraMode());
 		if (mainWindow.getmovAvatar() == 1.0f) {
 			switch (mainWindow.getsentido())
 			{

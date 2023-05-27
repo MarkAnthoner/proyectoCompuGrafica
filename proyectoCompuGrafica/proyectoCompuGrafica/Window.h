@@ -30,7 +30,7 @@ public:
 	GLfloat getmovAvatar() { return movAvatar; }	//0: no se espera movimiento, 1: se solicita movimiento
 	void setmovAvatar_r(float a) { movAvatar_r = a; } //0:no se ejecuta alg�n ciclo de movimiento, 1: ciclo en ejecuci�n
 	void setmovAvatar(float a) { movAvatar = a; } //0: no se espera movimiento, 1: se solicita movimiento
-
+	void setcameraMode(int a) { cameraMode = a; }
 
 
 	GLfloat getapagalinterna() { return apagalinterna; }
@@ -63,7 +63,7 @@ private:
 	GLfloat movAvatar;		//indica que el avatar se mueve, se mantiene activa mientras se completa el ciclo de "paso" sin importar la direcci�n
 	GLfloat movAvatar_r;	//bandera de control para que cada ciclo de animaci�n del desplazamiento se complete, evita que se den "pasos dem�s" en una sola pulsacion
 	GLint sentido;		//indica en qu� sentido se desplaza el avatar, 0: adelante, 1: atr�s, 2:izquierda, 3:derecha
-
+	GLint cameraMode;
 
 
 	GLfloat apagalinterna = 1;

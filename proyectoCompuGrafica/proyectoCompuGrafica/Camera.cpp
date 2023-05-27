@@ -1,4 +1,4 @@
-#include "Camera.h"
+Ôªø#include "Camera.h"
 
 float anguloPersonaje;
 glm::vec3 posicionPersonaje;
@@ -27,7 +27,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 
 
 	//Camara isometrica
-	rotation = 0.0f;   // ¡ngulo de vista inicial de 45 grados
+	rotation = 0.0f;   // √Ångulo de vista inicial de 45 grados
 	scale = 1.0f;       // Escala inicial de 1.0
 	positionIsometrica = glm::vec3(174.933762f, 180.697876f, -336.841492f);
 	frontIsometrica = glm::vec3(-0.406201f, -0.615662f, 0.675249f);
@@ -50,7 +50,7 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
 
-	//Controles WASD si se est· en modo de camara de plano XZ o libre
+	//Controles WASD si se est√° en modo de camara de plano XZ o libre
 	if (cameraMode == 0 or cameraMode == 1) {
 		if (keys[GLFW_KEY_W])
 		{
@@ -205,7 +205,7 @@ glm::mat4 Camera::calculateViewMatrix()
 	else {
 		//return glm::lookAt(positionIsometrica, positionIsometrica + frontIsometrica, upIsometrica);
 		
-		// Ajustar la posiciÛn de la c·mara isomÈtrica en funciÛn del zoom
+		// Ajustar la posici√≥n de la c√°mara isom√©trica en funci√≥n del zoom
 		positionIsometrica = zoomFactor * positionIsometrica;
 		zoomFactor = 1.0f;
 		return glm::lookAt(positionIsometrica, positionIsometrica + frontIsometrica, upIsometrica);
@@ -254,14 +254,14 @@ void Camera::update()
 
 	//Camara isometrica
 	else if (cameraMode == 2) {
-		// Aplicar transformaciones de vista y proyecciÛn en OpenGL
+		// Aplicar transformaciones de vista y proyecci√≥n en OpenGL
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
-		// Configurar una proyecciÛn ortogr·fica isomÈtrica
+		// Configurar una proyecci√≥n ortogr√°fica isom√©trica
 		glOrtho(-scale, scale, -scale, scale, -scale, scale);
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
-		// Aplicar desplazamiento y rotaciÛn de la c·mara
+		// Aplicar desplazamiento y rotaci√≥n de la c√°mara
 		glTranslatef(positionIsometrica.x, positionIsometrica.y, positionIsometrica.z);
 		glRotatef(rotation, 0.0f, 0.0f, 1.0f);
 	}
@@ -273,15 +273,15 @@ void Camera::update()
 
 //Camara isometrica
 void Camera::pan(float dx, float dy) {
-	// Desplazamiento de la c·mara en los ejes X y Y
+	// Desplazamiento de la c√°mara en los ejes X y Y
 	positionIsometrica.x += dx;
 	positionIsometrica.y += dy;
 }
 
 void Camera::zoom(float delta) {
-	// Acercamiento o alejamiento de la c·mara
+	// Acercamiento o alejamiento de la c√°mara
 	scale += delta;
-	// Limitar el valor mÌnimo de la escala
+	// Limitar el valor m√≠nimo de la escala
 	if (scale < 0.1f) {
 		scale = 0.1f;
 	}

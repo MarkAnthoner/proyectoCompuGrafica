@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <glew.h>
 
@@ -29,7 +29,7 @@ public:
 	void pan(float dx, float dy);
 	void zoom(float delta);
 
-
+	GLint getcameraMode() { return cameraMode; }
 	glm::vec3 getCameraPosition();
 	glm::vec3 getCameraDirection();
 	glm::mat4 calculateViewMatrix();
@@ -55,8 +55,8 @@ private:
 	int reinicioCambioCamara;
 
 	//Camara isometrica
-	float rotation;     // Ángulo de vista
-	float scale;        // Escala de la cámara
+	float rotation;     // ï¿½ngulo de vista
+	float scale;        // Escala de la cï¿½mara
 	glm::vec3 frontIsometrica;
 	glm::vec3 upIsometrica;
 	glm::vec3 positionIsometrica;
@@ -67,6 +67,7 @@ private:
 
 	//Personaje moviendose
 	GLfloat distanciaPersonajeCamara;
+
 
 	void update();
 };
