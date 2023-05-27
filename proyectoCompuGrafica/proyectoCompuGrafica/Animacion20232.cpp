@@ -1715,11 +1715,11 @@ int main()
 
 
 
-		//=== Pingu: Modelo de pinguino ===
+		//=== Pengling: Modelo de pinguino ===
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, -2.0f, 200.0 + movPenglingZ));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		//rotacion En circuito
 		model = glm::rotate(model, rotaPengling * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		//Movimiento del pinguino
@@ -2031,12 +2031,13 @@ int main()
 		//=== Pez - Animacion Salto ===
 		model = glm::mat4(1.0);
 		float componenteYpez = -1.5f + 5 * compSeno;
-		printf("\nY: %f", componenteYpez);
+		/*printf("\nY: %f", componenteYpez);
 		printf("\nSeno: %f", compSeno);
-		printf("\nSeno: %f", movPezY);
+		printf("\nSeno: %f", movPezY);*/
 		compSeno = sin(glm::radians(movPezY));
 		model = glm::translate(model, glm::vec3(-140.0f + movPezX, componenteYpez, 100.0f + movPezZ));
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		//rotacion En circuito
 		model = glm::rotate(model, rotaPez * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		if (adelantePez == true) {
