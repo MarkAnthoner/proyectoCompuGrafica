@@ -1,5 +1,6 @@
 ﻿#include "Camera.h"
 
+//Variables globales de posicion del ppersonaje principal
 float anguloPersonaje;
 glm::vec3 posicionPersonaje;
 
@@ -7,6 +8,7 @@ Camera::Camera() {}
 
 Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch, GLfloat startMoveSpeed, GLfloat startTurnSpeed)
 {
+	//variables de la instancia de cámara
 	position = startPosition;
 	worldUp = startUp;
 	yaw = startYaw;
@@ -79,6 +81,8 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 		}*/
 
 	}
+
+	//Camara de tipo isometrica
 	else if (cameraMode == 2) {
 		if (keys[GLFW_KEY_A]) {
 			pan(0.1f, 0.0f);  // Desplazamiento a la izquierda
@@ -99,11 +103,8 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 				zoomFactor += zoomSpeed;  // Acercamiento
 			}
 				habilitaZoom = 0;	
-			//zoom(0.1f);        // Acercamiento
-			//zoomFactor += zoomSpeed;  // Acercamiento
 		}
 		else if (keys[GLFW_KEY_Z]) {
-			//zoom(-0.1f);       // Alejamiento
 			if (habilitaZoom < 1)
 			{
 				habilitaZoom++;
@@ -128,7 +129,7 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 			}
 		}
 	}
-	//Tecla que habilita
+	//Tecla que habilita el cambio de tipo
 	if (keys[GLFW_KEY_C])
 	{
 		if (reinicioCambioCamara < 1)
@@ -188,6 +189,7 @@ glm::mat4 Camera::calculateViewMatrix()
 		//coordenadas adelante de la camara
 		//posicionPersonaje = position - glm::vec3(0.0f, 9.0f, 0.0f);   //Antes de reseteo de Y
 
+		//posicion del personaje en plano XZ
 		posicionPersonaje = position - glm::vec3(0.0f, position.y, 0.0f) - glm::vec3(0.0f, 2.0f, 0.0f);
 		position.y = 7.0f;
 		return glm::lookAt(position - front * distanciaPersonajeCamara, position + front, up);
@@ -201,6 +203,7 @@ glm::mat4 Camera::calculateViewMatrix()
 		return glm::lookAt(position - front * distanciaPersonajeCamara, position + front, up);
 
 	}
+
 	//Modo de camara isometrica
 	else {
 		//return glm::lookAt(positionIsometrica, positionIsometrica + frontIsometrica, upIsometrica);
@@ -281,7 +284,7 @@ void Camera::pan(float dx, float dy) {
 void Camera::zoom(float delta) {
 	// Acercamiento o alejamiento de la cámara
 	scale += delta;
-	// Limitar el valor mínimo de la escala
+	// Limita el valor mínimo de la escala
 	if (scale < 0.1f) {
 		scale = 0.1f;
 	}
