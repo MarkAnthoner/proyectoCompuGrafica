@@ -48,13 +48,13 @@ int Window::Initialise()
 	}
 	//Asignando variables de GLFW y propiedades de ventana
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 	//para solo usar el core profile de OpenGL y no tener retrocompatibilidad
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
 	//CREAR VENTANA
-	mainWindow = glfwCreateWindow(width, height, "Practica 10: Animacion por Keyframes", NULL, NULL);
+	mainWindow = glfwCreateWindow(width, height, "Proyecto: Diorama - Subnautica", NULL, NULL);
 
 	if (!mainWindow)
 	{

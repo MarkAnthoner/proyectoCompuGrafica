@@ -136,6 +136,9 @@ Texture aguaTexture;
 Texture arenaTexture;
 Texture casaTexture;
 
+Texture LeviathanTexture;
+Texture PezRojoTexture;
+
 // === Variables de Modelos ===
 
 Model papalote;
@@ -155,6 +158,9 @@ Model Leviathan_M;
 
 //Tom Nook
 Model tomNook;
+
+//Pez
+Model PezRojo_M;
 
 //Robin: Avatar
 Model BodyRobin;
@@ -1363,6 +1369,11 @@ int main()
 	casaTexture = Texture("Textures/Casa.tga");
 	casaTexture.LoadTextureA();
 
+	LeviathanTexture = Texture("Textures/Reaper_Leviathan.png");
+	LeviathanTexture.LoadTextureA();
+	PezRojoTexture = Texture("Textures/PezRojo.png");
+	PezRojoTexture.LoadTextureA();
+
 	// === Carga de modelos ===
 
 	//Faro
@@ -1386,6 +1397,14 @@ int main()
 	//Bolsa de dinero
 	bolsaDinero = Model();
 	bolsaDinero.LoadModel("Models/monedero.obj");
+
+	//Leviathan
+	Leviathan_M = Model();
+	Leviathan_M.LoadModel("Models/Leviathan.obj");
+
+	//Pez
+	PezRojo_M = Model();
+	PezRojo_M.LoadModel("Models/PezRojo.obj");
 
 	//Robin:Avatar
 	BodyRobin = Model();
@@ -1661,20 +1680,6 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		mesaTexture.UseTexture();
 		meshList[9]->RenderMesh();
-
-		//=== Primitiva: Agua ===
-		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-300.0f, -102.0f, 300.0));		//x:- (EscalaX/2)  y:- (EscalaY+2)  z: EscalaZ/2
-		model = glm::scale(model, glm::vec3(600.0f, 100.0f, 600.0f));
-
-		//blending: transparencia o traslucidez  menor al 100%
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		aguaTexture.UseTexture();
-		meshList[10]->RenderMesh();
-		glDisable(GL_BLEND);
-
 
 		//=== Primitiva: Arena ===
 		model = glm::mat4(1.0);
@@ -2002,7 +2007,7 @@ int main()
 		bolsaDinero.RenderModel();
 
 
-		//=== Bolsa de dinero - Animacion Salto ===
+		//=== Pez - Animacion Salto ===
 		model = glm::mat4(1.0);
 		float componenteYpez = -1.5f + 5 * compSeno;
 		printf("\nY: %f", componenteYpez);
@@ -2010,7 +2015,7 @@ int main()
 		printf("\nSeno: %f", movPezY);
 		compSeno = sin(glm::radians(movPezY));
 		model = glm::translate(model, glm::vec3(-140.0f + movPezX, componenteYpez, 100.0f + movPezZ));
-		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		//rotacion En circuito
 		model = glm::rotate(model, rotaPez * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		if (adelantePez == true) {
@@ -2081,9 +2086,35 @@ int main()
 			pezOffset = 0.0f;
 		}
 
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		bolsaDinero.RenderModel();
+		PezRojoTexture.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		PezRojo_M.RenderModel();
+
+		//=== Leviathan ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-90.0f, 6.0f, 200.0f));
+		model = glm::scale(model, glm::vec3(200.0f, 200.0f, 200.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, -35 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		LeviathanTexture.UseTexture();
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Leviathan_M.RenderModel();
+
+		//=== Primitiva: Agua ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-300.0f, -102.0f, 300.0));		//x:- (EscalaX/2)  y:- (EscalaY+2)  z: EscalaZ/2
+		model = glm::scale(model, glm::vec3(600.0f, 100.0f, 600.0f));
+
+		//blending: transparencia o traslucidez  menor al 100%
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		aguaTexture.UseTexture();
+		meshList[10]->RenderMesh();
+		glDisable(GL_BLEND);
 
 
 		//=== Texto [Textura con movimiento] === 
