@@ -138,6 +138,7 @@ Texture casaTexture;
 
 Texture LeviathanTexture;
 Texture PezRojoTexture;
+Texture PenglingTexture;
 
 // === Variables de Modelos ===
 
@@ -168,6 +169,9 @@ Model LegRightRobin;
 Model LegLeftRobin;
 Model ArmRightRobin;
 Model ArmLeftRobin;
+
+//Pengling
+Model Pengling_M;
 
 
 Skybox skybox;
@@ -1373,6 +1377,8 @@ int main()
 	LeviathanTexture.LoadTextureA();
 	PezRojoTexture = Texture("Textures/PezRojo.png");
 	PezRojoTexture.LoadTextureA();
+	PenglingTexture = Texture("Textures/Pengling.png");
+	PenglingTexture.LoadTextureA();
 
 	// === Carga de modelos ===
 
@@ -1417,6 +1423,10 @@ int main()
 	ArmLeftRobin.LoadModel("Models/RobinBrazoIzquierdo.obj");
 	ArmRightRobin = Model();
 	ArmRightRobin.LoadModel("Models/RobinBrazoDerecho.obj");
+
+	//Pengling
+	Pengling_M = Model();
+	Pengling_M.LoadModel("Models/Pengling.obj");
 
 	// === Skybox ===
 	std::vector<std::string> skyboxFaces;
@@ -1762,6 +1772,17 @@ int main()
 			penglingOffset = 0.0f;
 		}
 
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		PenglingTexture.UseTexture();
+		Pengling_M.RenderModel();
+
+
+		//=== Pingu ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, -2.0f, 200.0));
+		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Pingu.RenderModel();
