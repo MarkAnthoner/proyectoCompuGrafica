@@ -2141,7 +2141,7 @@ int main()
 
 		//=== Leviathan ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-90.0f, 6.0f + resultado, movLevZ));
+		model = glm::translate(model, glm::vec3(-90.0f, 0.0f + resultado, movLevZ));
 		model = glm::scale(model, glm::vec3(200.0f, 200.0f, 200.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, -35 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -2151,14 +2151,9 @@ int main()
 		if (movLevZ > 40.0f) {
 			movLevZ = 0.0f;
 		}
-
-		//model = glm::rotate(model, -170 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		//model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
 		model = glm::rotate(model, rotaLev * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-
-		
-
+	
+		//Segunda ejecución
 		if (controlDireccionLev == true) {
 			if (movLevZ >= -27.0f) {
 				movLevZ -= levOffset * deltaTime;
