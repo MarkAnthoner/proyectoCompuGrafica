@@ -13,3 +13,8 @@
 *.idb
 *.db
 *.db
+*.vsidx
+*.vsidx
+proyectoCompuGrafica/.vs/proyectoCompuGrafica/v17/.suo
+*.db
+*.log

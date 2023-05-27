@@ -92,6 +92,15 @@ float rotaPez = 0.0f;
 float movPezArribaAbajo = 0.0f;
 float offsetPezArribaAbajo;
 
+//Animacion de Levyathan
+float offsetAvanzaLev;
+float offsetGiroLev;
+float levOffset;
+float movLevZ = 0.0f;
+float movLevX = 0.0f;
+float movLevY = 0.0f;
+float rotaLev = 0.0f;
+
 //Movimiento de Robin (Avatar)
 float rotaBrazoDerRobin = 0.0f;
 float rotaBrazoIzqRobin = 0.0f;
@@ -1592,6 +1601,17 @@ int main()
 	bool adelantePez = true;
 	float compSeno = -1.0f;
 
+	//Movimiento de Leviathan
+	offsetAvanzaLev = 0.4;
+	offsetGiroLev = 0.5f;
+	levOffset = 0.35f;
+	movLevX = 0;
+	movLevY = 0;
+	movLevZ = 0.0f;
+	rotaLev = 0;
+	float resultado = 0;
+	bool controlDireccionLev = false;
+
 	//Letrero de la casa de tom Nook
 	glm::vec3 posicionLetreroCasaTomNook = glm::vec3(50.0f, 2.0f, 165.0);
 
@@ -1719,8 +1739,15 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, -2.0f, 200.0 + movPenglingZ));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+
+		if (movPenglingZ > 50) {
+			movPenglingZ = 49;
+		}
+
 		//rotacion En circuito
 		model = glm::rotate(model, rotaPengling * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
 		//Movimiento del pinguino
 		if (adelantePengling == true) {
 			if (movPenglingZ < 15.0f)
@@ -1977,7 +2004,15 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-20.0f + movTomNookX, -2.0f, 240.0));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, rotaTomNook * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		printf("\n%f\n",movTomNookX);
+		//Lineas que hacebn que no se inicialice desde coordenadas muy lejanas
+		if (movTomNookX > 10.0f) {
+			movTomNookX = 0.0f;
+		}
+
 		//Movimiento de Tom Nook
 		if (adelanteTomNook == true) {
 			if (movTomNookX < 4.0f)
@@ -2023,7 +2058,13 @@ int main()
 		compSeno = sin(glm::radians(movPezY));
 		model = glm::translate(model, glm::vec3(-140.0f + movPezX, componenteYpez, 100.0f + movPezZ));
 		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+
+		//Lineas que hacebn que no se inicialice desde coordenadas muy lejanas
+		if (movPezZ > 70.0f) {
+			movPezZ = 0.0f;
+		}
+
 		//rotacion En circuito
 		model = glm::rotate(model, rotaPez * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		if (adelantePez == true) {
@@ -2100,10 +2141,44 @@ int main()
 
 		//=== Leviathan ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-90.0f, 6.0f, 200.0f));
+		model = glm::translate(model, glm::vec3(-90.0f, 6.0f + resultado, movLevZ));
 		model = glm::scale(model, glm::vec3(200.0f, 200.0f, 200.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, -35 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, -35 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		//Lineas que hacebn que no se inicialice desde coordenadas muy lejanas
+		if (movLevZ > 40.0f) {
+			movLevZ = 0.0f;
+		}
+
+		//model = glm::rotate(model, -170 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		model = glm::rotate(model, rotaLev * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+
+		
+
+		if (controlDireccionLev == true) {
+			if (movLevZ >= -27.0f) {
+				movLevZ -= levOffset * deltaTime;
+				resultado = std::abs(0.02f * std::pow(movLevZ, 2) - 2) - 8;
+				rotaLev += offsetGiroLev * deltaTime;
+			}
+			else {
+				controlDireccionLev = false;
+			}
+		}
+		else {
+			if (movLevZ <= 27.0f ) {
+				movLevZ += levOffset * deltaTime;
+				resultado = std::abs(0.02f * std::pow(movLevZ, 2) - 2) - 8;
+				rotaLev -= offsetGiroLev * deltaTime;
+			}
+			else {
+				controlDireccionLev = true;
+			}
+		}
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		LeviathanTexture.UseTexture();
