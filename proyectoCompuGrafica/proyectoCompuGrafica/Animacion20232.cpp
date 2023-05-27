@@ -1778,7 +1778,7 @@ int main()
 		Pengling_M.RenderModel();
 
 
-		//=== Pingu ===
+		//=== Pingu: Modelo de pinguino ===
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(20.0f, -2.0f, 200.0));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
