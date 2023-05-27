@@ -1,1 +1,14 @@
 *.ipch
+*.vsidx
+*.db
+*.db-shm
+*.db-wal
+*.db
+*.db
+*.opendb
+*.pdb
+*.obj
+*.tlog
+*.ilk
+*.idb
+*.db
