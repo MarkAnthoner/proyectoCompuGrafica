@@ -218,7 +218,9 @@ GLfloat lastTime = 0.0f;
 static double limitFPS = 1.0 / 60.0;
 
 //  === Luz direccional === 
-DirectionalLight mainLight;
+DirectionalLight mainLight_1, mainLight_2, mainLight_3, mainLight_4, mainLight_5; //5 posiciones a lo largo del día
+DirectionalLight mainLight_night_1, mainLight_night_2, mainLight_night_3, mainLight_night_4, mainLight_night_5;
+
 
 //para declarar varias luces de tipo pointlight
 PointLight pointLights[MAX_POINT_LIGHTS];
@@ -1498,12 +1500,40 @@ int main()
 
 
 	// === Luz Direccional === 
-	//Solo 1 y siempre debe de existir
-
-	//1� Luz [Direccional]: Sol
-	mainLight = DirectionalLight(1.0f, 1.0f, 1.0f,
-		0.5f, 0.4f,
+	//Se implementan 5 etapas de día y 5 etapas de sol, cada una con su propia intensidad ambiental y dirección
+	//Definición etapas ciclo día
+	mainLight_1 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.3f, 0.4f,
 		0.0f, 0.0f, -1.0f);
+	mainLight_2 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.45f, 0.4f,
+		0.0f, -1.0f, -1.0f);
+	mainLight_3 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.5f, 0.4f,
+		0.0f, -1.0f, 0.0f);
+	mainLight_4 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.45f, 0.4f,
+		0.0f, -1.0f, 1.0f);
+	mainLight_5 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.3f, 0.4f,
+		0.0f, -1.0f, 1.0f);
+
+	//Definicion etapas ciclo noche
+	mainLight_night_1 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.1f, 0.4f,
+		0.0f, 0.0f, -1.0f);
+	mainLight_night_2 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.15f, 0.4f,
+		0.0f, -1.0f, -1.0f);
+	mainLight_night_3 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.2f, 0.4f,
+		0.0f, -1.0f, 0.0f);
+	mainLight_night_4 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.15f, 0.4f,
+		0.0f, -1.0f, 1.0f);
+	mainLight_night_5 = DirectionalLight(1.0f, 1.0f, 1.0f,
+		0.1f, 0.4f,
+		0.0f, 0.0f, 1.0f);
 
 
 	// === Luz Puntal ===
@@ -1656,10 +1686,16 @@ int main()
 	movCirculoZ = 0.0f;
 	anguloCirculo = 0;
 
-	//Skybox día-noche variable
+	//variables ciclo día-noche
 	float startTime = 0.0f;
 	float nowTime;
 	float diaNoche = 0.0f; //O: día, 1:noche
+	float duracionDia = 30.0f;
+	float duracionDia_1 = duracionDia / 5;
+	float duracionDia_2 = (duracionDia / 5) * 2;
+	float duracionDia_3 = (duracionDia / 5) * 3;
+	float duracionDia_4 = (duracionDia / 5) * 4;
+	float contTime = 0.0f;
 
 	//Letrero de la casa de tom Nook
 	glm::vec3 posicionLetreroCasaTomNook = glm::vec3(50.0f, 2.0f, 165.0);
@@ -1701,7 +1737,9 @@ int main()
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (nowTime - startTime >= 10) {
+		//Ciclo dia y noche: cambio de dia y de noche:  diaNoche=0.0f para día, diaNoche=1.0f para noche
+		contTime = nowTime - startTime;
+		if (contTime >= duracionDia) {
 			startTime = nowTime;
 			if (diaNoche == 0.0f)diaNoche = 1.0f;
 			else diaNoche = 0.0f;
@@ -1712,6 +1750,7 @@ int main()
 		else {
 			skybox_night.DrawSkybox(camera.calculateViewMatrix(), projection); //skybox de noche
 		}
+
 		shaderList[0].UseShader();
 		uniformModel = shaderList[0].GetModelLocation();
 		uniformProjection = shaderList[0].GetProjectionLocation();
@@ -1736,9 +1775,26 @@ int main()
 		//lowerLight.y -= 0.3f;
 		//spotLights[0].SetFlash(lowerLight, camera.getCameraDirection());
 
-		//informaci�n al shader de fuentes de iluminaci�n
-		shaderList[0].SetDirectionalLight(&mainLight);
-		shaderList[0].SetPointLights(pointLights, pointLightCount);
+
+		//Ciclo dia noche junto con encendido y apagado de luces tipo pointlight
+		if (diaNoche == 1.0f) {
+			shaderList[0].SetPointLights(pointLights, pointLightCount);
+			if (contTime < duracionDia_1)shaderList[0].SetDirectionalLight(&mainLight_night_1);
+			else if (contTime < duracionDia_2)shaderList[0].SetDirectionalLight(&mainLight_night_2);
+			else if (contTime < duracionDia_3)shaderList[0].SetDirectionalLight(&mainLight_night_3);
+			else if (contTime < duracionDia_4)shaderList[0].SetDirectionalLight(&mainLight_night_4);
+			else if (contTime < duracionDia)shaderList[0].SetDirectionalLight(&mainLight_night_5);
+		}
+		else {
+			shaderList[0].SetPointLights(pointLights, 0);
+			//shaderList[0].SetDirectionalLight(&mainLight);
+			if (contTime < duracionDia_1)shaderList[0].SetDirectionalLight(&mainLight_1);
+			else if (contTime < duracionDia_2)shaderList[0].SetDirectionalLight(&mainLight_2);
+			else if (contTime < duracionDia_3)shaderList[0].SetDirectionalLight(&mainLight_3);
+			else if (contTime < duracionDia_4)shaderList[0].SetDirectionalLight(&mainLight_4);
+			else if (contTime < duracionDia)shaderList[0].SetDirectionalLight(&mainLight_5);
+		}
+		//shaderList[0].SetPointLights(pointLights, pointLightCount);
 		//shaderList[0].SetSpotLights(spotLights, spotLightCount);
 
 
