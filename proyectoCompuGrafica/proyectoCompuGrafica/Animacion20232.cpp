@@ -1735,7 +1735,7 @@ int main()
 	float contTime = 0.0f;
 
 	//Letrero de la casa de tom Nook
-	glm::vec3 posicionLetreroCasaTomNook = glm::vec3(50.0f, 2.0f, 165.0);
+	glm::vec3 posicionLetreroCasaTomNook = glm::vec3(40.0f, 0.0f, -135.0);
 
 	//parametros de Arquimedes
 	// Variables para la animaci�n en espiral de Arqu�medes
@@ -1877,7 +1877,8 @@ int main()
 		//=== Primitiva: Casa ===
 		model = glm::mat4(1.0);
 		model = glm::translate(model, posicionLetreroCasaTomNook);
-		model = glm::scale(model, glm::vec3(60.0f, 60.0f, 60.0f));
+		model = glm::scale(model, glm::vec3(72.0f, 72.0f, 72.0f));
+		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 
 		//blending: transparencia o traslucidez  menor al 100%
@@ -1891,8 +1892,8 @@ int main()
 
 		//=== Pengling: Modelo de pinguino ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, -2.0f, 200.0 + movPenglingZ));
-		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		model = glm::translate(model, glm::vec3(5.0f + movPenglingX, -2.0f, 200.0 + movPenglingZ));
+		model = glm::scale(model, glm::vec3(5.9f, 5.9f, 5.9f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		if (movPenglingZ > 50) {
 			movPenglingZ = 49;
@@ -1904,18 +1905,18 @@ int main()
 		if (activarAnimacionPengling == true) {
 			//Movimiento del pinguino
 			if (adelantePengling == true) {
-				if (movPenglingZ < 15.0f)
+				if (movPenglingZ < 25.0f)
 				{
 					movPenglingZ += offsetAvanzaPengling * deltaTime;
 				}
-				else if (movPenglingZ >= 15.0 and movPenglingZ < 18.0f) {
+				else if (movPenglingZ >= 25.0 and movPenglingZ < 28.0f) {
 					movPenglingZ += 0.1 * deltaTime;
 					rotaPengling += offsetGiroPengling * deltaTime;
 				}
-				else if (movPenglingX < 20.0f) {
+				else if (movPenglingX < 30.0f) {
 					movPenglingX += offsetAvanzaPengling * deltaTime;
 				}
-				else if (movPenglingX >= 20.0 and movPenglingX < 23.0f) {
+				else if (movPenglingX >= 30.0 and movPenglingX < 33.0f) {
 					movPenglingX += 0.1 * deltaTime;
 					rotaPengling += offsetGiroPengling * deltaTime;
 				}
@@ -1925,18 +1926,18 @@ int main()
 
 			}
 			else {
-				if (movPenglingZ > -15.0f)
+				if (movPenglingZ > -25.0f)
 				{
 					movPenglingZ -= offsetAvanzaPengling * deltaTime;
 				}
-				else if (movPenglingZ <= -15.0 and movPenglingZ > -18.0f) {
+				else if (movPenglingZ <= -25.0 and movPenglingZ > -28.0f) {
 					movPenglingZ -= 0.1 * deltaTime;
 					rotaPengling += offsetGiroPengling * deltaTime;
 				}
-				else if (movPenglingX > -10.0f) {
+				else if (movPenglingX > -20.0f) {
 					movPenglingX -= offsetAvanzaPengling * deltaTime;
 				}
-				else if (movPenglingX <= -10.0 and movPenglingX > -13.0f) {
+				else if (movPenglingX <= -20.0 and movPenglingX > -23.0f) {
 					movPenglingX -= 0.1 * deltaTime;
 					rotaPengling += offsetGiroPengling * deltaTime;
 				}
@@ -1957,7 +1958,7 @@ int main()
 
 		//=== Pingu: Modelo de pinguino : Animación de circulo ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(20.0f + movCirculoX, 0.0f, -60.0f + movCirculoZ));
+		model = glm::translate(model, glm::vec3(1.0f + movCirculoX, 0.0f, 18.0f + movCirculoZ));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 350 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, -anguloCirculo * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -2163,9 +2164,9 @@ int main()
 
 		//=== Tom Nook: Modelo de mapache
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f + movTomNookX, -2.0f, 240.0));
-		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
-		//model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(55.0f + movTomNookX, -2.0f, -100.0));
+		model = glm::scale(model, glm::vec3(6.7f, 6.7f, 6.7f));
+		model = glm::rotate(model, 120 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
 		//Lineas que hacebn que no se inicialice desde coordenadas muy lejanas
 		if (movTomNookX > 10.0f) {
@@ -2206,7 +2207,7 @@ int main()
 
 		//=== Bolsa de dinero ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-30.0f, 2.0f + 4 * sin(glm::radians(movBolsaArribaAbajo)), 180.0f));
+		model = glm::translate(model, glm::vec3(-30.0f, 2.0f + 4 * sin(glm::radians(movBolsaArribaAbajo)), -80.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, rotacionBolsaEje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 
@@ -2314,6 +2315,7 @@ int main()
 		//Lineas que hacebn que no se inicialice desde coordenadas muy lejanas
 		if (movLevZ > 40.0f) {
 			movLevZ = 0.0f;
+			rotaLev = 0.0f;
 		}
 		model = glm::rotate(model, rotaLev * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 
@@ -2346,8 +2348,8 @@ int main()
 
 		//=== Capsulas ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(60.0f, -2.0f, -10.0));
-		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::translate(model, glm::vec3(130.0f, 0.0f, 80.0));
+		model = glm::scale(model, glm::vec3(14.0f, 14.0f, 14.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
@@ -2356,8 +2358,9 @@ int main()
 
 		//=== Sombrilla ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 5.0));
+		model = glm::translate(model, glm::vec3(-10.0f, -2.0f, 115.0));
 		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		UmbrellaTexture.UseTexture();
@@ -2365,16 +2368,18 @@ int main()
 
 		//=== Silla de playa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(5.0f, -2.0f, 00.0));
+		model = glm::translate(model, glm::vec3(-15.0f, -2.0f, 110.0));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		BeachChair_M.RenderModel();
 		
 		//=== Red ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(10.0f, -2.0f, 3.0));
+		model = glm::translate(model, glm::vec3(-20.0f, -2.0f, 113.0));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		NetTexture.UseTexture();
@@ -2409,10 +2414,11 @@ int main()
 		toffset = glm::vec2(toffsetu, toffsetv);
 
 		model = glm::mat4(1.0);
-		model = glm::translate(model, posicionLetreroCasaTomNook + glm::vec3(29.0f, 25.0f, 1.0f));
+		model = glm::translate(model, posicionLetreroCasaTomNook + glm::vec3(29.0f, 27.0f, 1.0f));
 		model = glm::rotate(model, 90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(50.0f, 50.0f, 50.0f));
 		glEnable(GL_BLEND);  //habilita las texturas del agave para blending
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

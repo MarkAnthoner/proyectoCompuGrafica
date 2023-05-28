@@ -31,9 +31,12 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	//Camara isometrica
 	rotation = 0.0f;   // Ángulo de vista inicial de 45 grados
 	scale = 1.0f;       // Escala inicial de 1.0
-	positionIsometrica = glm::vec3(174.933762f, 180.697876f, -336.841492f);
-	frontIsometrica = glm::vec3(-0.406201f, -0.615662f, 0.675249f);
-	upIsometrica = glm::vec3(-0.317359f, 0.788011f, 0.527563f);
+	positionIsometrica = glm::vec3(-289.190826f, 300.472473f, 431.226898f);
+	frontIsometrica = glm::vec3(0.406058f, -0.629320f, -0.662626f);
+	upIsometrica = glm::vec3(0.328819f, 0.777146f, -0.536584f);
+	//positionIsometrica = glm::vec3(174.933762f, 180.697876f, -336.841492f);
+	//frontIsometrica = glm::vec3(-0.406201f, -0.615662f, 0.675249f);
+	//upIsometrica = glm::vec3(-0.317359f, 0.788011f, 0.527563f);
 
 	zoomFactor = 1.0f;  // Factor de zoom inicial
 	zoomSpeed = 0.001f;   // Velocidad de zoom
@@ -74,27 +77,27 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 			position += right * velocity;
 		}
 
-		/*if (keys[GLFW_KEY_Q]) {
-			printf("Vector de front: x=%f, y=%f, z=%f", front.x, front.y, front.z);
+		if (keys[GLFW_KEY_Q]) {
+			printf("\nVector de front: x=%f, y=%f, z=%f", front.x, front.y, front.z);
 			printf("Vector de up: x=%f, y=%f, z=%f", up.x, up.y, up.z);
-			printf("Vector de posicion: x=%f, y=%f, z=%f", position.x, position.y, position.z);
-		}*/
+			printf("Vector de posicion: x=%f, y=%f, z=%f\n", position.x, position.y, position.z);
+		}
 
 	}
 
 	//Camara de tipo isometrica
 	else if (cameraMode == 2) {
 		if (keys[GLFW_KEY_A]) {
-			pan(0.1f, 0.0f);  // Desplazamiento a la izquierda
+			pan(-0.3f, 0.0f);  // Desplazamiento a la izquierda
 		}
 		else if (keys[GLFW_KEY_D]) {
-			pan(-0.1f, 0.0f);   // Desplazamiento a la derecha
+			pan(0.3f, 0.0f);   // Desplazamiento a la derecha
 		}
 		else if (keys[GLFW_KEY_W]) {
-			pan(0.0f, 0.1f);   // Desplazamiento hacia arriba
+			pan(0.0f, 0.3f);   // Desplazamiento hacia arriba
 		}
 		else if (keys[GLFW_KEY_S]) {
-			pan(0.0f, -0.1f);  // Desplazamiento hacia abajo
+			pan(0.0f, -0.3f);  // Desplazamiento hacia abajo
 		}
 		else if (keys[GLFW_KEY_X]) {
 			if (habilitaZoom < 1)
