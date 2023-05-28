@@ -163,6 +163,8 @@ Texture LeviathanTexture;
 Texture PezRojoTexture;
 Texture PenglingTexture;
 Texture CapsulasTexture;
+Texture UmbrellaTexture;
+Texture NetTexture;
 
 // === Variables de Modelos ===
 
@@ -199,6 +201,15 @@ Model Pengling_M;
 
 //Capsulas
 Model  Capsulas_M;
+
+//Silla de playa
+Model BeachChair_M;
+
+//Sombrilla
+Model Umbrella_M;
+
+//Red
+Model Net_M;
 
 //Dron
 Model dron;
@@ -1414,6 +1425,10 @@ int main()
 	PenglingTexture.LoadTextureA();
 	CapsulasTexture = Texture("Textures/Capsulas.png");
 	CapsulasTexture.LoadTextureA();
+	UmbrellaTexture = Texture("Textures/Umbrella.png");
+	UmbrellaTexture.LoadTextureA();
+	NetTexture = Texture("Models/Net.png");
+	NetTexture.LoadTextureA();
 
 	// === Carga de modelos ===
 
@@ -1466,6 +1481,18 @@ int main()
 	//Capsulas
 	Capsulas_M = Model();
 	Capsulas_M.LoadModel("Models/Capsulas.obj");
+
+	//Sombrilla
+	Umbrella_M = Model();
+	Umbrella_M.LoadModel("Models/Umbrella.obj");
+
+	//Silla de playa
+	BeachChair_M = Model();
+	BeachChair_M.LoadModel("Models/BeachChair.obj");
+
+	//Red
+	Net_M = Model();
+	Net_M.LoadModel("Models/Net.obj");
 
 	//Dron
 	dron = Model();
@@ -2296,13 +2323,39 @@ int main()
 
 		//=== Capsulas ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(50.0f, 0.0f, -10.0));
+		model = glm::translate(model, glm::vec3(60.0f, -2.0f, -10.0));
 		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		CapsulasTexture.UseTexture();
 		Capsulas_M.RenderModel();
+
+		//=== Sombrilla ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 5.0));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		UmbrellaTexture.UseTexture();
+		Umbrella_M.RenderModel();
+
+		//=== Silla de playa ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(5.0f, -2.0f, 00.0));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		BeachChair_M.RenderModel();
+		
+		//=== Red ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(10.0f, -2.0f, 3.0));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		NetTexture.UseTexture();
+		Net_M.RenderModel();
 
 
 		//=== Primitiva: Agua ===
