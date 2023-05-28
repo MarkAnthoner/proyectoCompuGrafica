@@ -1861,7 +1861,8 @@ int main()
 
 		//=== Primitiva: Mesa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(40.0f, 2.0f, 165.0));
+		model = glm::translate(model, posicionLetreroCasaTomNook + glm::vec3(-15.0f, 0.0f, 36.0f));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		mesaTexture.UseTexture();
 		meshList[9]->RenderMesh();
@@ -2358,7 +2359,7 @@ int main()
 
 		//=== Sombrilla ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-10.0f, -2.0f, 115.0));
+		model = glm::translate(model, glm::vec3(-20.0f, -2.0f, 115.0));
 		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -2368,7 +2369,7 @@ int main()
 
 		//=== Silla de playa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-15.0f, -2.0f, 110.0));
+		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 110.0));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -2377,7 +2378,7 @@ int main()
 		
 		//=== Red ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, -2.0f, 113.0));
+		model = glm::translate(model, glm::vec3(-30.0f, -2.0f, 113.0));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
