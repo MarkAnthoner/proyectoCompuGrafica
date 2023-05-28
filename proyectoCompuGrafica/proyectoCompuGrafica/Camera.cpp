@@ -46,7 +46,7 @@ Camera::Camera(glm::vec3 startPosition, glm::vec3 startUp, GLfloat startYaw, GLf
 	//Camara siguiendo a personaje
 	anguloPersonaje = startYaw;
 	posicionPersonaje = position - glm::vec3(0.0f, 7.0f, 0.0f); //se resta la altura de la camara que hay en el main
-	distanciaPersonajeCamara = 24.0f;
+	distanciaPersonajeCamara = 26.0f;
 
 	update();
 }
@@ -55,8 +55,8 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 {
 	GLfloat velocity = moveSpeed * deltaTime;
 
-	//Controles WASD si se está en modo de camara de plano XZ o libre
-	if (cameraMode == 0 or cameraMode == 1) {
+	//Controles WASD si se está en modo de camara de plano XZ
+	if (cameraMode == 0) {
 		if (keys[GLFW_KEY_W])
 		{
 			position += front * velocity;
@@ -76,6 +76,7 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 		{
 			position += right * velocity;
 		}
+		position.y = 9.0;
 
 		/*if (keys[GLFW_KEY_Q]) {
 			printf("\nVector de front: x=%f, y=%f, z=%f", front.x, front.y, front.z);
@@ -83,6 +84,29 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 			printf("Vector de posicion: x=%f, y=%f, z=%f\n", position.x, position.y, position.z);
 		}*/
 
+	}
+
+	//Movimiento en camara libre
+	else if (cameraMode == 1) {
+		if (keys[GLFW_KEY_W])
+		{
+			position += front * velocity;
+		}
+
+		if (keys[GLFW_KEY_S])
+		{
+			position -= front * velocity;
+		}
+
+		if (keys[GLFW_KEY_A])
+		{
+			position -= right * velocity;
+		}
+
+		if (keys[GLFW_KEY_D])
+		{
+			position += right * velocity;
+		}
 	}
 
 	//Camara de tipo isometrica
@@ -154,6 +178,18 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 
 		yaw += xChange;
 		anguloPersonaje = yaw;
+
+		pitch += yChange;
+
+		if (pitch > 89.0f)
+		{
+			pitch = 89.0f;
+		}
+
+		if (pitch < -89.0f)
+		{
+			pitch = -89.0f;
+		}
 	}
 
 	//Camara libre
@@ -162,6 +198,7 @@ void Camera::mouseControl(GLfloat xChange, GLfloat yChange)
 		yChange *= turnSpeed;
 
 		yaw += xChange;
+		anguloPersonaje = yaw;
 
 		pitch += yChange;
 
@@ -194,14 +231,14 @@ glm::mat4 Camera::calculateViewMatrix()
 
 		//posicion del personaje en plano XZ
 		posicionPersonaje = position - glm::vec3(0.0f, position.y, 0.0f) ;
-		position.y = 7.0f;
+		position.y = 9.0f;
 		return glm::lookAt(position - front * distanciaPersonajeCamara, position + front, up);
 	}
 
 	//Camara libre
 	else if (cameraMode == 1) {
 		//coordenadas adelante de la camara
-		posicionPersonaje = position - glm::vec3(0.0f, 7.0f, 0.0f); //se resta la altura de la camara que hay en el main;
+		posicionPersonaje = position - glm::vec3(0.0f, 9.0f, 0.0f); //se resta la altura de la camara que hay en el main;
 
 		return glm::lookAt(position - front * distanciaPersonajeCamara, position + front, up);
 
@@ -238,7 +275,7 @@ void Camera::update()
 	{
 		glm::vec3 newFront;
 		newFront.x = cos(glm::radians(yaw));
-		newFront.y = 0.0f;
+		newFront.y = sin(glm::radians(pitch)); //0.0f;
 		newFront.z = sin(glm::radians(yaw));
 		front = glm::normalize(newFront);
 
