@@ -1470,7 +1470,7 @@ int main()
 	dron.LoadModel("Models/dronSinhelices.obj");
 
 	heliceDron = Model();
-	heliceDron.LoadModel("Models/heliceDron.obj");
+	heliceDron.LoadModel("Models/cuatroHelices.obj");
 
 	// === Skybox ===
 	std::vector<std::string> skyboxFaces;
@@ -2311,25 +2311,14 @@ int main()
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
 		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
 		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelaux = model;
 
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		dron.RenderModel();
 
 		//Helice1 dron
-		model = glm::mat4(1.0);
-		posblackhawk = glm::vec3(posXAnimacion + movAnimacion_x, posYAnimacion + movAnimacion_y + 4.3f, posZAnimacion + movAnimacion_z + 10.5f);
-		model = glm::translate(model, posblackhawk);
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
-		model = glm::rotate(model, 270 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, giroAnimacion * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, giroDosAnimacion * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, giroTresAnimacion * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, -180 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
-
-		model = glm::rotate(model, rotacionBolsaEje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = modelaux;
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		heliceDron.RenderModel();

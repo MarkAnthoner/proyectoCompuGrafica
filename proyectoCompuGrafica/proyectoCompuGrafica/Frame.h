@@ -8,7 +8,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#define MAX_FRAMES 50
+#define MAX_FRAMES 200
 extern int i_max_steps;
 extern int i_curr_steps;
 extern int FrameIndex;
