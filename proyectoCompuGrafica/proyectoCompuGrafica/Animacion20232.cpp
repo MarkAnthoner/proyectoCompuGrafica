@@ -66,6 +66,7 @@ float penglingOffset;
 float movPenglingZ = 0.0f;
 float movPenglingX = 0.0f;
 float rotaPengling = 0.0f;
+bool activarAnimacionPengling;
 
 //Movimiento de Tom Nook
 float offsetAvanzaTomNook;
@@ -74,12 +75,14 @@ float tomNookOffset;
 float movTomNookZ = 0.0f;
 float movTomNookX = 0.0f;
 float rotaTomNook = 0.0f;
+bool activarAnimacionTomNook;
 
 //Movimiento de la Bolsa de Dinero
 float rotacionBolsaEje;
 float offsetGiroBolsa;
 float movBolsaArribaAbajo;
 float offsetBolsaArribaAbajo;
+bool activarAnimacionBolsa;
 
 //Animacion de salto de pez
 float offsetAvanzaPez;
@@ -124,6 +127,10 @@ float movCirculoZ = 0.0f;
 float movCirculoX = 0.0f;
 float radioCirculo = 0.0f;
 float anguloCirculo = 0.0f;
+
+
+// === Variables Animacion Basica ===
+float activarBooleano, habilitarBooleano = 0;
 
 
 // === Variables Animaci�n Keyframes ===
@@ -1642,18 +1649,21 @@ int main()
 	offsetGiroPengling = 3.0f;
 	penglingOffset = 5.0f;  //es el senoidal
 	bool adelantePengling = true;
+	activarAnimacionPengling = false;
 
 	//Movimiento Tom Nook
 	offsetAvanzaTomNook = 0.3f;
 	offsetGiroTomNook = 3.0f;
 	tomNookOffset = 5.0f;  //es el senoidal
 	bool adelanteTomNook = true;
+	activarAnimacionTomNook = false;
 
 	//Movimiento de bolsa de dinero
 	offsetGiroBolsa = 4;
 	rotacionBolsaEje = 0.0;
 	offsetBolsaArribaAbajo = 4.0f;
 	movBolsaArribaAbajo = 0.0f;
+	activarAnimacionBolsa = false;
 
 	//Movimiento de salto
 	offsetAvanzaPez = 0.4f;
@@ -1856,55 +1866,60 @@ int main()
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(30.0f + movPenglingX, -2.0f, 200.0 + movPenglingZ));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		if (movPenglingZ > 50) {
 			movPenglingZ = 49;
 		}
+
 		//rotacion En circuito
 		model = glm::rotate(model, rotaPengling * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		//Movimiento del pinguino
-		if (adelantePengling == true) {
-			if (movPenglingZ < 15.0f)
-			{
-				movPenglingZ += offsetAvanzaPengling * deltaTime;
-			}
-			else if (movPenglingZ >= 15.0 and movPenglingZ < 18.0f) {
-				movPenglingZ += 0.1 * deltaTime;
-				rotaPengling += offsetGiroPengling * deltaTime;
-			}
-			else if (movPenglingX < 20.0f) {
-				movPenglingX += offsetAvanzaPengling * deltaTime;
-			}
-			else if (movPenglingX >= 20.0 and movPenglingX < 23.0f) {
-				movPenglingX += 0.1 * deltaTime;
-				rotaPengling += offsetGiroPengling * deltaTime;
-			}
-			else {
-				adelantePengling = false;
-			}
 
-		}
-		else {
-			if (movPenglingZ > -15.0f)
-			{
-				movPenglingZ -= offsetAvanzaPengling * deltaTime;
-			}
-			else if (movPenglingZ <= -15.0 and movPenglingZ > -18.0f) {
-				movPenglingZ -= 0.1 * deltaTime;
-				rotaPengling += offsetGiroPengling * deltaTime;
-			}
-			else if (movPenglingX > -10.0f) {
-				movPenglingX -= offsetAvanzaPengling * deltaTime;
-			}
-			else if (movPenglingX <= -10.0 and movPenglingX > -13.0f) {
-				movPenglingX -= 0.1 * deltaTime;
-				rotaPengling += offsetGiroPengling * deltaTime;
+		if (activarAnimacionPengling == true) {
+			//Movimiento del pinguino
+			if (adelantePengling == true) {
+				if (movPenglingZ < 15.0f)
+				{
+					movPenglingZ += offsetAvanzaPengling * deltaTime;
+				}
+				else if (movPenglingZ >= 15.0 and movPenglingZ < 18.0f) {
+					movPenglingZ += 0.1 * deltaTime;
+					rotaPengling += offsetGiroPengling * deltaTime;
+				}
+				else if (movPenglingX < 20.0f) {
+					movPenglingX += offsetAvanzaPengling * deltaTime;
+				}
+				else if (movPenglingX >= 20.0 and movPenglingX < 23.0f) {
+					movPenglingX += 0.1 * deltaTime;
+					rotaPengling += offsetGiroPengling * deltaTime;
+				}
+				else {
+					adelantePengling = false;
+				}
+
 			}
 			else {
-				adelantePengling = true;
+				if (movPenglingZ > -15.0f)
+				{
+					movPenglingZ -= offsetAvanzaPengling * deltaTime;
+				}
+				else if (movPenglingZ <= -15.0 and movPenglingZ > -18.0f) {
+					movPenglingZ -= 0.1 * deltaTime;
+					rotaPengling += offsetGiroPengling * deltaTime;
+				}
+				else if (movPenglingX > -10.0f) {
+					movPenglingX -= offsetAvanzaPengling * deltaTime;
+				}
+				else if (movPenglingX <= -10.0 and movPenglingX > -13.0f) {
+					movPenglingX -= 0.1 * deltaTime;
+					rotaPengling += offsetGiroPengling * deltaTime;
+				}
+				else {
+					adelantePengling = true;
+				}
 			}
-		}
-		if (movPenglingZ > 359.0) {
-			penglingOffset = 0.0f;
+			if (movPenglingZ > 359.0) {
+				penglingOffset = 0.0f;
+			}
 		}
 
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
@@ -2129,29 +2144,33 @@ int main()
 		if (movTomNookX > 10.0f) {
 			movTomNookX = 0.0f;
 		}
+
 		model = glm::rotate(model, rotaTomNook * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		
-		//Movimiento de Tom Nook
-		if (adelanteTomNook == true) {
-			if (movTomNookX < 4.0f)
-			{
-				movTomNookX += offsetAvanzaTomNook * deltaTime;
-				rotaTomNook += offsetGiroTomNook * deltaTime;
+
+		if (activarAnimacionTomNook == true) {
+			//Movimiento de Tom Nook
+			if (adelanteTomNook == true) {
+				if (movTomNookX < 4.0f)
+				{
+					movTomNookX += offsetAvanzaTomNook * deltaTime;
+					rotaTomNook += offsetGiroTomNook * deltaTime;
+				}
+				else {
+					adelanteTomNook = false;
+				}
 			}
 			else {
-				adelanteTomNook = false;
+				if (movTomNookX > -4.0f)
+				{
+					movTomNookX -= offsetAvanzaTomNook * deltaTime;
+					rotaTomNook -= offsetGiroTomNook * deltaTime;
+				}
+				else {
+					adelanteTomNook = true;
+				}
 			}
 		}
-		else {
-			if (movTomNookX > -4.0f)
-			{
-				movTomNookX -= offsetAvanzaTomNook * deltaTime;
-				rotaTomNook -= offsetGiroTomNook * deltaTime;
-			}
-			else {
-				adelanteTomNook = true;
-			}
-		}
+
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		tomNook.RenderModel();
@@ -2163,8 +2182,12 @@ int main()
 		model = glm::translate(model, glm::vec3(-30.0f, 2.0f + 4 * sin(glm::radians(movBolsaArribaAbajo)), 180.0f));
 		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
 		model = glm::rotate(model, rotacionBolsaEje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
-		rotacionBolsaEje += offsetGiroBolsa * deltaTime;
-		movBolsaArribaAbajo += offsetBolsaArribaAbajo * deltaTime;
+
+		if (activarAnimacionBolsa == true) {
+			rotacionBolsaEje += offsetGiroBolsa * deltaTime;
+			movBolsaArribaAbajo += offsetBolsaArribaAbajo * deltaTime;
+		}
+		
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		bolsaDinero.RenderModel();
@@ -2623,6 +2646,55 @@ void inputKeyframes(bool* keys)
 			ciclo = 0;
 		}
 	}
+
+
+
+	//Animaciones básicas
+
+	//Activar o desactivar Animacion Pengling
+	if (keys[GLFW_KEY_7])
+	{
+		if (activarBooleano < 1)
+		{
+			activarBooleano++;
+			habilitarBooleano = 0;
+			activarAnimacionPengling = !activarAnimacionPengling;
+		}
+	}
+
+	//Activar o desactivar Animacion Tom Nook
+	if (keys[GLFW_KEY_8])
+	{
+		if (activarBooleano < 1)
+		{
+			activarBooleano++;
+			habilitarBooleano = 0;
+			activarAnimacionTomNook = !activarAnimacionTomNook;
+		}
+	}
+
+	//Activar o desactivar Animacion Bolsa de dinero
+	if (keys[GLFW_KEY_9])
+	{
+		if (activarBooleano < 1)
+		{
+			activarBooleano++;
+			habilitarBooleano = 0;
+			activarAnimacionBolsa = !activarAnimacionBolsa;
+		}
+	}
+
+	//Control para habilitar lo anterior
+	if (keys[GLFW_KEY_2])
+	{
+		if (habilitarBooleano < 1)
+		{
+			activarBooleano = 0;
+		}
+	}
+
+
+
 
 }
 
