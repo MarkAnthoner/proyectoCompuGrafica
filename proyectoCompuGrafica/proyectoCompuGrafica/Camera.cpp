@@ -77,11 +77,11 @@ void Camera::keyControl(bool* keys, GLfloat deltaTime)
 			position += right * velocity;
 		}
 
-		if (keys[GLFW_KEY_Q]) {
+		/*if (keys[GLFW_KEY_Q]) {
 			printf("\nVector de front: x=%f, y=%f, z=%f", front.x, front.y, front.z);
 			printf("Vector de up: x=%f, y=%f, z=%f", up.x, up.y, up.z);
 			printf("Vector de posicion: x=%f, y=%f, z=%f\n", position.x, position.y, position.z);
-		}
+		}*/
 
 	}
 
@@ -193,7 +193,7 @@ glm::mat4 Camera::calculateViewMatrix()
 		//posicionPersonaje = position - glm::vec3(0.0f, 9.0f, 0.0f);   //Antes de reseteo de Y
 
 		//posicion del personaje en plano XZ
-		posicionPersonaje = position - glm::vec3(0.0f, position.y, 0.0f) - glm::vec3(0.0f, 2.0f, 0.0f);
+		posicionPersonaje = position - glm::vec3(0.0f, position.y, 0.0f) ;
 		position.y = 7.0f;
 		return glm::lookAt(position - front * distanciaPersonajeCamara, position + front, up);
 	}
