@@ -177,13 +177,19 @@ Texture NetTexture;
 
 Model papalote;
 
-//Iluminaci�n
+//Modelos: Iluminaci�n
 Model faro;
 Model antorcha;
+Model lampara;
+Model panelLuz;
 
+//Anya
+Model Anya;
 //Pingu
 Model Pingu;
 
+//Caña de pescar
+Model Pesca;
 //Bolsa de dinero
 Model bolsaDinero;
 
@@ -1438,12 +1444,20 @@ int main()
 	NetTexture.LoadTextureA();
 
 	// === Carga de modelos ===
-
+	//==Iluminacion==//
 	//Faro
 	faro = Model();
 	faro.LoadModel("Models/Pruebas/Street Lamp.obj");
 	antorcha = Model();
 	antorcha.LoadModel("Models/Pruebas/Torch.obj");
+	
+	//Lampara
+	lampara = Model();
+	lampara.LoadModel("Models/LuzMesa.obj");
+	
+	//Panel de Luz
+	panelLuz = Model();
+	panelLuz.LoadModel("Models/Spotlight.obj");
 
 	//Papalote
 	papalote = Model();
@@ -1452,6 +1466,9 @@ int main()
 	//Pingu
 	Pingu = Model();
 	Pingu.LoadModel("Models/Pingu.obj");
+	//Anya
+	Anya = Model();
+	Anya.LoadModel("Models/Anya.obj");
 
 	//Tom Nook
 	tomNook = Model();
@@ -1460,6 +1477,9 @@ int main()
 	//Bolsa de dinero
 	bolsaDinero = Model();
 	bolsaDinero.LoadModel("Models/monedero.obj");
+	//Caña de pescar
+	Pesca = Model();
+	Pesca.LoadModel("Models/Pesca.obj");
 
 	//Leviathan
 	Leviathan_M = Model();
@@ -1569,70 +1589,55 @@ int main()
 		0.1f, 0.4f,
 		0.0f, 0.0f, 1.0f);
 
-
+	//Iluminacion: definicion de luces
 	// === Luz Puntal ===
 	unsigned int pointLightCount = 0;
-
-	pointLights[0] = PointLight(1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f,
-		30.0f, 3.5f, 50.0f,
-		1.0f, 0.03f, 0.006f);
+	//Lampara 1
+	pointLights[0] = PointLight(0.9411f, 0.9764f, 0.9764f,	//luz blanca ligeramente azulada
+		0.7f, 0.8f,
+		90.0f, 3.5f, 110.0f,
+		0.9f, 0.01f, 0.006f);
+	//0.3f, 0.2f, 0.1f);
+	pointLightCount++;
+	//Lampara 2
+	pointLights[1] = PointLight(0.9411f, 0.9764f, 0.9764f,	//luz blanca ligeramente azulada
+		0.7f, 0.8f,
+		90.0f, 3.5f, 50.0f,
+		0.9f, 0.01f, 0.006f);
+	//0.3f, 0.2f, 0.1f);
+	pointLightCount++;
+	
+	//Antorcha
+	pointLights[2] = PointLight(1.0f, 0.945f, 0.5254f,
+		0.8f, 0.6f,
+		40.0f, 5.5f, 175.0f,
+		0.7f, 0.01f, 0.001f);
 	//0.3f, 0.2f, 0.1f);
 	pointLightCount++;
 
-	pointLights[1] = PointLight(1.0f, 1.0f, 1.0f,
-		1.0f, 1.0f,
-		30.0f, 5.5f, 165.0f,
-		1.0f, 0.01f, 0.001f);
-	//0.3f, 0.2f, 0.1f);
-	pointLightCount++;
 
 
+	//Tipo spotlights
 	// === Luz Reflector ===
 	unsigned int spotLightCount = 0;
-	////linterna
-	//spotLights[0] = SpotLight(1.0f, 1.0f, 1.0f,
-	//	0.0f, 2.0f,
-	//	0.0f, 0.0f, 0.0f,
-	//	0.0f, -1.0f, 0.0f,
-	//	1.0f, 0.0f, 0.0f,
-	//	5.0f);
-	//spotLightCount++;
 
-	////luz fija
-	//spotLights[1] = SpotLight(0.0f, 0.0f, 1.0f,
-	//	1.0f, 2.0f,
-	//	5.0f, 10.0f, 0.0f,
-	//	0.0f, -5.0f, 0.0f,
-	//	1.0f, 0.0f, 0.0f,
-	//	15.0f);
-	//spotLightCount++;
-
-	//1� Luz [Reflector]: Luz frontal del coche
-	spotLightsInverso[0] = SpotLight(0.0f, 0.0f, 1.0f,
-		0.5f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.03f, 0.0001f,
-		15.0f);
+	//Panel de luces 1
+	spotLightsInverso[0] = SpotLight(0.9411f, 0.9764f, 0.9764f,	//luz blanca ligeramente azulada
+		0.9f, 0.8f,
+		115.0f, 20.0f, 35.0f,
+		-1.0f, -0.2f, -0.8f,
+		0.7f, 0.02f, 0.0f,
+		45.0f);
 	spotLightCount++;
-
-	//2� Luz [Reflector]: Luz trasera del coche
-	spotLightsInverso[1] = SpotLight(0.0f, 1.0f, 0.0f,
-		0.5f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.03f, 0.0001f,
-		15.0f);
+	
+	//Panel de luces 2
+	spotLightsInverso[1] = SpotLight(0.9411f, 0.9764f, 0.9764f,	//luz blanca ligeramente azulada
+		0.9f, 0.8f,
+		-40.0f, 10.0f, 120.0f,
+		-1.0f, -0.1f, -0.6f,
+		0.7f, 0.02f, 0.0f,
+		45.0f);
 	spotLightCount++;
-
-	//3� Luz [Reflector]: Luz del helicoptero
-	spotLightsInverso[2] = SpotLight(1.0f, 0.0f, 0.0f,
-		0.5f, 2.0f,
-		5.0f, 10.0f, 0.0f,
-		0.0f, -5.0f, 0.0f,
-		1.0f, 0.03f, 0.0001f,
-		15.0f);
 
 	//Variables Uniform
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
@@ -1832,7 +1837,7 @@ int main()
 			else if (contTime < duracionDia)shaderList[0].SetDirectionalLight(&mainLight_5);
 		}
 		//shaderList[0].SetPointLights(pointLights, pointLightCount);
-		//shaderList[0].SetSpotLights(spotLights, spotLightCount);
+		shaderList[0].SetSpotLights(spotLightsInverso, spotLightCount);
 
 
 		//Ciclo dia noche
@@ -1848,7 +1853,7 @@ int main()
 
 		//=== Antorcha ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(30.0f, 2.0f, 165.0));
+		model = glm::translate(model, glm::vec3(40.0f, 2.0f, 175.0));
 		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -2121,6 +2126,16 @@ int main()
 
 		}
 
+		//Anya
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(20.0f, -2.0f, 195.0));
+		//model = glm::translate(model, glm::vec3(posicionPersonaje));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
+		//model = glm::rotate(model, -anguloPersonaje * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Anya.RenderModel();
+
 
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(0.0f, 7.0f, 0.0));
@@ -2375,6 +2390,14 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		BeachChair_M.RenderModel();
 		
+		//=== Caña de pescar ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-65.0f, -2.0f, 110.0));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Pesca.RenderModel();
 		//=== Red ===
 		model = glm::mat4(1.0);
 		model = glm::translate(model, glm::vec3(-20.0f, -2.0f, 113.0));
@@ -2384,6 +2407,52 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		NetTexture.UseTexture();
 		Net_M.RenderModel();
+
+		//=====Iluminacion=====////
+		//== Lampara 1 ==//
+		model = glm::mat4(1.0);
+		//color = glm::vec3(1.0f, 1.0f, 1.0f);
+		model = glm::translate(model, glm::vec3(90.0f, -3.0f, 110.0));
+		//model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		lampara.RenderModel();
+		//== Lampara 2 ==//
+		model = glm::mat4(1.0);
+		//color = glm::vec3(1.0f, 1.0f, 1.0f);
+		model = glm::translate(model, glm::vec3(90.0f, -3.0f, 50.0));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		lampara.RenderModel();
+		//Tipo Spotlights
+
+		
+		//== Panel de luz 1==//
+		model = glm::mat4(1.0);
+		//color = glm::vec3(0.0f, 1.0f, 0.0f);
+		model = glm::translate(model, glm::vec3(115.0f, 14.0f, 35.0));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -215 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		panelLuz.RenderModel();
+		
+
+		//== Panel de luz 2 ==//
+		model = glm::mat4(1.0);
+		//color = glm::vec3(0.0f, 1.0f, 0.0f);
+		model = glm::translate(model, glm::vec3(-40.0f, -2.0f, 120.0));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -215 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		panelLuz.RenderModel();
 
 
 		//=== Primitiva: Agua ===
@@ -2461,15 +2530,15 @@ int main()
 		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		heliceDron.RenderModel();
 
-		//=== Faro ===
-		model = glm::mat4(1.0);
-		color = glm::vec3(0.0f, 1.0f, 0.0f);
-		model = glm::translate(model, glm::vec3(30.0f, -3.0f, 50.0));
-		model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
-		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
-		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
-		glUniform3fv(uniformColor, 1, glm::value_ptr(color));
-		faro.RenderModel();
+		////=== Faro ===
+		//model = glm::mat4(1.0);
+		//color = glm::vec3(0.0f, 1.0f, 0.0f);
+		//model = glm::translate(model, glm::vec3(30.0f, -3.0f, 50.0));
+		//model = glm::scale(model, glm::vec3(5.5f, 5.5f, 5.5f));
+		//Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		//glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		//faro.RenderModel();
 
 
 
