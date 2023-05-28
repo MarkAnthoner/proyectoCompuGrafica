@@ -33,7 +33,8 @@ public:
 	void setcameraMode(int a) { cameraMode = a; }
 
 
-	GLfloat getapagalinterna() { return apagalinterna; }
+	GLfloat getapagaLuces() { return apagaLuces; }
+
 	bool getShouldClose() {
 		return  glfwWindowShouldClose(mainWindow);
 	}
@@ -65,6 +66,8 @@ private:
 	GLint sentido;		//indica en qu� sentido se desplaza el avatar, 0: adelante, 1: atr�s, 2:izquierda, 3:derecha
 	GLint cameraMode;
 
+	//Control de luces
+	GLfloat apagaLuces;
 
 	GLfloat apagalinterna = 1;
 	bool mouseFirstMoved;

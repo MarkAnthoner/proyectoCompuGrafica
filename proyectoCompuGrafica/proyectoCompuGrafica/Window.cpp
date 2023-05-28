@@ -8,7 +8,7 @@ Window::Window()
 	movAvatar = 0;		//no se espera movimiento
 	movAvatar_r = 0;	//bandera de bloqueo apagada
 	sentido = 0;	//Hacia adelante originalmente
-
+	apagaLuces = 0.0f;
 
 	for (size_t i = 0; i < 1024; i++)
 	{
@@ -21,7 +21,7 @@ Window::Window(GLint windowWidth, GLint windowHeight)
 	height = windowHeight;
 	muevex = 2.0f;
 	muevey = 2.0f;
-
+	apagaLuces = 0.0f;
 	//Movimiento Avatar
 	movAvatar = 0;		//no se espera movimiento
 	movAvatar_r = 0;	//bandera de bloqueo apagada
@@ -162,8 +162,15 @@ void Window::ManejaTeclado(GLFWwindow* window, int key, int code, int action, in
 		}
 	}
 
-
-
+	//Control de luces
+	if (key == GLFW_KEY_Z)		//desplazamiento "hacia adelante"
+	{
+		theWindow->apagaLuces = 1.0f;
+	}
+	if (key == GLFW_KEY_X)		//desplazamiento "hacia adelante"
+	{
+		theWindow->apagaLuces = 0.0f;
+	}
 
 	//Movimiento del coche adelante y atras en eje X
 	if (key == GLFW_KEY_Y)
