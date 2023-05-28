@@ -201,6 +201,9 @@ Model tomNook;
 
 //Pez
 Model PezRojo_M;
+//Hongos
+Model HongoAlto;
+Model HongoEnano;
 
 //Robin: Avatar
 Model BodyRobin;
@@ -1488,6 +1491,12 @@ int main()
 	//Pez
 	PezRojo_M = Model();
 	PezRojo_M.LoadModel("Models/PezRojo.obj");
+	//Hongos
+	HongoAlto = Model();
+	HongoAlto.LoadModel("Models/HongoAlto.obj");
+	HongoEnano = Model();
+	HongoEnano.LoadModel("Models/HongoEnano.obj");
+
 
 	//Robin:Avatar
 	BodyRobin = Model();
@@ -1639,6 +1648,15 @@ int main()
 		45.0f);
 	spotLightCount++;
 
+
+	//Panel de luces 3
+	spotLightsInverso[2] = SpotLight(0.78f, 0.9843f, 1.0f,	//luz blanca ligeramente azulada
+		0.8f, 0.8f,
+		30.0f, 10.0f, -120.0f,
+		1.0f, -0.1f, 1.0f,
+		0.6f, 0.06f, 0.0f,
+		45.0f);
+	spotLightCount++;
 	//Variables Uniform
 	GLuint uniformProjection = 0, uniformModel = 0, uniformView = 0, uniformEyePosition = 0,
 		uniformSpecularIntensity = 0, uniformShininess = 0, uniformTextureOffset = 0;
@@ -1837,7 +1855,8 @@ int main()
 			else if (contTime < duracionDia)shaderList[0].SetDirectionalLight(&mainLight_5);
 		}
 		//shaderList[0].SetPointLights(pointLights, pointLightCount);
-		shaderList[0].SetSpotLights(spotLightsInverso, spotLightCount);
+		if(mainWindow.getapagaLuces()==0.0f)shaderList[0].SetSpotLights(spotLightsInverso, spotLightCount);
+		else shaderList[0].SetSpotLights(spotLightsInverso, 0);
 
 
 		//Ciclo dia noche
@@ -1845,6 +1864,7 @@ int main()
 		//=== Modelos ===
 		glm::mat4 model(1.0);
 		glm::mat4 modelaux(1.0);
+		glm::mat4 modelauxHongos(1.0);
 		glm::mat4 modelauxHelice(1.0);
 		glm::mat4 modelauxRobin(1.0);
 
@@ -2320,6 +2340,196 @@ int main()
 		PezRojoTexture.UseTexture();
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		PezRojo_M.RenderModel();
+		
+		
+		//Hongos: conjunto 1
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-100.0f, -19.5f, 150.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 30 * toRadians, glm::vec3(0.0f, 0.0f, 1.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		modelauxHongos = model;		//guardamos un centro de hongos para poder manejar poblaciones de varios hongos a la vez
+
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 2.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(1.0f, 0.0f, -2.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
+		model = glm::rotate(model, 25 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-2.0f, 0.0f, 3.0f));
+		model = glm::rotate(model, -15 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-1.5f, 0.0f, -0.5f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 2.5f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, -17 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-0.7f, 0.0f, 0.3f));
+		model = glm::rotate(model, 20* toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-1.5f, 0.0f, 2.0f));
+		model = glm::rotate(model, -36 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.8f));
+		model = glm::rotate(model, 20 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(1.0f, 0.0f, -1.0f));
+		model = glm::rotate(model, 20 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.5f));
+		model = glm::rotate(model, -36 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-0.2f, 0.0f, 2.0f));
+		model = glm::rotate(model, 20 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 2.5f));
+		model = glm::rotate(model, 20 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+
+		//=== Hongos: conjunto 2 ===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-90.0f, -11.0f, 50.0f));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, -76 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 30 * toRadians, glm::vec3(1.0f, 0.0f, 0.0f));
+		modelauxHongos = model;		//guardamos un centro de hongos para poder manejar poblaciones de varios hongos a la vez
+
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(3.0f, 0.0f, 2.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(1.0f, 0.0f, -2.0f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 5.0f));
+		model = glm::rotate(model, 25 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-2.0f, 0.0f, 3.0f));
+		model = glm::rotate(model, -15 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-1.5f, 0.0f, -0.5f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 2.5f));
+		//model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, -17 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-0.7f, 0.0f, 0.3f));
+		model = glm::rotate(model, 20 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-1.5f, 0.0f, 2.0f));
+		model = glm::rotate(model, -36 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, -0.8f));
+		model = glm::rotate(model, 20 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(1.0f, 0.0f, -1.0f));
+		model = glm::rotate(model, 20 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 1.5f));
+		model = glm::rotate(model, -36 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoAlto.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(-0.2f, 0.0f, 2.0f));
+		model = glm::rotate(model, 20 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+		model = modelauxHongos;
+		model = glm::translate(model, glm::vec3(0.5f, 0.0f, 2.5f));
+		model = glm::rotate(model, 20 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		HongoEnano.RenderModel();
+
 
 		//=== Leviathan ===
 		model = glm::mat4(1.0);
@@ -2390,10 +2600,75 @@ int main()
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		BeachChair_M.RenderModel();
-		
+		//=== Silla de playa ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 100.0));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		BeachChair_M.RenderModel();
+
+
+		//=== Sombrilla ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, -2.0f, 145.0));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		UmbrellaTexture.UseTexture();
+		Umbrella_M.RenderModel();
+
+		//=== Silla de playa ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 140.0));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		BeachChair_M.RenderModel();
+		//=== Silla de playa ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 130.0));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		BeachChair_M.RenderModel();
+
+		//=== Sombrilla ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-45.0f, -2.0f, 85.0));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		UmbrellaTexture.UseTexture();
+		Umbrella_M.RenderModel();
+
+		//=== Silla de playa ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-55.0f, -2.0f, 80.0));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		BeachChair_M.RenderModel();
+		//=== Silla de playa ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-55.0f, -2.0f, 70.0));
+		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		BeachChair_M.RenderModel();
+
+
+
 		//=== Caña de pescar ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-65.0f, -2.0f, 110.0));
+		model = glm::translate(model, glm::vec3(-70.0f, -2.0f, 110.0));
 		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -2455,6 +2730,16 @@ int main()
 		//glUniform3fv(uniformColor, 1, glm::value_ptr(color));
 		panelLuz.RenderModel();
 
+		//== Panel de luz 3 ==//
+		model = glm::mat4(1.0);
+		//color = glm::vec3(0.0f, 1.0f, 0.0f);
+		model = glm::translate(model, glm::vec3(30.0f, -2.0f, -120.0));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		//glUniform3fv(uniformColor, 1, glm::value_ptr(color));
+		panelLuz.RenderModel();
 
 		//=== Primitiva: Agua ===
 		model = glm::mat4(1.0);
