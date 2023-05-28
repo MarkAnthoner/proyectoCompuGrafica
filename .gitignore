@@ -7,7 +7,6 @@
 *.db
 *.opendb
 *.pdb
-*.obj
 *.tlog
 *.ilk
 *.idb
