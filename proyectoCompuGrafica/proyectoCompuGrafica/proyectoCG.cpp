@@ -16,6 +16,9 @@ Integrantes
 #include <vector>
 #include <math.h>
 
+#include <irrKlang.h>
+
+
 #include <glew.h>
 #include <glfw3.h>
 
@@ -48,6 +51,8 @@ Integrantes
 //numeros random
 #include<cstdlib>
 using namespace std;
+using namespace irrklang;
+
 
 
 // === Constantes �ngulos === 
@@ -1772,6 +1777,35 @@ int main()
 	srand((unsigned)time(NULL));
 
 
+	// start the sound engine with default parameters
+	ISoundEngine* engine = createIrrKlangDevice();
+
+	if (!engine)
+	{
+		printf("Could not startup engine\n");
+		return 0; // error starting up the engine
+	}
+
+	//engine->play2D("media/getout.ogg", true);
+
+
+	//Sonido espacial
+	ISoundEngine* soundEngine = createIrrKlangDevice();
+
+	if (!soundEngine)
+	{
+		printf("Could not startup engine\n");
+		return 0; // error starting up the engine
+	}
+	// Reproducción del sonido 3D asociado al modelo
+	irrklang::ISound* spatialSound = soundEngine->play3D("media/getout.ogg",
+		vec3df(1.0f, 18.0f, 0.0f),
+		true, // Repetición activada
+		false, // Inicialmente pausado
+		true // Sonido de 3D espacial
+	);
+	
+
 
 	////Loop mientras no se cierra la ventana
 	while (!mainWindow.getShouldClose())
@@ -1791,6 +1825,31 @@ int main()
 		//para keyframes
 		inputKeyframes(mainWindow.getsKeys());
 		animate();
+
+
+
+
+		// Actualización de la posición y orientación del oyente
+		float listenerX = camera.getCameraPosition().x;
+		float listenerY = camera.getCameraPosition().z;
+		float listenerZ = camera.getCameraPosition().y;
+		float listenerFrontX = glm::normalize(camera.getCameraPosition()).x;
+		float listenerFrontY = glm::normalize(camera.getCameraPosition()).z;
+		float listenerFrontZ = glm::normalize(camera.getCameraPosition()).y;
+
+		// Actualización del motor de audio 3D
+		soundEngine->setListenerPosition(
+			vec3df(listenerX, listenerY, listenerZ),
+			vec3df(listenerFrontX, listenerFrontY, listenerFrontZ)
+		);
+
+		spatialSound->setPosition(irrklang::vec3df(1.0f + movCirculoX, 18.0f + movCirculoZ,0.0f));
+		
+
+		spatialSound->setMinDistance(6.0f);
+		spatialSound->setMaxDistance(80.0f);
+
+
 
 
 		// Clear the window
@@ -2832,6 +2891,9 @@ int main()
 
 		mainWindow.swapBuffers();
 	}
+
+	engine->drop(); // delete engine
+	soundEngine->drop(); // delete engine
 
 	return 0;
 }

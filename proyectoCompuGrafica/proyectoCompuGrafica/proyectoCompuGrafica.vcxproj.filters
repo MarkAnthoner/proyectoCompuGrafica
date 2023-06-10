@@ -110,10 +110,10 @@
     <ClCompile Include="Window.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Animacion20232.cpp">
+    <ClCompile Include="Archivos.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="Archivos.cpp">
+    <ClCompile Include="proyectoCG.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
