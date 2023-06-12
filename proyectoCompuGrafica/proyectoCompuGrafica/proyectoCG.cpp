@@ -1786,7 +1786,16 @@ int main()
 		return 0; // error starting up the engine
 	}
 
-	//engine->play2D("media/getout.ogg", true);
+	ISound* ambiente = engine->play2D("media/getout.ogg", true, false, true);
+	if (!ambiente)
+	{
+		// Error al reproducir el sonido
+		return 1;
+	}
+
+	//Modificar el volumen del sonido
+	ambiente->setVolume(0.07f); // Establecer volumen al 50%
+
 
 
 	//Sonido espacial
@@ -1798,13 +1807,13 @@ int main()
 		return 0; // error starting up the engine
 	}
 	// Reproducción del sonido 3D asociado al modelo
-	irrklang::ISound* spatialSound = soundEngine->play3D("media/getout.ogg",
+	irrklang::ISound* spatialSound = soundEngine->play3D("media/sonidoPinguino.mp3",
 		vec3df(1.0f, 18.0f, 0.0f),
 		true, // Repetición activada
 		false, // Inicialmente pausado
 		true // Sonido de 3D espacial
 	);
-	
+	spatialSound->setVolume(55.5f); // Establecer volumen al 50%
 
 
 	////Loop mientras no se cierra la ventana
