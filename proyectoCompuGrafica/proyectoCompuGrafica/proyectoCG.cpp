@@ -236,6 +236,22 @@ Model Net_M;
 Model dron;
 Model heliceDron;
 
+//Poblacion adicional: enriquecimiento de la escena
+Model muelle;
+Model lifeguard;
+Model bote;
+Model CastilloArena;
+Model Ring;
+Model VolleyballNet;
+Model Pelota;
+Model Surf1;
+Model Surf2;
+Model Surf3;
+Model Surf4;
+Model Surf5;
+Model CarritoHelado;
+Model Palmeras;
+
 Skybox skybox;	//skybox de día
 Skybox skybox_night; //skybox de noche
 
@@ -1051,38 +1067,38 @@ void CrearAgua()
 
 		//Back
 		//x		y		z			S		T			-NX		-NY		-NZ
-		0.0f,	 0.0f,  -1.0f,		1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//4: E
-		0.125f,  0.0f,  -1.0f,		1.0f,	0.143f,		0.0f,	0.0f,	1.0f,	//5: F
-		0.0f,	 1.0f,  -1.0f,		0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//6: G
-		0.375f,  1.0f,  -1.0f,		0.0f,	0.143,		0.0f,	0.0f,	1.0f,	//7: H
+		0.0f,	 0.0f,  -0.9f,		1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//4: E
+		0.125f,  0.0f,  -0.9f,		1.0f,	0.143f,		0.0f,	0.0f,	1.0f,	//5: F
+		0.0f,	 1.0f,  -0.9f,		0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//6: G
+		0.375f,  1.0f,  -0.9f,		0.0f,	0.143,		0.0f,	0.0f,	1.0f,	//7: H
 
 		//Left
 		//x		y		z			S		T			-NX		-NY		-NZ
 		0.0f,	 0.0f,  0.0f,		1.0f,   0.0f,		1.0f,	0.0f,	0.0f,	//8: A
-		0.0f,	 0.0f,  -1.0f,		1.0f,	0.143f,		1.0f,	0.0f,	0.0f,	//9: E
+		0.0f,	 0.0f,  -0.9f,		1.0f,	0.143f,		1.0f,	0.0f,	0.0f,	//9: E
 		0.0f,	 1.0f,  0.0f,		0.0f,	0.0f,		1.0f,	0.0f,	0.0f,	//10: C
-		0.0f,	 1.0f,  -1.0f,		0.0f,	0.143,		1.0f,	0.0f,	0.0f,	//11: G
+		0.0f,	 1.0f,  -0.9f,		0.0f,	0.143,		1.0f,	0.0f,	0.0f,	//11: G
 
 		//Right
 		//x		y		z			S		T			-NX		-NY		-NZ
 		0.125f,	 0.0f,  0.0f,		1.0f,   0.0f,		-1.0f,	0.0f,	0.0f,	//12: B
-		0.125f,  0.0f,  -1.0f,		1.0f,	0.143f,		-1.0f,	0.0f,	0.0f,	//13: F
+		0.125f,  0.0f,  -0.9f,		1.0f,	0.143f,		-1.0f,	0.0f,	0.0f,	//13: F
 		0.375f,	 1.0f,  0.0f,		0.0f,	0.0f,		-1.0f,	0.0f,	0.0f,	//14: D
-		0.375f,  1.0f,  -1.0f,		0.0f,	0.143,		-1.0f,	0.0f,	0.0f,	//15: H
+		0.375f,  1.0f,  -0.9f,		0.0f,	0.143,		-1.0f,	0.0f,	0.0f,	//15: H
 
 		//Bottom
 		//x		y		z			S		T			-NX		-NY		-NZ
 		0.0f,	 0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//16: A
 		0.125f,	 0.0f,  0.0f,		1.0f,	0.143f,		0.0f,	1.0f,	0.0f,	//17: B
-		0.0f,	 0.0f,  -1.0f,		0.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//18: E
-		0.125f,  0.0f,  -1.0f,		0.0f,	0.143,		0.0f,	1.0f,	0.0f,	//19: F
+		0.0f,	 0.0f,  -0.9f,		0.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//18: E
+		0.125f,  0.0f,  -0.9f,		0.0f,	0.143,		0.0f,	1.0f,	0.0f,	//19: F
 
 		//Top
 		//x		y		z			S		T			-NX		-NY		-NZ
 		0.0f,	 1.0f,  0.0f,		1.0f,   0.0f,		0.0f,	-1.0f,	0.0f,	//20: C
 		0.375f,	 1.0f,  0.0f,		1.0f,	0.143f,		0.0f,	-1.0f,	0.0f,	//21: D
-		0.0f,	 1.0f,  -1.0f,		0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,	//22: G
-		0.375f,  1.0f,  -1.0f,		0.0f,	0.143,		0.0f,	-1.0f,	0.0f,	//23: H
+		0.0f,	 1.0f,  -0.9f,		0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,	//22: G
+		0.375f,  1.0f,  -0.9f,		0.0f,	0.143,		0.0f,	-1.0f,	0.0f,	//23: H
 
 	};
 
@@ -1120,44 +1136,44 @@ void CrearArena()
 		//Front
 		//x			y		z		S		T			-NX		-NY		-NZ
 		0.125f,	 0.0f,  0.0f,		0.0f,	0.0f,		0.0f,	0.0f,	-1.0f,	//0: B
-		1.0f,	 0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	0.0f,	-1.0f,	//1: I
+		0.9f,	 0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	0.0f,	-1.0f,	//1: I
 		0.375f,	 1.0f,  0.0f,		0.0f,	1.0f,		0.0f,	0.0f,	-1.0f,	//2: D
-		1.0f,	 1.0f,  0.0f,		1.0f,	1.0f,		0.0f,	0.0f,	-1.0f,	//3: J
+		0.9f,	 1.0f,  0.0f,		1.0f,	1.0f,		0.0f,	0.0f,	-1.0f,	//3: J
 
 		//Back
 		//x		y		z			S		T			-NX		-NY		-NZ
-		0.125f,  0.0f,  -1.0f,		0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//5: F
-		1.0f,	 0.0f,  -1.0f,		1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//4: K
-		0.375f,  1.0f,  -1.0f,		0.0f,	1.0f,		0.0f,	0.0f,	1.0f,	//7: H
-		1.0f,	 1.0f,  -1.0f,		1.0f,	1.0f,		0.0f,	0.0f,	1.0f,	//6: L
+		0.125f,  0.0f,  -0.9f,		0.0f,	0.0f,		0.0f,	0.0f,	1.0f,	//5: F
+		0.9f,	 0.0f,  -0.9f,		1.0f,   0.0f,		0.0f,	0.0f,	1.0f,	//4: K
+		0.375f,  1.0f,  -0.9f,		0.0f,	1.0f,		0.0f,	0.0f,	1.0f,	//7: H
+		0.9f,	 1.0f,  -0.9f,		1.0f,	1.0f,		0.0f,	0.0f,	1.0f,	//6: L
 
 		//Left
 		//x		y		z			S		T			-NX		-NY		-NZ
 		0.125f,	 0.0f,  0.0f,		0.0f,	0.0f,		1.0f,	0.0f,	0.0f,	//8: B
-		0.125f,  0.0f,  -1.0f,		1.0f,   0.0f,		1.0f,	0.0f,	0.0f,	//9: F
+		0.125f,  0.0f,  -0.9f,		1.0f,   0.0f,		1.0f,	0.0f,	0.0f,	//9: F
 		0.375f,	 1.0f,  0.0f,		0.0f,	1.0f,		1.0f,	0.0f,	0.0f,	//10: D
-		0.375f,  1.0f,  -1.0f,		1.0f,	1.0f,		1.0f,	0.0f,	0.0f,	//11: H
+		0.375f,  1.0f,  -0.9f,		1.0f,	1.0f,		1.0f,	0.0f,	0.0f,	//11: H
 
 		//Right
 		//x		y		z			S		T			-NX		-NY		-NZ
-		1.0f,	 0.0f,  0.0f,		0.0f,	0.0f,		-1.0f,	0.0f,	0.0f,	//12: I
-		1.0f,	 0.0f,  -1.0f,		1.0f,   0.0f,		-1.0f,	0.0f,	0.0f,	//13: K
-		1.0f,	 1.0f,  0.0f,		0.0f,	1.0f,		-1.0f,	0.0f,	0.0f,	//14: J
-		1.0f,	 1.0f,  -1.0f,		1.0f,	1.0f,		-1.0f,	0.0f,	0.0f,	//15: L
+		0.9f,	 0.0f,  0.0f,		0.0f,	0.0f,		-1.0f,	0.0f,	0.0f,	//12: I
+		0.9f,	 0.0f,  -0.9f,		1.0f,   0.0f,		-1.0f,	0.0f,	0.0f,	//13: K
+		0.9f,	 1.0f,  0.0f,		0.0f,	1.0f,		-1.0f,	0.0f,	0.0f,	//14: J
+		0.9f,	 1.0f,  -0.9f,		1.0f,	1.0f,		-1.0f,	0.0f,	0.0f,	//15: L
 
 		//Bottom
 		//x		y		z			S		T			-NX		-NY		-NZ
 		0.125f,	 0.0f,  0.0f,		0.0f,	0.0f,		0.0f,	1.0f,	0.0f,	//16: B
-		1.0f,	 0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//17: I
-		0.125f,  0.0f,  -1.0f,		0.0f,	1.0f,		0.0f,	1.0f,	0.0f,	//18: F
-		1.0f,	 0.0f,  -1.0f,		1.0f,	1.0f,		0.0f,	1.0f,	0.0f,	//19: K
+		0.9f,	 0.0f,  0.0f,		1.0f,   0.0f,		0.0f,	1.0f,	0.0f,	//17: I
+		0.125f,  0.0f,  -0.9f,		0.0f,	1.0f,		0.0f,	1.0f,	0.0f,	//18: F
+		0.9f,	 0.0f,  -0.9f,		1.0f,	1.0f,		0.0f,	1.0f,	0.0f,	//19: K
 
 		//Top
 		//x		y		z			S		T			-NX		-NY		-NZ
 		0.375f,	 1.0f,  0.0f,		0.0f,	0.0f,		0.0f,	-1.0f,	0.0f,	//20: D
-		1.0f,	 1.0f,  0.0f,		1.0f,   0.0f,		0.0f,	-1.0f,	0.0f,	//21: J
-		0.375f,  1.0f,  -1.0f,		0.0f,	1.0f,		0.0f,	-1.0f,	0.0f,	//22: H
-		1.0f,	 1.0f,  -1.0f,		1.0f,	1.0f,		0.0f,	-1.0f,	0.0f,	//23: L
+		0.9f,	 1.0f,  0.0f,		1.0f,   0.0f,		0.0f,	-1.0f,	0.0f,	//21: J
+		0.375f,  1.0f,  -0.9f,		0.0f,	1.0f,		0.0f,	-1.0f,	0.0f,	//22: H
+		0.9f,	 1.0f,  -0.9f,		1.0f,	1.0f,		0.0f,	-1.0f,	0.0f,	//23: L
 
 	};
 
@@ -1541,6 +1557,37 @@ int main()
 
 	heliceDron = Model();
 	heliceDron.LoadModel("Models/cuatroHelices.obj");
+
+	//Poblacion adicional: enriquecimiento de la escena
+	muelle = Model();
+	muelle.LoadModel("Models/muelle.obj");
+	lifeguard = Model();
+	lifeguard.LoadModel("Models/lifeguard.obj");
+	bote = Model();
+	bote.LoadModel("Models/inflatable_boat_low.obj");
+	CastilloArena = Model();
+	CastilloArena.LoadModel("Models/SandCastle.obj");
+	Ring = Model();
+	Ring.LoadModel("Models/Ring.obj");
+	VolleyballNet = Model();
+	VolleyballNet.LoadModel("Models/VolleyballNet.obj");
+	Pelota = Model();
+	Pelota.LoadModel("Models/Ball.obj");
+	Surf1 = Model();
+	Surf1.LoadModel("Models/Surf1.obj");
+	Surf2 = Model();
+	Surf2.LoadModel("Models/Surf2.obj");
+	Surf3 = Model();
+	Surf3.LoadModel("Models/Surf3.obj");
+	Surf4 = Model();
+	Surf4.LoadModel("Models/Surf4.obj");
+	Surf5 = Model();
+	Surf5.LoadModel("Models/Surf5.obj");
+	CarritoHelado = Model();
+	CarritoHelado.LoadModel("Models/CarritoHelado.obj");
+	Palmeras = Model();
+	Palmeras.LoadModel("Models/Palmeras.obj");
+
 
 	// === Skybox ===
 	std::vector<std::string> skyboxFaces;
@@ -2650,19 +2697,18 @@ int main()
 		CapsulasTexture.UseTexture();
 		Capsulas_M.RenderModel();
 
-		//=== Sombrilla ===
+		//=== Sombrilla 1 ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, -2.0f, 115.0));
+		model = glm::translate(model, glm::vec3(20.0f, -2.0f, 105.0));
 		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		UmbrellaTexture.UseTexture();
 		Umbrella_M.RenderModel();
-
 		//=== Silla de playa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 110.0));
+		model = glm::translate(model, glm::vec3(25.0f, -2.0f, 100.0));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -2670,7 +2716,7 @@ int main()
 		BeachChair_M.RenderModel();
 		//=== Silla de playa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 100.0));
+		model = glm::translate(model, glm::vec3(25.0f, -2.0f, 90.0));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -2678,19 +2724,18 @@ int main()
 		BeachChair_M.RenderModel();
 
 
-		//=== Sombrilla ===
+		//=== Sombrilla 2 ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-20.0f, -2.0f, 145.0));
+		model = glm::translate(model, glm::vec3(-20.0f, -2.0f, 165.0));
 		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		UmbrellaTexture.UseTexture();
 		Umbrella_M.RenderModel();
-
 		//=== Silla de playa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 140.0));
+		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 160.0));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -2698,26 +2743,25 @@ int main()
 		BeachChair_M.RenderModel();
 		//=== Silla de playa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 130.0));
+		model = glm::translate(model, glm::vec3(-25.0f, -2.0f, 150.0));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		BeachChair_M.RenderModel();
 
-		//=== Sombrilla ===
+		//=== Sombrilla 3 ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-45.0f, -2.0f, 85.0));
+		model = glm::translate(model, glm::vec3(-45.0f, -2.0f, -40.0));
 		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		UmbrellaTexture.UseTexture();
 		Umbrella_M.RenderModel();
-
 		//=== Silla de playa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-55.0f, -2.0f, 80.0));
+		model = glm::translate(model, glm::vec3(-55.0f, -2.0f, -30.0));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -2725,7 +2769,7 @@ int main()
 		BeachChair_M.RenderModel();
 		//=== Silla de playa ===
 		model = glm::mat4(1.0);
-		model = glm::translate(model, glm::vec3(-55.0f, -2.0f, 70.0));
+		model = glm::translate(model, glm::vec3(-55.0f, -2.0f, -50.0));
 		model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
 		model = glm::rotate(model, 180 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
 		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
@@ -2751,6 +2795,148 @@ int main()
 		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
 		NetTexture.UseTexture();
 		Net_M.RenderModel();
+
+		//Poblacion adicional: enriquecimiento de la escena
+		//===Muelle 1===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-130.0f, -24.0f, 230.0));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		muelle.RenderModel();
+		//===Muelle 2===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-130.0f, -24.0f, -130.0));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		muelle.RenderModel();
+
+		//===Puesto de salvavidas===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(50.0f, 12.0f, 250.0));
+		model = glm::scale(model, glm::vec3(3.0f, 3.0f, 3.0f));
+		model = glm::rotate(model, -90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		lifeguard.RenderModel();
+
+		//===Bote===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-180.0f, -2.0f, 200.0));
+		model = glm::scale(model, glm::vec3(6.0f, 6.0f, 6.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		bote.RenderModel();
+
+		//===Castillo Arena===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-45.0f, 1.5f, 180.0));
+		model = glm::scale(model, glm::vec3(2.0f, 2.0f, 2.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		CastilloArena.RenderModel();
+
+		//===Ring inflable===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-200.0f, -2.0f, -170.0));
+		model = glm::scale(model, glm::vec3(0.15f, 0.15f, 0.15f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Ring.RenderModel();
+
+		//===Volleyball Net===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 20.0));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		VolleyballNet.RenderModel();
+
+		//===Pelota Volleyball===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, -2.0f, 40.0));
+		model = glm::scale(model, glm::vec3(4.0f, 4.0f, 4.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Pelota.RenderModel();
+
+		//===Surf 1===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 4.5f, 235.0));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Surf1.RenderModel();
+
+		//===Surf 2===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 5.0f, 235.0));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::rotate(model, 45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Surf2.RenderModel();
+
+		//===Surf 3===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(0.0f, 4.5f, -150.0));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Surf3.RenderModel();
+
+		//===Surf 4===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-20.0f, 5.0f, -150.0));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Surf4.RenderModel();
+
+		//===Surf 5===//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(-40.0f, 5.0f, -150.0));
+		model = glm::scale(model, glm::vec3(10.0f, 10.0f, 10.0f));
+		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Surf5.RenderModel();
+
+		//===Carrito Helado==//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(80.0f, -2.0f, 160.0));
+		model = glm::scale(model, glm::vec3(8.0f, 8.0f, 8.0f));
+		model = glm::rotate(model, 90 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_brillante.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		CarritoHelado.RenderModel();
+
+		//===Palmeras==//
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(130.0f, -2.0f, -180.0));
+		model = glm::scale(model, glm::vec3(12.0f, 12.0f, 12.0f));
+		model = glm::rotate(model, -45 * toRadians, glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		Material_opaco.UseMaterial(uniformSpecularIntensity, uniformShininess);
+		Palmeras.RenderModel();
+	
+		//=== Primitiva: Arena ===
+		model = glm::mat4(1.0);
+		model = glm::translate(model, glm::vec3(160.0f, -102.0f, 300.0));
+		model = glm::scale(model, glm::vec3(100.0f, 135.0f, 600.0f));
+		glUniformMatrix4fv(uniformModel, 1, GL_FALSE, glm::value_ptr(model));
+		arenaTexture.UseTexture();
+		meshList[11]->RenderMesh();
+
 
 		//=====Iluminacion=====////
 		//== Lampara 1 ==//
@@ -3182,6 +3368,3 @@ void inputKeyframes(bool* keys)
 
 
 }
-
-//Prueba de GIT
-//Prueba commit ignore Github
